@@ -8,6 +8,7 @@ import { Provider, useDispatch, useSelector } from "react-redux";
 import store from "./store/index.js";
 import { getSubDomain } from "./utils/functions.js";
 import { createTheme, ThemeProvider } from "@material-ui/core";
+import { getSignInUser } from "./store/actions/AuthAction.js";
 import { SnackbarProvider } from "notistack";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
