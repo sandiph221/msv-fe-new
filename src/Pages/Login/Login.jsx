@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -41,8 +41,8 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
     "& input": {
       "&:-webkit-autofill": {
-        "-webkit-box-shadow": "0 0 0 100px rgb(250 250 250) inset",
-        "-webkit-text-fill-color": "#323132",
+        WebkitBoxShadow: "0 0 0 100px rgb(250 250 250) inset", // Fixed
+        WebkitTextFillColor: "#323132", // Fixed
       },
     },
     "& fieldset": {
@@ -262,7 +262,7 @@ const Login = () => {
         <Grid item xl={6} lg={6} md={12} sm={12} xs={12}>
           <div style={classes.root}>
             <div style={classes.loginTitle}>
-              <img src={formatServerImages(logoURL)} height="55" alt="server" />
+              {/* <img src={formatServerImages(logoURL)} height="55" alt="server" /> */}
             </div>
             {!showForgotPassword ? (
               <>
@@ -535,7 +535,7 @@ const Login = () => {
             {bannerURL && (
               <img
                 style={classes.loginImg}
-                src={formatServerImages(bannerURL)}
+                // src={formatServerImages(bannerURL)}
                 alt="Banner"
               />
             )}
