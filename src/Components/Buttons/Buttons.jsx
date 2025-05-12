@@ -1,6 +1,4 @@
-
-import { Button } from "@mui/material";
-import {makeStyles} from "@mui/material";
+import { Button, makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   btnPrimary: {
@@ -12,18 +10,21 @@ const useStyles = makeStyles((theme) => ({
     borderColor: "#FBE281",
     border: "1px solid ",
     margin: "auto 0",
-    '&:hover': {
+    "&:hover": {
       backgroundColor: "#f4d45f",
       borderColor: "#f4d45f",
     },
   },
-
 }));
 
 const Buttons = ({ className, children, ...props }) => {
   const classes = useStyles();
   return (
-    <Button className={`${classes.btnPrimary} ${className}`} variant="contained" {...props}>
+    <Button
+      className={`${classes.btnPrimary} ${className}`}
+      variant="contained"
+      {...props}
+    >
       {children}
     </Button>
   );
