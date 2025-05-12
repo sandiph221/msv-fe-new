@@ -17,7 +17,7 @@ import {
   Select,
   FormControl,
   Checkbox,
-} from "@mui/material";
+} from "@material-ui/core";
 
 import SearchIcon from '@material-ui/icons/Search';
 import Layout from "../../Components/Layout";

@@ -9,7 +9,7 @@ import {
   Button, 
   Chip,
   withStyles,
-} from "@mui/material";
+} from "@material-ui/core";
 
 import AddModalForm from "../AddModalForm/AddModalForm";
 import CheckIcon from '@material-ui/icons/Check';

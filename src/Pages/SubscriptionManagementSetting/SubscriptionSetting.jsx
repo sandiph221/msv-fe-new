@@ -12,7 +12,7 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from "@mui/material";
+} from "@material-ui/core";
 
 import AddIcon from "@material-ui/icons/Add";
 import { withRouter } from "react-router-dom";

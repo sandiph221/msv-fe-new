@@ -4,8 +4,8 @@ import {
   makeStyles,
   withStyles,
   InputAdornment,
-} from "@mui/material";
-import { OutlinedInput } from "@mui/material";
+} from "@material-ui/core";
+import { OutlinedInput } from "@material-ui/core";
 import SearchIcon from '@material-ui/icons/Search';
 import CloseIcon from '@material-ui/icons/Close';
 

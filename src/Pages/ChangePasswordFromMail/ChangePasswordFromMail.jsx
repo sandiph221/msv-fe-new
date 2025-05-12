@@ -5,10 +5,10 @@ import {
   makeStyles,
   useTheme,
   useMediaQuery,
-} from '@mui/material';
+} from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
-import TextField from '@mui/material/TextField';
+import TextField from '@material-ui/core/TextField';
 import Buttons from '../../Components/Buttons/Buttons';
 import { connect } from 'react-redux';
 import { ChangePasswordEmailVerification } from '../../store/actions/AuthAction';

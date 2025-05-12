@@ -1,4 +1,4 @@
-import { makeStyles, Typography } from '@mui/material';
+import { makeStyles, Typography } from '@material-ui/core';
 import Moment from 'moment-timezone';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';

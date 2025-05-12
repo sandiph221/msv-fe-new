@@ -17,7 +17,7 @@ import {
   styled,
   useTheme,
   useMediaQuery,
-} from "@mui/material";
+} from "@material-ui/core";
 
 import CloseIcon from '@material-ui/icons/Close';
 import PageviewIcon from '@material-ui/icons/Pageview';

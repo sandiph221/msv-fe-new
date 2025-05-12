@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Typography } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import ReactExport from "react-data-export";
 import { useSelector } from "react-redux";

@@ -5,7 +5,7 @@ import {
   ClickAwayListener,
   useTheme,
   useMediaQuery,
-} from "@mui/material";
+} from "@material-ui/core";
 import DateRangeIcon from '@material-ui/icons/DateRange';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import DatePicker from "react-datepicker";

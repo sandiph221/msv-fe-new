@@ -15,7 +15,7 @@ import {
   FormControl,
   Checkbox,
   Typography,
-} from "@mui/material";
+} from "@material-ui/core";
 import { Styles } from "./Styles";
 import FilterDays from "../../../Components/FilterDays";
 import { CustomButton } from "../../../Components/CustomButton/CustomButton";

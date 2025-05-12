@@ -1,4 +1,4 @@
-import { Typography, useTheme, useMediaQuery, makeStyles } from "@mui/material";
+import { Typography, useTheme, useMediaQuery, makeStyles } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { PhotoshopPicker } from "react-color";
 import { useDispatch, useSelector } from "react-redux";

@@ -8,9 +8,9 @@ import {
   useMediaQuery,
   ToggleButton,
   ToggleButtonGroup,
-} from "@mui/material";
+} from "@material-ui/core";
 import { Line, Chart } from "react-chartjs-2";
-import { blue } from "@mui/material/colors";
+import { blue } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((test) => ({
   selected: {

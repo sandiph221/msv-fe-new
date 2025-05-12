@@ -1,4 +1,4 @@
-import { Container, Grid, makeStyles, Typography } from "@mui/material";
+import { Container, Grid, makeStyles, Typography } from "@material-ui/core";
 
 import { CustomerSupportCard } from "../../../Components/CustomerSupportCard/CustomerSupportCard";
 import Layout from "../../../Components/Layout";

@@ -16,7 +16,7 @@ import {
   useTheme,
   Chip,
   Tooltip,
-} from "@mui/material";
+} from "@material-ui/core";
 import {
   KeyboardArrowDown as ExpandMoreIcon,
   KeyboardArrowUp as ExpandLessIcon,

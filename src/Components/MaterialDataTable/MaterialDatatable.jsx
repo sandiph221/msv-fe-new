@@ -7,7 +7,7 @@ import {
   ThemeProvider,
   createTheme,
   CircularProgress,
-} from "@mui/material";
+} from "@material-ui/core";
 import $ from "jquery";
 
 // Icons

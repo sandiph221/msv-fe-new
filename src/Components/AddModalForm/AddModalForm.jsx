@@ -12,7 +12,7 @@ import {
   makeStyles,
   TextField,
   withStyles,
-} from "@mui/material";
+} from "@material-ui/core";
 import CloseIcon from '@material-ui/icons/Close';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import ReplyIcon from '@material-ui/icons/Reply';

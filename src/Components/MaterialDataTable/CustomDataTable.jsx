@@ -6,7 +6,7 @@ import {
   IconButton,
   useTheme,
   useMediaQuery,
-} from "@mui/material";
+} from "@material-ui/core";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { formatImage, formatNumber } from "utils/functions.js";

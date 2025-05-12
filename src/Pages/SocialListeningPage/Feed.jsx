@@ -1,6 +1,6 @@
-import { Box, Button, Container, Typography, useTheme } from "@mui/material";
+import { Box, Button, Container, Typography, useTheme } from "@material-ui/core";
 
-import { useMediaQuery } from "@mui/material";
+import { useMediaQuery } from "@material-ui/core";
 import { formatImage } from "utils/functions.js";
 import { useSelector } from "react-redux";
 

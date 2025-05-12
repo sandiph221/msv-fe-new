@@ -1,4 +1,4 @@
-import { Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Typography, useMediaQuery, useTheme } from "@material-ui/core";
 import fbIcon from "../../assets/images/facebook.png";
 import instaBg from "../../assets/images/instabg.png";
 import { useSelector } from "react-redux";

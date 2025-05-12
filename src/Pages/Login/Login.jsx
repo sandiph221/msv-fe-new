@@ -13,8 +13,8 @@ import {
   TextField,
   useMediaQuery,
   useTheme,
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
+} from "@material-ui/core";
+import { styled } from "@material-ui/core/styles";
 
 import facebookImage from "../../assets/images/facebook.png";
 import Buttons from "../../Components/Buttons/Buttons";

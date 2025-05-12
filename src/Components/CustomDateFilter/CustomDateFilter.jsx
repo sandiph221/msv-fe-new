@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { DateRangePicker } from 'materialui-daterange-picker';
 import { DateTime } from 'luxon';
-import { Button } from '@mui/material';
+import { Button } from '@material-ui/core';
 import { CustomButton } from '../CustomButton/CustomButton';
 import { withRouter } from 'react-router-dom';
 

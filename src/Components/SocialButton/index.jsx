@@ -9,8 +9,8 @@ import {
   MenuItem,
   useTheme,
   useMediaQuery,
-} from "@mui/material";
-import Button from "@mui/material/Button";
+} from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 import { useSelector, useDispatch } from "react-redux";
 import { socialMediaType } from "../../store/actions/SettingActions";
 import fbIcon from "../../assets/images/facebook.png";

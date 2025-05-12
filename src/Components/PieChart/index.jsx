@@ -5,7 +5,7 @@ import {
   Typography,
   useTheme,
   useMediaQuery,
-} from "@mui/material";
+} from "@material-ui/core";
 import { Doughnut, Chart } from "react-chartjs-2";
 
 import { numbersFormat } from "utils/functions.js";

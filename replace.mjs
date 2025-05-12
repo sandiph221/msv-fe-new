@@ -1,63 +1,102 @@
 import fs from "fs/promises";
 import path from "path";
+import { fileURLToPath } from "url";
 
-const targetFolder = path.join(process.cwd(), "src");
-let totalCount = 0;
-let fileMatchCount = 0;
+// Get current file directory with ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// Function to recursively walk through directories
-async function walk(dir, fileCallback) {
-  const files = await fs.readdir(dir);
+// Define the directory to start searching from (relative to script location)
+const rootDir = path.join(__dirname, "src");
 
-  for (const file of files) {
-    const fullPath = path.join(dir, file);
-    const stat = await fs.stat(fullPath);
+// Define the replacements with more comprehensive mappings
+const replacements = [
+  { from: /@mui\/material/g, to: "@material-ui/core" },
+  { from: /@mui\/icons-material/g, to: "@material-ui/icons" },
+  { from: /@mui\/styles/g, to: "@material-ui/styles" },
+  { from: /@mui\/lab/g, to: "@material-ui/lab" },
+  // Additional common import patterns
+  {
+    from: /import \{([^}]*)\} from ['"]@mui\/material['"];/g,
+    to: "import {$1} from '@material-ui/core';",
+  },
+  {
+    from: /import \{([^}]*)\} from ['"]@mui\/icons-material['"];/g,
+    to: "import {$1} from '@material-ui/icons';",
+  },
+  // Handle specific component imports that might have changed paths
+  {
+    from: /import \{ styled \} from ['"]@mui\/material\/styles['"];/g,
+    to: "import { styled } from '@material-ui/core/styles';",
+  },
+  {
+    from: /import \{ ThemeProvider \} from ['"]@mui\/material\/styles['"];/g,
+    to: "import { ThemeProvider } from '@material-ui/core/styles';",
+  },
+];
 
-    if (stat.isDirectory()) {
-      await walk(fullPath, fileCallback);
-    } else if (/\.(js|jsx|ts|tsx)$/.test(file)) {
-      await fileCallback(fullPath);
-    }
-  }
-}
+// Function to process a file with async/await
+async function processFile(filePath) {
+  const ext = path.extname(filePath);
+  if (![".js", ".jsx", ".ts", ".tsx"].includes(ext)) return;
 
-// Function to replace the imports in a given file
-async function replaceImportsInFile(filePath) {
-  const content = await fs.readFile(filePath, "utf-8");
-  let updatedContent = content;
-  let count = 0;
-
-  // Regex to find @mui/icons-material imports
-  const iconImportRegex =
-    /from\s+['"]@mui\/icons-material\/([a-zA-Z0-9]+)['"]/g;
-  let match;
-
-  while ((match = iconImportRegex.exec(content)) !== null) {
-    const iconName = match[1];
-    const replacement = `@material-ui/icons/${iconName}`;
-    updatedContent = updatedContent.replace(match[0], `from '${replacement}'`);
-    count++;
-  }
-
-  if (count > 0) {
-    fileMatchCount++;
-    totalCount += count;
-    await fs.writeFile(filePath, updatedContent, "utf-8");
-    console.log(`Replaced ${count} imports in: ${filePath}`);
-  }
-}
-
-// Main function to replace imports in all files
-async function replaceImports() {
   try {
-    await walk(targetFolder, replaceImportsInFile);
+    let content = await fs.readFile(filePath, "utf8");
+    let modified = false;
 
-    console.log(`Total files modified: ${fileMatchCount}`);
-    console.log(`Total replacements made: ${totalCount}`);
+    replacements.forEach(({ from, to }) => {
+      const newContent = content.replace(from, to);
+      if (newContent !== content) {
+        content = newContent;
+        modified = true;
+      }
+    });
+
+    if (modified) {
+      console.log(`Modified: ${filePath}`);
+      await fs.writeFile(filePath, content, "utf8");
+    }
   } catch (error) {
-    console.error("Error during processing:", error);
+    console.error(`Error processing file ${filePath}:`, error);
   }
 }
 
-// Execute the replacement
-replaceImports();
+// Function to walk through directories using async/await
+async function walkDir(dir) {
+  try {
+    const files = await fs.readdir(dir);
+
+    // Process all files in parallel for better performance
+    await Promise.all(
+      files.map(async (file) => {
+        const filePath = path.join(dir, file);
+        const stat = await fs.stat(filePath);
+
+        if (stat.isDirectory()) {
+          await walkDir(filePath);
+        } else {
+          await processFile(filePath);
+        }
+      })
+    );
+  } catch (error) {
+    console.error(`Error walking directory ${dir}:`, error);
+  }
+}
+
+// Main function to start the process
+async function main() {
+  console.log(`Starting MUI v5 to v4 migration in ${rootDir}`);
+  console.log("This will replace @mui/* imports with @material-ui/* imports");
+
+  try {
+    await walkDir(rootDir);
+    console.log("Migration completed successfully!");
+  } catch (error) {
+    console.error("Migration failed:", error);
+    process.exit(1);
+  }
+}
+
+// Execute the main function
+main();

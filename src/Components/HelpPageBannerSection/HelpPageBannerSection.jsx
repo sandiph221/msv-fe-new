@@ -5,7 +5,7 @@ import {
   withStyles,
   TextField,
   InputAdornment,
-} from '@mui/material';
+} from '@material-ui/core';
 
 import * as constant from '../../utils/constant';
 import SearchIcon from '@material-ui/icons/Search';

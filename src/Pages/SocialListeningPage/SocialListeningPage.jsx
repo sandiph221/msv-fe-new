@@ -6,7 +6,7 @@ import {
   Typography,
   useTheme,
   useMediaQuery,
-} from "@mui/material";
+} from "@material-ui/core";
 import { useEffect } from "react";
 import Layout from "../../Components/Layout";
 import PageTitle from "../../Components/PageTitle/PageTitle";

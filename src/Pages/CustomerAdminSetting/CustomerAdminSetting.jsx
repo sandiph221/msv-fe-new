@@ -8,7 +8,7 @@ import {
   useMediaQuery,
   useTheme,
   Container,
-} from "@mui/material";
+} from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
 import Buttons from "../../Components/Buttons/Buttons";
 import Spinner from "../../Components/Spinner";

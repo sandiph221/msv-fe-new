@@ -5,8 +5,8 @@ import {
   Select,
   Typography,
   useTheme,
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
+} from "@material-ui/core";
+import { styled } from "@material-ui/core/styles";
 import { useEffect, useState } from "react";
 import {
   Bar,

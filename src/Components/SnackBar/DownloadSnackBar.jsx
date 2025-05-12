@@ -1,5 +1,5 @@
-import Snackbar from '@mui/material/Snackbar';
-import { CircularProgress, withStyles } from '@mui/material';
+import Snackbar from '@material-ui/core/Snackbar';
+import { CircularProgress, withStyles } from '@material-ui/core';
 
 const StyledSnackbar = withStyles({
     root: {

@@ -11,7 +11,7 @@ import {
   withStyles,
   useMediaQuery,
   useTheme,
-} from '@mui/material';
+} from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { useDispatch, useSelector } from 'react-redux';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';

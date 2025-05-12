@@ -5,9 +5,9 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
-} from "@mui/material";
-import { makeStyles, withStyles } from "@mui/material/styles";
-import Tooltip from "@mui/material/Tooltip";
+} from "@material-ui/core";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
+import Tooltip from "@material-ui/core/Tooltip";
 import CameraAltIcon from '@material-ui/icons/CameraAlt';
 import CommentIcon from '@material-ui/icons/Comment';
 import LinkIcon from '@material-ui/icons/Link';

@@ -10,7 +10,7 @@ import {
     alpha,
     styled,
     Divider
-} from "@mui/material";
+} from "@material-ui/core";
 
 
 // Styled components

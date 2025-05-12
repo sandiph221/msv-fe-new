@@ -1,7 +1,7 @@
 
-import { makeStyles, withStyles } from '@mui/material/styles';
-import Avatar from '@mui/material/Avatar';
-import Chip from '@mui/material/Chip';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import Avatar from '@material-ui/core/Avatar';
+import Chip from '@material-ui/core/Chip';
 import FaceIcon from '@material-ui/icons/Face';
 import DoneIcon from '@material-ui/icons/Done';
 

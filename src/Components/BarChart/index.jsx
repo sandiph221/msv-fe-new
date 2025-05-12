@@ -15,7 +15,7 @@ import {
   withStyles,
   ToggleButton,
   ToggleButtonGroup,
-} from "@mui/material";
+} from "@material-ui/core";
 import { useEffect } from "react";
 import { Bar, Chart } from "react-chartjs-2";
 import { useSelector } from "react-redux";

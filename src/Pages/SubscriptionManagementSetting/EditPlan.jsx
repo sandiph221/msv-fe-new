@@ -12,7 +12,7 @@ import {
   MenuItem,
   makeStyles,
   CircularProgress,
-} from "@mui/material";
+} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Layout from "../../Components/Layout";
 import styles from "./Styles";

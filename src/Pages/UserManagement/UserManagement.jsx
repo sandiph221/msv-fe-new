@@ -22,7 +22,7 @@ import {
   TextField,
   Typography,
   withStyles,
-} from "@mui/material";
+} from "@material-ui/core";
 
 import Layout from "../../Components/Layout";
 

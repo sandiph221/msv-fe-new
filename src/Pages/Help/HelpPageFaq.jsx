@@ -1,10 +1,10 @@
-import { Container, Grid, makeStyles } from "@mui/material";
+import { Container, Grid, makeStyles } from "@material-ui/core";
 import { useEffect, useState, useRef } from "react";
 import { HelpPageBannerSection } from "../../Components/HelpPageBannerSection/HelpPageBannerSection";
 import Layout from "../../Components/Layout/index";
 import Styles from "./Styles";
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
-import { Typography } from "@mui/material";
+import { Typography } from "@material-ui/core";
 import { withRouter } from "react-router-dom";
 import HelpSectionList from "../../Components/HelpSectionList/HelpSectionList";
 import { useDispatch, useSelector } from "react-redux";

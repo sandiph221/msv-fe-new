@@ -7,7 +7,7 @@ import {
   Select,
   MenuItem,
   InputLabel
-} from "@mui/material";
+} from "@material-ui/core";
 
 import { Styles } from "./Styles";
 

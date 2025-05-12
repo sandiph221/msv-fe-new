@@ -1,4 +1,4 @@
-import { Box, Container, Grid, makeStyles } from '@mui/material';
+import { Box, Container, Grid, makeStyles } from '@material-ui/core';
 import { useEffect } from 'react';
 import ReactPaginate from 'react-paginate';
 import { useDispatch, useSelector } from 'react-redux';

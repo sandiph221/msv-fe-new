@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import Snackbar from "@mui/material/Snackbar";
+import Snackbar from "@material-ui/core/Snackbar";
 import { useState } from "react";
-import { CircularProgress, withStyles } from "@mui/material";
+import { CircularProgress, withStyles } from "@material-ui/core";
 
 const StyledSnackbar = withStyles({
   root: {

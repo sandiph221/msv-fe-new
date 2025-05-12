@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Typography } from "@material-ui/core";
 import { numbersFormat } from "utils/functions.js";
 
 import CallMadeIcon from '@material-ui/icons/CallMade';

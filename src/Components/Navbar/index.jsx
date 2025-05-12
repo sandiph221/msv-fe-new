@@ -13,7 +13,7 @@ import {
   IconButton,
   Drawer,
   useTheme,
-} from "@mui/material";
+} from "@material-ui/core";
 
 import { NavLink } from "react-router-dom";
 

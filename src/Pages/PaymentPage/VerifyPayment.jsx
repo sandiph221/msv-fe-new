@@ -1,8 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { CheckCircleOutline } from "@material-ui/icons";
-import { Alert } from "@mui/material";
-
+import { Alert } from "@material-ui/lab";
 export const PAYMENT_STATUS_STATE = {
   LOADING: "loading",
   PAID: "paid",

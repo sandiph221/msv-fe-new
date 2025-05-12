@@ -11,10 +11,10 @@ import {
   Typography,
   makeStyles,
   withStyles
-} from '@mui/material';
-import FormHelperText from '@mui/material/FormHelperText';
-import Select from '@mui/material/Select';
-import TextField from '@mui/material/TextField';
+} from '@material-ui/core';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Select from '@material-ui/core/Select';
+import TextField from '@material-ui/core/TextField';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 

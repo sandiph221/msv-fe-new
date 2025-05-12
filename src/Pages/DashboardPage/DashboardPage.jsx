@@ -8,7 +8,7 @@ import {
   useMediaQuery,
   useTheme,
   withStyles,
-} from "@mui/material";
+} from "@material-ui/core";
 import domtoimage from "dom-to-image";
 import { saveAs } from "file-saver";
 import { useEffect, useState } from "react";

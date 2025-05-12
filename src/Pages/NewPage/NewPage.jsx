@@ -6,7 +6,7 @@ import {
   TextField,
   Typography,
   useTheme,
-} from "@mui/material";
+} from "@material-ui/core";
 import {
   AddCircleOutline,
   CancelOutlined,

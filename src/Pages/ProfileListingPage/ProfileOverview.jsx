@@ -21,7 +21,7 @@ import {
   withStyles,
   Checkbox,
   Container,
-} from "@mui/material";
+} from "@material-ui/core";
 import Layout from "../../Components/Layout";
 import { useSelector, useDispatch } from "react-redux";
 import SocialButton from "../../Components/SocialButton";

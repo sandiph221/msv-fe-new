@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Snackbar, Alert as MuiAlert } from "@mui/material";
+import { Snackbar, Alert as MuiAlert } from "@material-ui/core";
 
 export default function ClearToast() {
   const dispatch = useDispatch();

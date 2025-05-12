@@ -1,4 +1,4 @@
-import { useMediaQuery, useTheme } from "@mui/material";
+import { useMediaQuery, useTheme } from "@material-ui/core";
 import {
   Avatar,
   FormControl,
@@ -8,7 +8,7 @@ import {
   makeStyles,
   InputLabel,
   Select,
-} from "@mui/material";
+} from "@material-ui/core";
 
 import { formatImage } from "utils/functions.js";
 import { Styles } from "./Styles";

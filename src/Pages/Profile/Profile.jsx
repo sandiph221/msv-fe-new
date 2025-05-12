@@ -5,7 +5,6 @@ import {
   Box,
   Typography,
   Avatar,
-  makeStyles,
   Button,
   TextField,
   useMediaQuery,
@@ -16,7 +15,8 @@ import {
   MenuItem,
   FormHelperText,
   InputLabel,
-} from "@mui/material";
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Layout from "../../Components/Layout";
@@ -29,9 +29,9 @@ import {
 } from "../../store/actions/AuthAction";
 import Spinner from "../../Components/Spinner";
 import styles from "./Styles";
-import MailOutlineIcon from '@material-ui/icons/MailOutline';
-import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
-import ContactMailOutlinedIcon from '@material-ui/icons/ContactMailOutlined';
+import MailOutlineIcon from "@material-ui/icons/MailOutline";
+import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
+import ContactMailOutlinedIcon from "@material-ui/icons/ContactMailOutlined";
 // Password Requirements
 import * as constant from "../../utils/constant";
 import { toast } from "react-toastify";

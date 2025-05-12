@@ -5,7 +5,7 @@ import {
   Typography,
   makeStyles,
   CardContent,
-} from "@mui/material";
+} from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
 import DeleteIcon from '@material-ui/icons/Delete';
 import CreateIcon from '@material-ui/icons/Create';

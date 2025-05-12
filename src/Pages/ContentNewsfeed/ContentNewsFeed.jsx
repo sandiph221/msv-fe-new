@@ -15,8 +15,8 @@ import {
   Card,
   ClickAwayListener,
   Container,
-} from "@mui/material";
-import Tooltip from "@mui/material/Tooltip";
+} from "@material-ui/core";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import Layout from "../../Components/Layout";
 import PageTitle from "../../Components/PageTitle/PageTitle";

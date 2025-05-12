@@ -12,7 +12,7 @@ import {
   Slide,
   Typography,
   makeStyles,
-} from "@mui/material";
+} from "@material-ui/core";
 import axios from "axios";
 import PlanDisplay from "Components/Subscription/PlanDisplay";
 import { useEffect, useState } from "react";

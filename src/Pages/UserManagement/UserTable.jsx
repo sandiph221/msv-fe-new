@@ -5,7 +5,7 @@ import {
   Typography,
   IconButton,
   Tooltip,
-} from "@mui/material";
+} from "@material-ui/core";
 import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { formatImage, formatNumber } from "utils/functions.js";

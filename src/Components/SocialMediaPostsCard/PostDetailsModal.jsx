@@ -22,7 +22,7 @@ import {
   Tooltip,
   useTheme,
   useMediaQuery,
-} from "@mui/material";
+} from "@material-ui/core";
 import PieChart from "../PieChart";
 import {
   formatImage,

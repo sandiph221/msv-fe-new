@@ -7,7 +7,7 @@ import {
   Typography,
   makeStyles,
   useTheme
-} from '@mui/material';
+} from '@material-ui/core';
 import axios from 'axios';
 import moment from 'moment-timezone';
 import { useEffect, useState } from 'react';

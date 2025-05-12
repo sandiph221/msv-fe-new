@@ -1,4 +1,4 @@
-import { Divider } from "@mui/material";
+import { Divider } from "@material-ui/core";
 import axios from "axios";
 import { Footer } from "Components/Footer/Footer";
 import PlanDisplay from "Components/Subscription/PlanDisplay";

@@ -8,9 +8,9 @@ import {
   Radio,
   RadioGroup,
   Typography,
-  makeStyles,
-} from "@mui/material";
-import OfflineBoltOutlined from '@material-ui/icons/OfflineBoltOutlined';
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import OfflineBoltOutlined from "@material-ui/icons/OfflineBoltOutlined";
 import { useEffect, useState } from "react";
 import { COUNTRIES } from "../../utils/constant";
 

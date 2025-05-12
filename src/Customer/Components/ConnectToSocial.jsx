@@ -13,7 +13,7 @@ import {
   Typography,
   makeStyles,
   withStyles,
-} from "@mui/material";
+} from "@material-ui/core";
 import HelpIcon from '@material-ui/icons/Help';
 import { linkSocialPlatform } from "store/actions/CustomersAction";
 import { toast } from "react-toastify";

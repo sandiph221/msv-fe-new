@@ -4,7 +4,7 @@ import {
   makeStyles,
   Tooltip,
   Typography,
-} from "@mui/material";
+} from "@material-ui/core";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Spinner from "../../../Components/Spinner";

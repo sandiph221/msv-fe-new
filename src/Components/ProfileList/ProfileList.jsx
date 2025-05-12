@@ -9,7 +9,7 @@ import {
   Button,
   TextField,
   InputAdornment,
-} from "@mui/material";
+} from "@material-ui/core";
 import CompareIcon from '@material-ui/icons/Compare';
 import SearchIcon from '@material-ui/icons/Search';
 import styles from "./Styles";

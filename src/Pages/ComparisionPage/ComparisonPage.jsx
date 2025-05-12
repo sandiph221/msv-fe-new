@@ -18,7 +18,7 @@ import {
   FormControl,
   InputLabel,
   Select,
-} from "@mui/material";
+} from "@material-ui/core";
 import SearchIcon from '@material-ui/icons/Search';
 import { saveAs } from "file-saver";
 import Layout from "../../Components/Layout";
@@ -42,13 +42,13 @@ import {
   loadMoreContentNewsFeed,
 } from "../../store/actions/SocialMediaProfileAction";
 import Spinner from "../../Components/Spinner";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import MessageIcon from '@material-ui/icons/Message';
 import ReplySharpIcon from '@material-ui/icons/ReplySharp';
@@ -81,7 +81,7 @@ import PoppinsFont from "../../assets/fonts/Poppins-Medium.ttf";
 import domtoimage from "dom-to-image";
 import ComparisonDataExport from "./ComparisonDataExport";
 import SocialMediaPostsCard from "../../Components/SocialMediaPostsCard/SocialMediaPostsCard";
-import { MenuItem } from "@mui/material";
+import { MenuItem } from "@material-ui/core";
 import DownloadButton from "../../Components/DownloadButton/DownloadButton";
 import { SnackBarDownload } from "../../Components/SnackBar/DownloadSnackBar";
 import { PDFlogo, PNGlogo, XLSXlogo } from "../../Components/logosandicons";

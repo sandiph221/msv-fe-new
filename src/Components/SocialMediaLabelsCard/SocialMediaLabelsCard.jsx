@@ -7,7 +7,7 @@ import {
   makeStyles,
   useTheme,
   useMediaQuery,
-} from "@mui/material";
+} from "@material-ui/core";
 
 import CallMadeIcon from '@material-ui/icons/CallMade';
 import CallReceivedIcon from '@material-ui/icons/CallReceived';
