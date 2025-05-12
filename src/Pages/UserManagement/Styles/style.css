@@ -1,0 +1,19 @@
+/* .MuiOutlinedInput-input {
+  padding: 15px 14px !important;
+}
+
+.MuiInputLabel-outlined {
+  transform: translate(14px, 17px) scale(1) !important;
+}
+
+.MuiInputLabel-outlined.MuiInputLabel-shrink {
+  transform: translate(14px, -6px) scale(0.75) !important;
+}
+
+.MuiCardContent-root:last-child {
+  padding-bottom: inherit !important;
+} */
+/* div[class^="makeStyles-profileOverview"] { background-color: green} */
+.makeStyles-profileOverview  {
+  background-color: green;
+} 

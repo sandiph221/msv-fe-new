@@ -1,0 +1,27 @@
+/* Reactions hover styling */
+
+.tooltipReactionsUL{
+    list-style: none;
+    padding-left: 0px;
+    width: 200px;
+
+}
+
+.tooltipReactionsLi{
+    display: flex;
+ 
+}
+
+.tooltipReactionsLi img{
+    height: 20px;
+    width: 20px;
+    margin-right: 10px;
+}
+
+.reactionsToolTipCount{
+    margin-left: auto;
+}
+.no-attachment {
+    background: #000;
+    background-image: none !important;
+}
