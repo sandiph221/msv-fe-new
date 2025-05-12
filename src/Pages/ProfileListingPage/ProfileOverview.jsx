@@ -60,7 +60,6 @@ import domtoimage from "dom-to-image";
 import DownloadButton from "../../Components/DownloadButton/DownloadButton";
 import { ProfileOverviewDataExport } from "./ProfileOverviewDataExport";
 import { PDFlogo, PNGlogo, XLSXlogo } from "../../Components/logosandicons";
-import { withRouter } from "react-router-dom";
 import ProfileOverViewPDF from "./ProfileOverViewPDF";
 import { ColorPicker } from "../../Components/ColorPicker/ColorPicker";
 import { CustomSelectDropdown } from "../../Components/CustomSelectDropdown/CustomSelectDropdown";
@@ -1466,4 +1465,4 @@ const ProfileOverview = ({ history }) => {
   );
 };
 
-export default withRouter(ProfileOverview);
+export default ProfileOverview;

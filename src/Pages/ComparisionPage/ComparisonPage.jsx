@@ -86,7 +86,6 @@ import DownloadButton from "../../Components/DownloadButton/DownloadButton";
 import { SnackBarDownload } from "../../Components/SnackBar/DownloadSnackBar";
 import { PDFlogo, PNGlogo, XLSXlogo } from "../../Components/logosandicons";
 import AbsoluteGrowthCard from "../../Components/AbsoluteGrowthCard/AbsoluteGrowthCard";
-import { withRouter } from "react-router-dom";
 import { NO_DATA_AVAILABLE } from "../../utils/constant";
 import { CustomButton } from "../../Components/CustomButton/CustomButton";
 import { createUserReportDownloadActivity } from "../../store/actions/UserActivityAction";
@@ -2450,4 +2449,4 @@ const ComparisonPage = ({ history }) => {
   );
 };
 
-export default withRouter(ComparisonPage);
+export default ComparisonPage;

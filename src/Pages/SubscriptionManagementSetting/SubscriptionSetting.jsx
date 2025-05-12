@@ -15,8 +15,6 @@ import {
 } from "@material-ui/core";
 
 import AddIcon from "@material-ui/icons/Add";
-import { withRouter } from "react-router-dom";
-
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import axios from "axios";
 import Alert from "Components/AlertBox/Alert";
@@ -167,4 +165,4 @@ const SubscriptionSetting = ({ history }) => {
   );
 };
 
-export default withRouter(SubscriptionSetting);
+export default SubscriptionSetting;

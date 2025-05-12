@@ -2,7 +2,6 @@ import { makeStyles, Typography } from "@material-ui/core";
 import Moment from "moment-timezone";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { withRouter } from "react-router-dom";
 import fbIcon from "../../../assets/images/facebook.png";
 import instaBg from "../../../assets/images/instabg.png";
 import { CustomButton } from "../../../Components/CustomButton/CustomButton";
@@ -24,8 +23,8 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     minWidth: 500,
     overflow: "auto",
-    border: '1px solid #e0e0e0',
-    boxShadow: 'none',
+    border: "1px solid #e0e0e0",
+    boxShadow: "none",
     borderRadius: 8,
     "& .table-1-table-data": {
       minHeight: 65,
@@ -37,8 +36,8 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 2,
     overflowX: "auto",
     scrollBehavior: "smooth",
-    border: '1px solid #e0e0e0',
-    boxShadow: 'none',
+    border: "1px solid #e0e0e0",
+    boxShadow: "none",
     borderRadius: 8,
     "& .table-2-table-header-data": {
       display: "flex",
@@ -58,8 +57,8 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 3,
     borderLeft: "1px solid #bdbdbd",
     position: "relative",
-    border: '1px solid #e0e0e0',
-    boxShadow: 'none',
+    border: "1px solid #e0e0e0",
+    boxShadow: "none",
     borderRadius: 8,
     "& .table-3-table-data": {
       padding: 22,
@@ -200,73 +199,78 @@ const ReportDownloadActivityTable = ({ selectedSubdomain }) => {
               </div>
               <div className={classes.tableBody}>
                 {!userReportDownloadActivity.loading &&
-                userReportDownloadActivity.success
-                  ? userReportDownloadActivity.data.map((d, i) => (
-                      <div key={i} className={classes.tableRow}>
-                        <div className={classes.tableData}>
+                userReportDownloadActivity.success ? (
+                  userReportDownloadActivity.data.map((d, i) => (
+                    <div key={i} className={classes.tableRow}>
+                      <div className={classes.tableData}>
+                        <Typography style={{ fontSize: 14 }}>
+                          {d.name}
+                        </Typography>
+                      </div>
+                      <div className={classes.tableData}>
+                        <Typography style={{ fontSize: 14 }}>
+                          {d.email}
+                        </Typography>
+                      </div>
+                      <div className={classes.tableData}>
+                        <Typography style={{ fontSize: 14 }}>
+                          {JSON.parse(d.profile).join(", ")}
+                        </Typography>
+                        {d.social_type === "facebook" ? (
+                          <img
+                            style={{ height: 20, width: 20, marginLeft: 10 }}
+                            alt="platform-icon"
+                            src={fbIcon}
+                          />
+                        ) : (
+                          <img
+                            alt="platform-icon"
+                            style={{ height: 25, width: 25, marginLeft: 10 }}
+                            src={instaBg}
+                          />
+                        )}
+                      </div>
+                      <div className={classes.tableData}>
+                        <Typography style={{ fontSize: 14 }}>
+                          {d.file_type}
+                        </Typography>
+                      </div>
+                      <div className={classes.tableData}>
+                        <Typography style={{ fontSize: 14 }}>
+                          {d.CustomerSubdomain
+                            ? d.CustomerSubdomain.subdomain
+                            : null}
+                        </Typography>
+                      </div>
+                      <div className={classes.tableData}>
+                        <div>
                           <Typography style={{ fontSize: 14 }}>
-                            {d.name}
+                            {Moment(d.download_time)
+                              .tz("Australia/Sydney")
+                              .format("YYYY-MM-DD hh:mm A")}
                           </Typography>
-                        </div>
-                        <div className={classes.tableData}>
-                          <Typography style={{ fontSize: 14 }}>
-                            {d.email}
+                          <Typography
+                            style={{ fontSize: 13, color: "#757575" }}
+                          >
+                            Australia/Sydney
                           </Typography>
-                        </div>
-                        <div className={classes.tableData}>
-                          <Typography style={{ fontSize: 14 }}>
-                            {JSON.parse(d.profile).join(", ")}
-                          </Typography>
-                          {d.social_type === "facebook" ? (
-                            <img
-                              style={{ height: 20, width: 20, marginLeft: 10 }}
-                              alt="platform-icon"
-                              src={fbIcon}
-                            />
-                          ) : (
-                            <img
-                              alt="platform-icon"
-                              style={{ height: 25, width: 25, marginLeft: 10 }}
-                              src={instaBg}
-                            />
-                          )}
-                        </div>
-                        <div className={classes.tableData}>
-                          <Typography style={{ fontSize: 14 }}>
-                            {d.file_type}
-                          </Typography>
-                        </div>
-                        <div className={classes.tableData}>
-                          <Typography style={{ fontSize: 14 }}>
-                            {d.CustomerSubdomain
-                              ? d.CustomerSubdomain.subdomain
-                              : null}
-                          </Typography>
-                        </div>
-                        <div className={classes.tableData}>
-                          <div>
-                            <Typography style={{ fontSize: 14 }}>
-                              {Moment(d.download_time).tz('Australia/Sydney').format(
-                                "YYYY-MM-DD hh:mm A"
-                              )}
-                            </Typography>
-                            <Typography
-                              style={{ fontSize: 13, color: "#757575" }}
-                            >
-                              Australia/Sydney
-                            </Typography>
-                          </div>
                         </div>
                       </div>
-                    ))
-                  : <div style={{
+                    </div>
+                  ))
+                ) : (
+                  <div
+                    style={{
                       textAlign: "center",
                       margin: "20px auto",
-                      fontSize: 16 ,
+                      fontSize: 16,
                       color: "#757575",
-                      fontWeight: 500}}>
-                        No data found
-                      </div> }
+                      fontWeight: 500,
+                    }}
+                  >
+                    No data found
+                  </div>
+                )}
               </div>
             </div>
           </>
@@ -281,4 +285,4 @@ const ReportDownloadActivityTable = ({ selectedSubdomain }) => {
   );
 };
 
-export default withRouter(ReportDownloadActivityTable);
+export default ReportDownloadActivityTable;

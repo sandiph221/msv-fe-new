@@ -9,29 +9,32 @@ const __dirname = path.dirname(__filename);
 // Define the directory to start searching from (relative to script location)
 const rootDir = path.join(__dirname, "src");
 
-// Define the replacements with more comprehensive mappings
+// Define the replacements for withRouter
 const replacements = [
-  { from: /@mui\/material/g, to: "@material-ui/core" },
-  { from: /@mui\/icons-material/g, to: "@material-ui/icons" },
-  { from: /@mui\/styles/g, to: "@material-ui/styles" },
-  { from: /@mui\/lab/g, to: "@material-ui/lab" },
-  // Additional common import patterns
+  // Remove the withRouter import
   {
-    from: /import \{([^}]*)\} from ['"]@mui\/material['"];/g,
-    to: "import {$1} from '@material-ui/core';",
+    from: /import\s*{\s*withRouter\s*}\s*from\s*['"]react-router-dom['"];\s*/g,
+    to: "",
   },
+  // Remove withRouter from multiple imports
   {
-    from: /import \{([^}]*)\} from ['"]@mui\/icons-material['"];/g,
-    to: "import {$1} from '@material-ui/icons';",
+    from: /import\s*{([^}]*)withRouter,([^}]*)}\s*from\s*['"]react-router-dom['"];\s*/g,
+    to: 'import {$1$2} from "react-router-dom";\n',
   },
-  // Handle specific component imports that might have changed paths
+  // Remove withRouter when it wraps an exported component
   {
-    from: /import \{ styled \} from ['"]@mui\/material\/styles['"];/g,
-    to: "import { styled } from '@material-ui/core/styles';",
+    from: /export\s+default\s+withRouter\s*\(\s*(\w+)\s*\)\s*;/g,
+    to: "export default $1;",
   },
+  // Remove withRouter when it's the last item in an import list
   {
-    from: /import \{ ThemeProvider \} from ['"]@mui\/material\/styles['"];/g,
-    to: "import { ThemeProvider } from '@material-ui/core/styles';",
+    from: /import\s*{([^}]*),\s*withRouter\s*}\s*from\s*['"]react-router-dom['"];\s*/g,
+    to: 'import {$1} from "react-router-dom";\n',
+  },
+  // Handle case where withRouter might be used inline with export
+  {
+    from: /export\s+default\s+withRouter\s*\(\s*/g,
+    to: "export default (",
   },
 ];
 
@@ -86,14 +89,14 @@ async function walkDir(dir) {
 
 // Main function to start the process
 async function main() {
-  console.log(`Starting MUI v5 to v4 migration in ${rootDir}`);
-  console.log("This will replace @mui/* imports with @material-ui/* imports");
+  console.log(`Starting withRouter removal in ${rootDir}`);
+  console.log("This will remove withRouter imports and usages from all files");
 
   try {
     await walkDir(rootDir);
-    console.log("Migration completed successfully!");
+    console.log("withRouter removal completed successfully!");
   } catch (error) {
-    console.error("Migration failed:", error);
+    console.error("withRouter removal failed:", error);
     process.exit(1);
   }
 }

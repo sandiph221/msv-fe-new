@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import {
   AppBar,
@@ -16,6 +17,7 @@ import {
 } from "@material-ui/core";
 
 import { NavLink } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import DashboardIcon from "@material-ui/icons/Dashboard";
@@ -27,7 +29,6 @@ import CardMembershipIcon from "@material-ui/icons/CardMembership";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import CompareIcon from "@material-ui/icons/Compare";
 
-import { Link, withRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import { SignOut } from "../../store/actions/AuthAction";
@@ -55,7 +56,9 @@ const StyledMenuItem = withStyles({
   },
 })(MenuItem);
 
-const Navbar = ({ location: { pathname } }) => {
+const Navbar = () => {
+  const location = useLocation();
+  const pathname = location.pathname;
   const theme = useTheme();
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
   const sm = useMediaQuery(theme.breakpoints.down("sm"));
@@ -393,4 +396,4 @@ const Navbar = ({ location: { pathname } }) => {
   );
 };
 
-export default withRouter(Navbar);
+export default Navbar;

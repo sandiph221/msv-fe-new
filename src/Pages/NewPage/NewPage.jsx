@@ -14,7 +14,7 @@ import {
 } from "@material-ui/icons";
 import Buttons from "../../Components/Buttons/Buttons";
 import { useCallback, useEffect, useState } from "react";
-import Editor from "react-simple-wysiwyg";
+import { Editor } from "react-simple-wysiwyg";
 import Layout from "../../Components/Layout";
 import Styles from "./Styles";
 import axios from "axios";

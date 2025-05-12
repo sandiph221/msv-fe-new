@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { withRouter } from "react-router-dom";
 import {
   Container,
   Typography,
@@ -18,7 +17,7 @@ import Layout from "../../Components/Layout";
 import styles from "./Styles";
 import axios from "axios";
 import Buttons from "Components/Buttons/Buttons";
-import Editor from "react-simple-wysiwyg";
+import { Editor } from "react-simple-wysiwyg";
 import { Add } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => styles(theme));
@@ -298,4 +297,4 @@ const EditPlan = ({ history, match }) => {
   );
 };
 
-export default withRouter(EditPlan);
+export default EditPlan;

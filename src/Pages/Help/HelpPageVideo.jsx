@@ -5,7 +5,6 @@ import Layout from "../../Components/Layout/index";
 import Styles from "./Styles";
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import { Typography } from "@material-ui/core";
-import { withRouter } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getHelpVideoList,
@@ -94,4 +93,4 @@ const HelpPageVideo = ({ history }) => {
   );
 };
 
-export default withRouter(HelpPageVideo);
+export default HelpPageVideo;

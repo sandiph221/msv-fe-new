@@ -1,43 +1,43 @@
-
 import {
   Grid,
   Typography,
   makeStyles,
   useTheme,
   useMediaQuery,
-} from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, withRouter } from 'react-router-dom';
-import TextField from '@material-ui/core/TextField';
-import Buttons from '../../Components/Buttons/Buttons';
-import { connect } from 'react-redux';
-import { ChangePasswordEmailVerification } from '../../store/actions/AuthAction';
-import Spinner from '../../Components/Spinner';
+} from "@material-ui/core";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate, useLocation } from "react-router-dom"; // Updated imports
+import TextField from "@material-ui/core/TextField";
+import Buttons from "../../Components/Buttons/Buttons";
+import { ChangePasswordEmailVerification } from "../../store/actions/AuthAction";
+import Spinner from "../../Components/Spinner";
 // Default Profile Page Styles
-import styles from '../Login/Styles';
+import styles from "../Login/Styles";
 // Password Requirements
-import * as constant from '../../utils/constant';
+import * as constant from "../../utils/constant";
 
 // Default Login Page Styles
 const useStyles = makeStyles((theme) => styles(theme));
 
-const ChangePasswordFromMail = ({ history }) => {
+const ChangePasswordFromMail = () => {
   const { logoURL, bannerURL } = useSelector((state) => state.settings);
   const dispatch = useDispatch();
+  const navigate = useNavigate(); // Replace history with navigate
+  const location = useLocation(); // For accessing URL parameters
   const theme = useTheme();
-  const match = useMediaQuery(theme.breakpoints.down('md'));
+  const match = useMediaQuery(theme.breakpoints.down("md"));
   const { apiRes } = useSelector((state) => state.apiResReducer);
   const { changePasswordLoading, password } = useSelector(
     (state) => state.auth
   );
   const [passwordValues, setPasswordValues] = React.useState({
-    newPassword: '',
-    confirmNewPassword: '',
+    newPassword: "",
+    confirmNewPassword: "",
   });
 
-  const url_string = window.location.href;
-  var url = new URL(url_string);
-  var authorization_token = url.searchParams.get('Authorization');
+  // Get authorization token from URL params
+  const searchParams = new URLSearchParams(location.search);
+  const authorization_token = searchParams.get("Authorization");
 
   const [passwordErrors, setErrorsPassword] = React.useState({});
   const handleChange = (event) => {
@@ -54,19 +54,19 @@ const ChangePasswordFromMail = ({ history }) => {
     // Password minumum requirements which includes lower case letter, upper case letter, numbers and special characters and minimum 8 characters
     if (!constant.PASSWORD_PATTERN.test(passwordValues.newPassword)) {
       formErrors.newPasswordError =
-        'Password must contain a minimum 8 characters, at least one number, one uppercase letter, one lowercase letter.';
+        "Password must contain a minimum 8 characters, at least one number, one uppercase letter, one lowercase letter.";
     }
     // Check if password and confirm password are same
     if (passwordValues.newPassword !== passwordValues.confirmNewPassword) {
       formErrors.confirmNewPasswordError =
-        'New password and confirm password does not match.';
+        "New password and confirm password does not match.";
     }
     // Check empty value
     if (!passwordValues.newPassword) {
-      formErrors.newPasswordError = 'New Password is Required*';
+      formErrors.newPasswordError = "New Password is Required*";
     }
     if (!passwordValues.confirmNewPassword) {
-      formErrors.confirmNewPasswordError = 'Confirm Password is Required*';
+      formErrors.confirmNewPasswordError = "Confirm Password is Required*";
     }
 
     setErrorsPassword(formErrors);
@@ -83,56 +83,38 @@ const ChangePasswordFromMail = ({ history }) => {
 
   React.useEffect(() => {
     if (password && password.status) {
-      history.push('/login');
+      navigate("/login"); // Replace history.push with navigate
     }
-  }, [password]);
+  }, [password, navigate]);
 
   // Default Login Page Styles
   const classes = useStyles();
   return (
     <Grid container>
-      <Grid
-        item
-        xl={6}
-        lg={6}
-        md={12}
-        sm={12}
-        xs={12}
-      >
+      <Grid item xl={6} lg={6} md={12} sm={12} xs={12}>
         <div className={classes.root}>
           <Typography className={classes.loginTitle}>
-            <img
-              src={logoURL}
-              height='70'
-              alt='logo-image'
-            />
+            <img src={logoURL} height="70" alt="logo-image" />
           </Typography>
           <Grid>
             <Typography className={classes.loginWelcome}>
               Reset Password
             </Typography>
             <Typography className={classes.loginDesc}>
-              {' '}
+              {" "}
               Please use a strong password consisting a mix of letters, numbers
               & symbols to make your account secure.
             </Typography>
 
             <form onSubmit={handleSubmit}>
-              <Grid
-                container
-                spacing={3}
-                justifyContent='space-between'
-              >
-                <Grid
-                  item
-                  xs={12}
-                >
+              <Grid container spacing={3} justifyContent="space-between">
+                <Grid item xs={12}>
                   <TextField
                     lg={12}
                     className={classes.inputField}
-                    variant='outlined'
-                    title='Password'
-                    label='New Password'
+                    variant="outlined"
+                    title="Password"
+                    label="New Password"
                     error={
                       passwordErrors && passwordErrors.newPasswordError
                         ? true
@@ -141,24 +123,21 @@ const ChangePasswordFromMail = ({ history }) => {
                     helperText={
                       passwordErrors && passwordErrors.newPasswordError
                     }
-                    name='newPassword'
+                    name="newPassword"
                     value={passwordValues.newPassword}
                     onChange={handleChange}
                     fullWidth
-                    type='password'
+                    type="password"
                   />
                 </Grid>
-                <Grid
-                  item
-                  xs={12}
-                >
+                <Grid item xs={12}>
                   <TextField
                     lg={12}
                     className={classes.inputField}
-                    variant='outlined'
-                    label='Confirm Password'
-                    title='Confirm Password'
-                    name='confirmNewPassword'
+                    variant="outlined"
+                    label="Confirm Password"
+                    title="Confirm Password"
+                    name="confirmNewPassword"
                     error={
                       passwordErrors && passwordErrors.confirmNewPasswordError
                         ? true
@@ -170,20 +149,17 @@ const ChangePasswordFromMail = ({ history }) => {
                     value={passwordValues.confirmNewPassword}
                     onChange={handleChange}
                     fullWidth
-                    type='password'
+                    type="password"
                   />
                 </Grid>
 
-                <Grid
-                  item
-                  xs={12}
-                >
+                <Grid item xs={12}>
                   <div className={classes.btnWrapper}>
                     <Buttons
                       className={classes.MuiButton}
                       fullWidth
                       disableElevation
-                      type='submit'
+                      type="submit"
                       disabled={changePasswordLoading}
                     >
                       Reset
@@ -196,27 +172,29 @@ const ChangePasswordFromMail = ({ history }) => {
               <Grid
                 item
                 container
-                direction='row'
-                justify='center'
-                alignItems='center'
-                style={{ marginTop: 20 }}
+                direction="row"
+                style={{
+                  marginTop: 20,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
               >
                 <Typography>
-                  {' '}
+                  {" "}
                   <h3
-                    className='forgot-password'
-                    style={{ color: '#323132', fontWeight: 'normal' }}
+                    className="forgot-password"
+                    style={{ color: "#323132", fontWeight: "normal" }}
                   >
                     Remember your Password?
                   </h3>
                 </Typography>
-                {'    '}
+                {"    "}
                 <Typography
                   component={Link}
-                  to='/login'
-                  style={{ textDecoration: 'none' }}
+                  to="/login"
+                  style={{ textDecoration: "none" }}
                 >
-                  <h3 className='forgot-password'>&nbsp;Log in</h3>
+                  <h3 className="forgot-password">&nbsp;Log in</h3>
                 </Typography>
               </Grid>
             </form>
@@ -232,16 +210,11 @@ const ChangePasswordFromMail = ({ history }) => {
         </div>
       </Grid>
       {!match && (
-        <Grid
-          className={classes.loginBannerImg}
-          item
-          xl={6}
-          lg={6}
-        >
+        <Grid className={classes.loginBannerImg} item xl={6} lg={6}>
           <img
             className={classes.loginImg}
             src={bannerURL}
-            alt='Banner Image'
+            alt="Banner Image"
           />
         </Grid>
       )}
@@ -249,9 +222,4 @@ const ChangePasswordFromMail = ({ history }) => {
   );
 };
 
-const mapDispatchToProps = { ChangePasswordEmailVerification };
-// connect(null, mapDispatchToProps), withRouter(ChangePasswordFromMail);
-
-export default withRouter(
-  connect(null, mapDispatchToProps)(ChangePasswordFromMail)
-);
+export default ChangePasswordFromMail;

@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
-import { DateRangePicker } from 'materialui-daterange-picker';
-import { DateTime } from 'luxon';
-import { Button } from '@material-ui/core';
-import { CustomButton } from '../CustomButton/CustomButton';
-import { withRouter } from 'react-router-dom';
+import React, { useEffect } from "react";
+import { DateRangePicker } from "materialui-daterange-picker";
+import { DateTime } from "luxon";
+import { Button } from "@material-ui/core";
+import { CustomButton } from "../CustomButton/CustomButton";
 
 const CustomDateFilter = (props) => {
   const [dateRange, setDateRange] = React.useState({});
@@ -28,9 +27,9 @@ const CustomDateFilter = (props) => {
   return (
     <div
       style={{
-        position: 'absolute',
+        position: "absolute",
         right: 0,
-        top: props.location.pathname === '/contact-support' ? '20px' : '100%',
+        top: props.location.pathname === "/contact-support" ? "20px" : "100%",
       }}
     >
       <DateRangePicker
@@ -47,16 +46,13 @@ const CustomDateFilter = (props) => {
       {props.customDate && (
         <div
           style={{
-            position: 'absolute',
+            position: "absolute",
             bottom: 25,
-            right: '8%',
+            right: "8%",
             zIndex: 999999,
           }}
         >
-          <CustomButton
-            defaultBackgroundColor
-            onClick={handleDateChange}
-          >
+          <CustomButton defaultBackgroundColor onClick={handleDateChange}>
             Apply
           </CustomButton>
         </div>
@@ -65,4 +61,4 @@ const CustomDateFilter = (props) => {
   );
 };
 
-export default withRouter(CustomDateFilter);
+export default CustomDateFilter;

@@ -14,7 +14,7 @@ import Spinner from "../../Components/Spinner";
 import RemoveCircleOutlineOutlinedIcon from '@material-ui/icons/RemoveCircleOutlineOutlined';
 import Alert from "../../Components/AlertBox/Alert";
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
-import { Link, withRouter } from "react-router-dom";
+import { Link} from "react-router-dom";
 import SystemUpdateAltIcon from '@material-ui/icons/SystemUpdateAlt';
 import {
   deletePagesInfo,
@@ -348,4 +348,4 @@ const UserTable = ({
   );
 };
 
-export default withRouter(UserTable);
+export default UserTable;

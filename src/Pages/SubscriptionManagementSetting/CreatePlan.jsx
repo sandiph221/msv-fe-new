@@ -1,6 +1,5 @@
 // CreatePlan.js
 import { useState } from "react";
-import { withRouter } from "react-router-dom";
 import {
   Container,
   Typography,
@@ -264,4 +263,4 @@ const CreatePlan = ({ history }) => {
   );
 };
 
-export default withRouter(CreatePlan);
+export default CreatePlan;

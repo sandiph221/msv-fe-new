@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Box,
   Button,
@@ -19,7 +20,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Layout from "../../Components/Layout";
 import styles from "./Styles";
-import Buttons from "Components/Buttons/Buttons";
+// import Buttons from "Components/Buttons/Buttons";
 
 const useStyles = makeStyles((theme) => styles(theme));
 
@@ -84,7 +85,8 @@ const UpgradePlan = (props) => {
   };
 
   return (
-    <Layout>
+    <>
+      {/* // <Layout> */}
       <div
         style={{
           marginTop: 100,
@@ -156,7 +158,7 @@ const UpgradePlan = (props) => {
               <Button variant="outlined" onClick={handleClose}>
                 Cancel
               </Button>
-              <Buttons
+              {/* <Buttons
                 variant="outlined"
                 color="secondary"
                 onClick={() =>
@@ -173,12 +175,13 @@ const UpgradePlan = (props) => {
                 }
               >
                 Proceed
-              </Buttons>
+              </Buttons> */}
             </DialogActions>
           </>
         )}
       </Dialog>
-    </Layout>
+    </>
+    // </Layout>
   );
 };
 

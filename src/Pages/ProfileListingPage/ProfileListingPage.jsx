@@ -33,7 +33,7 @@ import SocialButton from "../../Components/SocialButton";
 import MaterailDataTable from "../../Components/MaterialDataTable/MaterialDatatable";
 import AddProfileModal from "../../Components/AddProfileModal/AddProfileModal";
 import CompareIcon from '@material-ui/icons/Compare';
-import { withRouter, Link } from "react-router-dom";
+import {  Link } from "react-router-dom";
 import PageTitle from "../../Components/PageTitle/PageTitle";
 import { toast } from "react-toastify";
 import TextInput from "../../Components/TextInput/TextInput";
@@ -434,4 +434,4 @@ const ProfileListingPage = ({ history }) => {
   );
 };
 
-export default withRouter(ProfileListingPage);
+export default ProfileListingPage;

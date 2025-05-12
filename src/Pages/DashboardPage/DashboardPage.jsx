@@ -13,7 +13,6 @@ import domtoimage from "dom-to-image";
 import { saveAs } from "file-saver";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { withRouter } from "react-router-dom";
 import { toast } from "react-toastify";
 import BarChart from "../../Components/BarChart";
 import { CustomButton } from "../../Components/CustomButton/CustomButton";
@@ -647,4 +646,4 @@ const DashboardPage = ({ history }) => {
   );
 };
 
-export default withRouter(DashboardPage);
+export default DashboardPage;

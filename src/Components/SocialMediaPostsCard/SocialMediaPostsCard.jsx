@@ -19,7 +19,6 @@ import { useState } from "react";
 import LazyLoad from "react-lazyload";
 import ReactPlayer from "react-player";
 import { useSelector } from "react-redux";
-import { withRouter } from "react-router-dom";
 import fbIcon from "../../assets/images/facebook.png";
 import instaIcon from "../../assets/images/insta-icon.png";
 import postImg from "../../assets/images/post-img.jpeg";
@@ -645,4 +644,4 @@ const SocialMediaPostsCard = ({
   );
 };
 
-export default withRouter(SocialMediaPostsCard);
+export default SocialMediaPostsCard;

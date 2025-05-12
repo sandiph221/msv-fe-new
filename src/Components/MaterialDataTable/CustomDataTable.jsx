@@ -20,8 +20,6 @@ import RemoveCircleOutlineOutlinedIcon from '@material-ui/icons/RemoveCircleOutl
 import Alert from "../AlertBox/Alert";
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { deleteAddedProfileList } from "../../store/actions/SocialMediaProfileAction";
-import { withRouter } from "react-router-dom";
-
 const useStyles = makeStyles((theme) => ({
   divTabelContent: {
     width: "100%",
@@ -614,4 +612,4 @@ const CustomDataTable = ({
   );
 };
 
-export default withRouter(CustomDataTable);
+export default CustomDataTable;

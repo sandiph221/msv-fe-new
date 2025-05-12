@@ -10,7 +10,7 @@ import {
 import { AddCircleOutline, CancelOutlined } from "@material-ui/icons";
 import Buttons from "../../Components/Buttons/Buttons";
 import { useState } from "react";
-import Editor from "react-simple-wysiwyg";
+import { Editor } from "react-simple-wysiwyg";
 import Layout from "../../Components/Layout";
 import Styles from "./Styles";
 import { toast } from "react-toastify";
