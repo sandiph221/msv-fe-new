@@ -1,25 +1,20 @@
-
 import {
   makeStyles,
   Box,
   Typography,
-  BottomNavigation,
   useTheme,
   useMediaQuery,
-  ToggleButton,
-  ToggleButtonGroup,
 } from "@material-ui/core";
 import { Line, Chart } from "react-chartjs-2";
-import { blue } from "@material-ui/core/colors";
+import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 
 const useStyles = makeStyles((test) => ({
   selected: {
     backgroundColor: "transparent !important",
-    borderColor: "transparent !important",
   },
 
   graphTitleSection: {
-    display: (props) => props.xs ? "block" : "flex",
+    display: (props) => (props.xs ? "block" : "flex"),
     justifyContent: "space-between",
     marginBottom: 15,
     alignItems: "flex-end",
@@ -86,7 +81,7 @@ const LineChart = (props) => {
       return false;
     }
     var offset = 0;
-    let heightOffset = 0
+    let heightOffset = 0;
     //adjust the offset left or right depending on the event position
     if (elements[0]._chart.width / 2 > position.x) {
       offset = 20;
@@ -94,7 +89,7 @@ const LineChart = (props) => {
     if (elements[0]._chart.height / 2 < position.y) {
       heightOffset = -70;
     } else {
-      heightOffset = 70
+      heightOffset = 70;
     }
     // if(elements[0]._chart.width / 2 > position.y) {
     //   heightOffset = 70
@@ -145,35 +140,41 @@ const LineChart = (props) => {
             const dataPointsIndex = tooltipItem.map((data) => {
               return `${data.index}`;
             });
-            const points = dataPointsIndex.slice(0, 1)
+            const points = dataPointsIndex.slice(0, 1);
             const dateRange = props.chartData.timeline
               ? props.chartData.timeline.filter(
-                (date, index) => index == points
-              )
+                  (date, index) => index == points
+                )
               : [];
             if (dateRange && dateRange.length !== 0) {
               if (postDateFilter === "day") {
-                return `${dateRange
-                  ? new Date(dateRange[0].start).toDateString().split(" ")[1]
-                  : ""
-                  } ${dateRange
+                return `${
+                  dateRange
+                    ? new Date(dateRange[0].start).toDateString().split(" ")[1]
+                    : ""
+                } ${
+                  dateRange
                     ? new Date(dateRange[0].start).toDateString().split(" ")[2]
                     : ""
-                  } `
+                } `;
               } else {
-                return `From : ${dateRange
-                  ? new Date(dateRange[0].start).toDateString().split(" ")[1]
-                  : ""
-                  } ${dateRange
+                return `From : ${
+                  dateRange
+                    ? new Date(dateRange[0].start).toDateString().split(" ")[1]
+                    : ""
+                } ${
+                  dateRange
                     ? new Date(dateRange[0].start).toDateString().split(" ")[2]
                     : ""
-                  }  To: ${dateRange
+                }  To: ${
+                  dateRange
                     ? new Date(dateRange[0].end).toDateString().split(" ")[1]
                     : ""
-                  } ${dateRange
+                } ${
+                  dateRange
                     ? new Date(dateRange[0].end).toDateString().split(" ")[2]
                     : ""
-                  }`;
+                }`;
               }
             } else {
               return tooltipItem.map((item) => item.label.toUpperCase());
@@ -251,7 +252,7 @@ const LineChart = (props) => {
 
   const classes = useStyles({ xs });
   return (
-    <Box style={{ maxWidth: '100vw' }}>
+    <Box style={{ maxWidth: "100vw" }}>
       <div className={classes.graphTitleSection}>
         <Typography
           style={{ fontSize: xs ? 14 : 22, letterSpacing: 0, fontWeight: 600 }}
@@ -265,7 +266,7 @@ const LineChart = (props) => {
             height: xs ? 28 : 34,
             background: "#fff",
             border: "1px solid #E0E0E0",
-            marginTop: xs ? 35 : 0
+            marginTop: xs ? 35 : 0,
           }}
           selected={color === "blue"}
           value={postDateFilter}
@@ -309,7 +310,6 @@ const LineChart = (props) => {
             style={{
               position: "relative",
               width: xs ? "1024px" : sm ? "100%" : "100%",
-
             }}
           >
             <Line

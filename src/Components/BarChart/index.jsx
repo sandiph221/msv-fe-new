@@ -13,9 +13,8 @@ import {
   useMediaQuery,
   useTheme,
   withStyles,
-  ToggleButton,
-  ToggleButtonGroup,
 } from "@material-ui/core";
+import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import { useEffect } from "react";
 import { Bar, Chart } from "react-chartjs-2";
 import { useSelector } from "react-redux";
