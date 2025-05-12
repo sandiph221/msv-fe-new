@@ -1,5 +1,3 @@
-import { Opacity } from "@mui/icons-material";
-
 export default (theme) => ({
   row: {
     marginTop: "65px",
@@ -9,9 +7,9 @@ export default (theme) => ({
   tabHeaderComp: {
     marginTop: "30px",
     display: "flex",
-    padding: (props) => props.xs ? "0px 20px" : "0px 40px",
+    padding: (props) => (props.xs ? "0px 20px" : "0px 40px"),
     width: "100%",
-    justifyContent: 'space-between'
+    justifyContent: "space-between",
   },
   title: {
     textAlign: "center",
@@ -34,13 +32,13 @@ export default (theme) => ({
     position: "relative",
   },
   loader: {
-    background: "rgba(255, 255, 255, 0.6)"
+    background: "rgba(255, 255, 255, 0.6)",
   },
   graphTitleSection: {
     display: "flex",
     justifyContent: "space-between",
     marginBottom: 15,
-    alignItems: 'flex-end'
+    alignItems: "flex-end",
   },
   chartFallBackContainer: {
     height: "calc(100% - 47px)",
@@ -60,14 +58,11 @@ export default (theme) => ({
     border: "1px solid #bdbdbd",
     minHeight: 350,
     borderRadius: 4,
-
   },
 
   /* profile overview css */
 
-  profileOverview: {
-
-  },
+  profileOverview: {},
   clearBtn: {
     marginLeft: 10,
     alignSelf: "center",
@@ -78,8 +73,7 @@ export default (theme) => ({
     textTransform: "capitalize",
 
     "&:hover": {
-      backgroundColor: "transparent"
-
-    }
-  }
+      backgroundColor: "transparent",
+    },
+  },
 });

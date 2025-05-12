@@ -12,10 +12,10 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+import SearchIcon from '@material-ui/icons/Search';
 import { useDispatch, useSelector } from 'react-redux';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import RotateLeftIcon from '@mui/icons-material/RotateLeft';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import RotateLeftIcon from '@material-ui/icons/RotateLeft';
 import Cards from '../Cards';
 import Buttons from '../Buttons/Buttons';
 import {
@@ -27,7 +27,7 @@ import Spinner from '../Spinner';
 import Styles from './Styles';
 import Alert from '../AlertBox/Alert';
 import { DeleteCustomer } from '../../store/actions/CustomersAction';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 
 const useStyles = makeStyles((theme) => Styles(theme));
 

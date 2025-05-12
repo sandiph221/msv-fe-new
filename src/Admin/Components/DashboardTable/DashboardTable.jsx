@@ -10,9 +10,9 @@ import { useDispatch, useSelector } from "react-redux";
 import Spinner from "../../../Components/Spinner";
 import { formatImage, formatNumber } from "utils/functions.js";
 
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
-import SystemUpdateAltIcon from "@mui/icons-material/SystemUpdateAlt";
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
+import RemoveCircleOutlineOutlinedIcon from '@material-ui/icons/RemoveCircleOutlineOutlined';
+import SystemUpdateAltIcon from '@material-ui/icons/SystemUpdateAlt';
 import Moment from "moment-timezone";
 import { Link, withRouter } from "react-router-dom";
 import Alert from "../../../Components/AlertBox/Alert";

@@ -14,7 +14,7 @@ import {
   makeStyles,
   withStyles,
 } from "@mui/material";
-import HelpIcon from "@mui/icons-material/Help";
+import HelpIcon from '@material-ui/icons/Help';
 import { linkSocialPlatform } from "store/actions/CustomersAction";
 import { toast } from "react-toastify";
 import axios from "axios";

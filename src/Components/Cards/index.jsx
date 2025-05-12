@@ -7,8 +7,8 @@ import {
   CardContent,
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import DeleteIcon from "@mui/icons-material/Delete";
-import CreateIcon from "@mui/icons-material/Create";
+import DeleteIcon from '@material-ui/icons/Delete';
+import CreateIcon from '@material-ui/icons/Create';
 import Styles from "./Styles";
 import * as constant from "../../utils/constant";
 // get our fontawesome imports

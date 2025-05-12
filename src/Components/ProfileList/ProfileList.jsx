@@ -10,8 +10,8 @@ import {
   TextField,
   InputAdornment,
 } from "@mui/material";
-import CompareIcon from "@mui/icons-material/Compare";
-import SearchIcon from "@mui/icons-material/Search";
+import CompareIcon from '@material-ui/icons/Compare';
+import SearchIcon from '@material-ui/icons/Search';
 import styles from "./Styles";
 import ProfileDataTable from "../ProfileDataTable/ProfileDataTable";
 

@@ -7,7 +7,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { AddCircleOutline, CancelOutlined } from "@mui/icons-material";
+import { AddCircleOutline, CancelOutlined } from "@material-ui/icons";
 import Buttons from "../../Components/Buttons/Buttons";
 import { useState } from "react";
 import Editor from "react-simple-wysiwyg";

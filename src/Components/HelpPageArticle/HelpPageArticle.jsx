@@ -1,6 +1,6 @@
 import { Box, Container } from "@mui/material";
 import { useEffect, useState } from "react";
-import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 
 export const HelpPageArticle = (props) => {
   const [show, setShow] = useState(false);

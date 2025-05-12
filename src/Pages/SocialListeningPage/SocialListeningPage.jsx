@@ -15,8 +15,8 @@ import FilterDays from "../../Components/FilterDays";
 import styles from "./Styles";
 import { BubbleChart } from "../../Components/BubbleChart/BubbleChart";
 import { SocialMediaCardLabels } from "../../Components/SocialMediaLabelsCard/SocialMediaLabelsCard";
-import PeopleIcon from "@mui/icons-material/People";
-import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
+import PeopleIcon from '@material-ui/icons/People';
+import CommentOutlinedIcon from '@material-ui/icons/CommentOutlined';
 import LineCharts from "../../Components/LineChart";
 import { useDispatch, useSelector } from "react-redux";
 import {

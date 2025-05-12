@@ -13,9 +13,9 @@ import {
   TextField,
   withStyles,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import MailOutlineIcon from "@mui/icons-material/MailOutline";
-import ReplyIcon from "@mui/icons-material/Reply";
+import CloseIcon from '@material-ui/icons/Close';
+import MailOutlineIcon from '@material-ui/icons/MailOutline';
+import ReplyIcon from '@material-ui/icons/Reply';
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Styles from "../../Pages/Help/Styles";

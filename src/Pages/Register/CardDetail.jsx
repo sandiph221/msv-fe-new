@@ -10,7 +10,7 @@ import {
   Typography,
   makeStyles,
 } from "@mui/material";
-import OfflineBoltOutlined from "@mui/icons-material/OfflineBoltOutlined";
+import OfflineBoltOutlined from '@material-ui/icons/OfflineBoltOutlined';
 import { useEffect, useState } from "react";
 import { COUNTRIES } from "../../utils/constant";
 

@@ -1,5 +1,3 @@
-import { Opacity } from "@mui/icons-material";
-
 export default (props) => ({
   row: {
     marginTop: "65px",
@@ -10,7 +8,7 @@ export default (props) => ({
     marginTop: "30px",
     display: "flex",
     padding: (props) => (props.xs ? "0px 10px" : "0px 40px"),
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   title: {
     textAlign: "center",
@@ -36,15 +34,12 @@ export default (props) => ({
     position: "relative",
   },
   loader: {
-    background: "rgba(255, 255, 255, 0.6)"
+    background: "rgba(255, 255, 255, 0.6)",
   },
-
 
   /* profile overview css */
 
-  profileOverview: {
-
-  },
+  profileOverview: {},
 
   pieChart: {
     marginTop: 65,
@@ -97,7 +92,6 @@ export default (props) => ({
   pieChartDetailHeader: {
     display: "flex",
     alignItems: "center",
-
   },
 
   pieDistributionTitle: {
@@ -114,13 +108,13 @@ export default (props) => ({
 
   chartDetails: {
     width: "70%",
-    margin: "auto"
+    margin: "auto",
   },
 
   pieChartProfile: {
     position: "relative",
     margin: "30px 0",
-    borderRight: "1px solid rgba(224, 224, 224, 1)"
+    borderRight: "1px solid rgba(224, 224, 224, 1)",
   },
 
   chartFallBackContainer: {
@@ -135,7 +129,7 @@ export default (props) => ({
     display: "flex",
     justifyContent: "space-between",
     marginBottom: 15,
-    alignItems: 'flex-end'
+    alignItems: "flex-end",
   },
 
   graphTitle: {
@@ -161,8 +155,8 @@ export default (props) => ({
     "& .top_post_title": {
       marginBottom: 20,
       display: (props) => (props.xs ? "block" : "flex"),
-      justifyContent: "space-between"
-    }
+      justifyContent: "space-between",
+    },
   },
 
   loadMoreButtonDivDashboard: {

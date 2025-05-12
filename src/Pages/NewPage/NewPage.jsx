@@ -11,7 +11,7 @@ import {
   AddCircleOutline,
   CancelOutlined,
   CloudUpload,
-} from "@mui/icons-material";
+} from "@material-ui/icons";
 import Buttons from "../../Components/Buttons/Buttons";
 import { useCallback, useEffect, useState } from "react";
 import Editor from "react-simple-wysiwyg";

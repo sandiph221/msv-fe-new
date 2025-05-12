@@ -19,11 +19,11 @@ import {
   useMediaQuery,
 } from "@mui/material";
 
-import CloseIcon from "@mui/icons-material/Close";
-import PageviewIcon from "@mui/icons-material/Pageview";
-import SearchIcon from "@mui/icons-material/Search";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import CollectionsIcon from "@mui/icons-material/Collections";
+import CloseIcon from '@material-ui/icons/Close';
+import PageviewIcon from '@material-ui/icons/Pageview';
+import SearchIcon from '@material-ui/icons/Search';
+import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
+import CollectionsIcon from '@material-ui/icons/Collections';
 
 // Styled components to replace withStyles
 const Root = styled("div")(({ theme }) => ({

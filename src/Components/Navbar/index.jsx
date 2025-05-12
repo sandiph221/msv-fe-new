@@ -17,15 +17,15 @@ import {
 
 import { NavLink } from "react-router-dom";
 
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import HelpIcon from "@mui/icons-material/Help";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import SettingsIcon from "@mui/icons-material/Settings";
-import AccountBox from "@mui/icons-material/AccountBox";
-import CardMembershipIcon from "@mui/icons-material/CardMembership";
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import CompareIcon from "@mui/icons-material/Compare";
+import AccountBoxIcon from "@material-ui/icons/AccountBox";
+import DashboardIcon from "@material-ui/icons/Dashboard";
+import HelpIcon from "@material-ui/icons/Help";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import SettingsIcon from "@material-ui/icons/Settings";
+import AccountBox from "@material-ui/icons/AccountBox";
+import CardMembershipIcon from "@material-ui/icons/CardMembership";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import CompareIcon from "@material-ui/icons/Compare";
 
 import { Link, withRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -33,12 +33,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { SignOut } from "../../store/actions/AuthAction";
 import { Styles } from "./Styles";
 import * as constant from "../../utils/constant";
-import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
-import MenuIcon from "@mui/icons-material/Menu";
-import HeadsetIcon from "@mui/icons-material/Headset";
-import CallSharpIcon from "@mui/icons-material/CallSharp";
+import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
+import MenuIcon from "@material-ui/icons/Menu";
+import HeadsetIcon from "@material-ui/icons/Headset";
+import CallSharpIcon from "@material-ui/icons/CallSharp";
 import { formatServerImages } from "utils/functions.js";
-import { BarChart, CreditCard, Description } from "@mui/icons-material";
+import { BarChart, CreditCard, Description } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => Styles(theme));
 

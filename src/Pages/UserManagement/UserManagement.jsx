@@ -22,20 +22,20 @@ import {
   TextField,
   Typography,
   withStyles,
-} from '@mui/material';
+} from "@mui/material";
 
-import Layout from '../../Components/Layout';
+import Layout from "../../Components/Layout";
 
-import { Delete, Edit } from '@mui/icons-material';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import Buttons from 'Components/Buttons/Buttons';
-import UploadImg from 'Components/UploadImg';
-import { connect, useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-import { getPagesInfo } from 'store/actions/SuperAdminDashboardAction';
-import Alert from '../../Components/AlertBox/Alert';
-import Spinner from '../../Components/Spinner';
+import { Delete, Edit } from "@material-ui/icons";
+import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import Buttons from "Components/Buttons/Buttons";
+import UploadImg from "Components/UploadImg";
+import { connect, useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { getPagesInfo } from "store/actions/SuperAdminDashboardAction";
+import Alert from "../../Components/AlertBox/Alert";
+import Spinner from "../../Components/Spinner";
 import {
   CreateCustomer,
   DeleteCustomer,
@@ -43,18 +43,18 @@ import {
   PaginateCustomer,
   SearchCustomer,
   UpdateCustomer,
-} from '../../store/actions/CustomersAction';
-import * as constant from '../../utils/constant';
-import { Styles } from './Styles';
-import './Styles/style.css';
+} from "../../store/actions/CustomersAction";
+import * as constant from "../../utils/constant";
+import { Styles } from "./Styles";
+import "./Styles/style.css";
 
 const useStyles = makeStyles((theme) => Styles(theme));
 
 const StyledTextField = withStyles({
   root: {
     borderRadius: 15,
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": {
         borderRadius: 12,
       },
     },
@@ -69,19 +69,19 @@ const UserManagement = ({ history }) => {
   const { user } = useSelector((state) => state.auth);
   const { logoUrl, bannerUrl } = useSelector((state) => state.settings);
   const [formValues, setFormValues] = React.useState({
-    id: '',
-    brandName: '',
-    firstName: '',
-    lastName: '',
-    email: '',
-    phoneNumber: '',
-    employeeNumber: '',
-    position: '',
-    role: '',
-    logo: '',
-    featured_image: '',
-    userAccountsLimt: '',
-    socialMediaProfilesLimt: '',
+    id: "",
+    brandName: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    phoneNumber: "",
+    employeeNumber: "",
+    position: "",
+    role: "",
+    logo: "",
+    featured_image: "",
+    userAccountsLimt: "",
+    socialMediaProfilesLimt: "",
   });
   const [errors, setErrors] = React.useState({});
   const [validationErrors, setValidationErrors] = React.useState({});
@@ -93,7 +93,7 @@ const UserManagement = ({ history }) => {
   const [itemToDelete, setItemToDelete] = React.useState(null);
   const [deleteAlertOpen, setDeleteAlertOpen] = React.useState(false);
   const [userAddedAlertOpen, setUserAddedAlertOpen] = React.useState(false);
-  const [responseMessage, setResponseMessage] = React.useState('');
+  const [responseMessage, setResponseMessage] = React.useState("");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -121,7 +121,6 @@ const UserManagement = ({ history }) => {
     setEditData({});
     resetCustomerForm();
   };
-
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -159,7 +158,7 @@ const UserManagement = ({ history }) => {
 
   const handleChange = (event) => {
     let inputValue =
-      event.target.name === 'logo' || event.target.name === 'featured_image'
+      event.target.name === "logo" || event.target.name === "featured_image"
         ? event.target.files[0]
         : event.target.value;
 
@@ -172,24 +171,24 @@ const UserManagement = ({ history }) => {
   /* Resetting the form values */
   const resetCustomerForm = () => {
     setFormValues({
-      brandName: '',
-      firstName: '',
-      lastName: '',
-      email: '',
-      phoneNumber: '',
-      employeeNumber: '',
-      position: '',
-      role: '',
-      logo: '',
-      featured_image: '',
-      userAccountsLimt: '',
-      socialMediaProfilesLimt: '',
+      brandName: "",
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneNumber: "",
+      employeeNumber: "",
+      position: "",
+      role: "",
+      logo: "",
+      featured_image: "",
+      userAccountsLimt: "",
+      socialMediaProfilesLimt: "",
     });
   };
 
   React.useEffect(() => {
     if (user.role === constant.CUSTOMER_VIEWER_NAME) {
-      history.push('/admin/dashboard');
+      history.push("/admin/dashboard");
     }
   }, [user]);
 
@@ -219,69 +218,69 @@ const UserManagement = ({ history }) => {
       customerAdmin &&
       !formValues.brandName
     ) {
-      formErrors.brandName = 'Sub Domain is Required';
+      formErrors.brandName = "Sub Domain is Required";
     }
 
     if (!formValues.firstName) {
-      formErrors.firstName = 'First Name is Required';
+      formErrors.firstName = "First Name is Required";
     }
 
     if (!formValues.lastName) {
-      formErrors.lastName = 'Last Name is Required';
+      formErrors.lastName = "Last Name is Required";
     }
 
     if (!formValues.email) {
-      formErrors.email = 'Email is Required';
+      formErrors.email = "Email is Required";
     }
-    if (typeof formValues.email !== 'undefined') {
+    if (typeof formValues.email !== "undefined") {
       //regular expression for email validation
       var pattern = new RegExp(constant.EMAIL_PATTERN);
       if (!pattern.test(formValues.email)) {
-        formErrors.email = 'Please enter valid email-ID.';
+        formErrors.email = "Please enter valid email-ID.";
       }
     }
     if (user.role === constant.CUSTOMER_ADMIN_NAME && !formValues.position) {
-      formErrors.position = 'Position is Required';
+      formErrors.position = "Position is Required";
     }
     if (user.role === constant.CUSTOMER_ADMIN_NAME && !formValues.role) {
-      formErrors.role = 'User Role is Required';
+      formErrors.role = "User Role is Required";
     }
 
     if (
       user.role === constant.CUSTOMER_ADMIN_NAME &&
       !formValues.employeeNumber
     ) {
-      formErrors.employeeNumber = 'Employee Number is Required';
+      formErrors.employeeNumber = "Employee Number is Required";
     }
     if (!formValues.phoneNumber) {
-      formErrors.phoneNumber = 'Contact Number is Required';
+      formErrors.phoneNumber = "Contact Number is Required";
     }
     /* checking if the fields contains only number */
     if (isNaN(formValues.phoneNumber)) {
-      formErrors.phoneNumber = 'Contact Number must be a valid ';
+      formErrors.phoneNumber = "Contact Number must be a valid ";
     }
     if (specialCharacters.test(formValues.phoneNumber)) {
       formErrors.phoneNumber =
-        'Contact Number cannot contain any special characters.';
+        "Contact Number cannot contain any special characters.";
     }
     if (
       user.role === constant.SUPER_ADMIN_NAME &&
       customerAdmin &&
       !formValues.userAccountsLimt
     ) {
-      formErrors.userAccountsLimt = ' Account limit is Required';
+      formErrors.userAccountsLimt = " Account limit is Required";
     }
     if (isNaN(formValues.userAccountsLimt)) {
       formErrors.userAccountsLimt =
-        'The user account limit must be an integer  ';
+        "The user account limit must be an integer  ";
     }
-    if (formValues.userAccountsLimt === '0') {
+    if (formValues.userAccountsLimt === "0") {
       formErrors.userAccountsLimt =
-        'The user account limit must be greater than 0 ';
+        "The user account limit must be greater than 0 ";
     }
     if (specialCharacters.test(formValues.userAccountsLimt)) {
       formErrors.userAccountsLimt =
-        'Account limit cannot contain any special characters.';
+        "Account limit cannot contain any special characters.";
     }
     if (
       user.role === constant.SUPER_ADMIN_NAME &&
@@ -289,19 +288,19 @@ const UserManagement = ({ history }) => {
       !formValues.socialMediaProfilesLimt
     ) {
       formErrors.socialMediaProfilesLimt =
-        ' Social Media Profile limit is Required';
+        " Social Media Profile limit is Required";
     }
     if (isNaN(formValues.socialMediaProfilesLimt)) {
       formErrors.socialMediaProfilesLimt =
-        'The social media profile limit must be an integer ';
+        "The social media profile limit must be an integer ";
     }
-    if (formValues.socialMediaProfilesLimt === '0') {
+    if (formValues.socialMediaProfilesLimt === "0") {
       formErrors.socialMediaProfilesLimt =
-        'Social Media Profile limit must be greater than 0 ';
+        "Social Media Profile limit must be greater than 0 ";
     }
     if (specialCharacters.test(formValues.socialMediaProfilesLimt)) {
       formErrors.socialMediaProfilesLimt =
-        'Social Media Profile limit cannot contain any special characters.';
+        "Social Media Profile limit cannot contain any special characters.";
     }
 
     // Create Validation due to API data structuring
@@ -312,14 +311,14 @@ const UserManagement = ({ history }) => {
         customerAdmin &&
         !imageExtensions.test(formValues.logo.name)
       ) {
-        formErrors.logo = 'Image must be valid image file.';
+        formErrors.logo = "Image must be valid image file.";
       }
       if (
         user.role === constant.SUPER_ADMIN_NAME &&
         customerAdmin &&
         !imageExtensions.test(formValues.featured_image.name)
       ) {
-        formErrors.featured_image = 'Image must be valid image file.';
+        formErrors.featured_image = "Image must be valid image file.";
       }
     }
 
@@ -331,14 +330,14 @@ const UserManagement = ({ history }) => {
         customerAdmin &&
         !imageExtensions.test(editData.CustomerSubdomain.logo)
       ) {
-        formErrors.logo = 'Image must be valid image file.';
+        formErrors.logo = "Image must be valid image file.";
       }
       if (
         user.role === constant.SUPER_ADMIN_NAME &&
         customerAdmin &&
         !imageExtensions.test(editData.CustomerSubdomain.feature_image)
       ) {
-        formErrors.featured_image = 'Image must be valid image file.';
+        formErrors.featured_image = "Image must be valid image file.";
       }
 
       // Image Size Validation
@@ -364,7 +363,7 @@ const UserManagement = ({ history }) => {
       customerAdmin &&
       !formValues.logo
     ) {
-      formErrors.logo = 'Logo is Required';
+      formErrors.logo = "Logo is Required";
     }
 
     if (
@@ -372,7 +371,7 @@ const UserManagement = ({ history }) => {
       customerAdmin &&
       !formValues.featured_image
     ) {
-      formErrors.featured_image = 'Brand banner image is Required';
+      formErrors.featured_image = "Brand banner image is Required";
     }
 
     setErrors(formErrors);
@@ -405,7 +404,7 @@ const UserManagement = ({ history }) => {
             setRefreshImgUploadComponent(false);
             setValidationErrors(createErrorMsg);
           } else {
-            toast.error('Check your internet connection');
+            toast.error("Check your internet connection");
             setUserFormSubmitting(false);
             setRefreshImgUploadComponent(false);
           }
@@ -439,7 +438,7 @@ const UserManagement = ({ history }) => {
             setValidationErrors(updateresError);
             setUserFormSubmitting(false);
           } else {
-            toast.error('Check your internet connection');
+            toast.error("Check your internet connection");
             setUserFormSubmitting(false);
           }
         }
@@ -461,19 +460,19 @@ const UserManagement = ({ history }) => {
     if (Object.keys(editData).length !== 0) {
       let brandName = editData.CustomerSubdomain
         ? editData.CustomerSubdomain.subdomain
-        : '';
+        : "";
       let logo = editData.CustomerSubdomain
         ? editData.CustomerSubdomain.logo
-        : '';
+        : "";
       let featured_image = editData.CustomerSubdomain
         ? editData.CustomerSubdomain.feature_image
-        : '';
+        : "";
       let user_accounts_limit = editData.CustomerSubdomain
         ? editData.CustomerSubdomain.user_accounts_limit
-        : '';
+        : "";
       let social_media_profiles_limit = editData.CustomerSubdomain
         ? editData.CustomerSubdomain.social_media_profiles_limit
-        : '';
+        : "";
 
       setFormValues({
         id: editData.id,
@@ -543,7 +542,7 @@ const UserManagement = ({ history }) => {
         if (error.response) {
           toast.error(error.response.data.message);
         } else {
-          toast.error('Check your internet connection');
+          toast.error("Check your internet connection");
         }
       }
     }
@@ -599,69 +598,56 @@ const UserManagement = ({ history }) => {
   const classes = useStyles();
 
   const menuProps = {
-    borderRadius: '12px',
+    borderRadius: "12px",
     anchorOrigin: {
-      vertical: 'bottom',
-      horizontal: 'left',
+      vertical: "bottom",
+      horizontal: "left",
       borderRadius: 12,
     },
     transformOrigin: {
-      vertical: 'top',
-      horizontal: 'left',
+      vertical: "top",
+      horizontal: "left",
     },
     getContentAnchorEl: null,
   };
 
   const columns = [
     ...(user.role === constant.CUSTOMER_ADMIN_NAME
-      ? [{ id: 'employee_number', label: 'Employee ID', minWidth: 170 }]
+      ? [{ id: "employee_number", label: "Employee ID", minWidth: 170 }]
       : []),
-    { id: 'first_name', label: 'First Name', minWidth: 170 },
-    { id: 'last_name', label: 'Last Name', minWidth: 170 },
-    { id: 'email', label: 'Email', minWidth: 170 },
-    { id: 'position', label: 'Position', minWidth: 170 },
+    { id: "first_name", label: "First Name", minWidth: 170 },
+    { id: "last_name", label: "Last Name", minWidth: 170 },
+    { id: "email", label: "Email", minWidth: 170 },
+    { id: "position", label: "Position", minWidth: 170 },
     ...(user.role === constant.SUPER_ADMIN_NAME
       ? [
           {
-            id: 'subdomain',
-            label: 'Subdomain',
+            id: "subdomain",
+            label: "Subdomain",
             minWidth: 170,
             format: (value) => value.CustomerSubdomain.subdomain,
           },
         ]
       : []),
-    { id: 'action', label: 'Action', minWidth: 80, align: "right" },
+    { id: "action", label: "Action", minWidth: 80, align: "right" },
   ];
 
   return (
     <Layout>
       <div className={classes.main}>
-        <div
-          style={{ padding: 10 }}
-          className='dashboardPageContainer'
-        >
-          <Container
-            disableGutters
-            maxWidth='xl'
-          >
+        <div style={{ padding: 10 }} className="dashboardPageContainer">
+          <Container disableGutters maxWidth="xl">
             <Box className={classes.topFilter}>
-              <Grid
-                container
-                spacing={2}
-                justifyContent='space-between'
-              >
-                <Grid
-                  item
-                  style={{ display: 'flex' }}
-                >
+              <Grid container spacing={2} justifyContent="space-between">
+                <Grid item style={{ display: "flex" }}>
                   {/* <FilterDays
 
                 /> */}
                   <Buttons
-                    variant='contained'
-                    color='primary'
+                    variant="contained"
+                    color="primary"
                     onClick={addUserData}
-                    style={{ marginBottom: '16px' }}
+                    style={{ marginBottom: "16px" }}
                   >
                     Add User
                   </Buttons>
@@ -675,10 +661,7 @@ const UserManagement = ({ history }) => {
               ) : (
                 <Paper className={classes.root}>
                   <TableContainer className={classes.container}>
-                    <Table
-                      stickyHeader
-                      aria-label='sticky table'
-                    >
+                    <Table stickyHeader aria-label="sticky table">
                       <TableHead>
                         <TableRow>
                           {columns.map((column) => (
@@ -703,13 +686,13 @@ const UserManagement = ({ history }) => {
                               return (
                                 <TableRow
                                   hover
-                                  role='checkbox'
+                                  role="checkbox"
                                   tabIndex={-1}
                                   key={row.code}
                                 >
                                   {columns.map((column) => {
                                     const value =
-                                      column.id === 'subdomain'
+                                      column.id === "subdomain"
                                         ? column.format(row)
                                         : row[column.id];
 
@@ -718,7 +701,7 @@ const UserManagement = ({ history }) => {
                                         key={column.id}
                                         align={column.align}
                                       >
-                                        {column.id === 'action' ? (
+                                        {column.id === "action" ? (
                                           <IconButton
                                             onClick={(event) =>
                                               handleMenuOpen(event, row)
@@ -727,7 +710,7 @@ const UserManagement = ({ history }) => {
                                             <MoreVertIcon />
                                           </IconButton>
                                         ) : column.format &&
-                                          typeof value === 'number' ? (
+                                          typeof value === "number" ? (
                                           column.format(value)
                                         ) : (
                                           value
@@ -746,24 +729,18 @@ const UserManagement = ({ history }) => {
                       onClose={handleMenuClose}
                     >
                       <MenuItem onClick={handleEdit}>
-                        <Edit
-                          color='primary'
-                          style={{ marginRight: 10 }}
-                        />{' '}
+                        <Edit color="primary" style={{ marginRight: 10 }} />{" "}
                         Edit
                       </MenuItem>
                       <MenuItem onClick={deleteUser}>
-                        <Delete
-                          color='secondary'
-                          style={{ marginRight: 10 }}
-                        />{' '}
+                        <Delete color="secondary" style={{ marginRight: 10 }} />{" "}
                         Delete
                       </MenuItem>
                     </Menu>
                   </TableContainer>
                   <TablePagination
                     rowsPerPageOptions={[10, 25, 100]}
-                    component='div'
+                    component="div"
                     count={
                       customers?.users?.length ? customers?.users?.length : 0
                     }
@@ -779,30 +756,30 @@ const UserManagement = ({ history }) => {
                 icon={
                   <ErrorOutlineIcon
                     style={{
-                      fontSize: '5rem',
-                      color: '#f50057',
+                      fontSize: "5rem",
+                      color: "#f50057",
                       paddingBottom: 0,
                     }}
                   />
                 }
-                title='Are you sure?'
-                confirmBtn='DELETE'
+                title="Are you sure?"
+                confirmBtn="DELETE"
                 description="You're about to Delete the profile. This process cannot be undone."
                 open={deleteAlertOpen}
                 setOpen={setDeleteAlertOpen}
                 onConfirm={handleDelete}
-                buttonbgcolor='#f50057'
+                buttonbgcolor="#f50057"
               />
             </Grid>
           </Container>
         </div>
       </div>
       <Modal
-        style={{ overflow: 'scroll', maxWidth: '100%' }}
+        style={{ overflow: "scroll", maxWidth: "100%" }}
         open={modalOpen}
         onClose={handleModalClose}
-        aria-labelledby='user-modal-title'
-        aria-describedby='user-modal-description'
+        aria-labelledby="user-modal-title"
+        aria-describedby="user-modal-description"
         closeAfterTransition
         BackdropProps={{
           timeout: 500,
@@ -812,49 +789,40 @@ const UserManagement = ({ history }) => {
       >
         <Box
           sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: '80%', // Adjust the modal width here
-            maxWidth: '1200px', // Optional, to cap the maximum width
-            bgcolor: 'background.paper',
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "80%", // Adjust the modal width here
+            maxWidth: "1200px", // Optional, to cap the maximum width
+            bgcolor: "background.paper",
             boxShadow: 24,
             p: 4,
-            height: 'calc(100vh - 24px)',
-            overflow: 'scroll',
+            height: "calc(100vh - 24px)",
+            overflow: "scroll",
             borderRadius: 8,
           }}
         >
-          <Typography
-            variant='h6'
-            id='user-modal-title'
-          >
-            {formValues.id ? 'Edit User' : 'Add User'}
+          <Typography variant="h6" id="user-modal-title">
+            {formValues.id ? "Edit User" : "Add User"}
           </Typography>
           <form
             container
             className={classes.userManagementForm}
             onSubmit={onSubmit}
           >
-            <Grid
-              container
-              spacing={3}
-            >
+            <Grid container spacing={3}>
               {user.role === constant.SUPER_ADMIN_NAME ? (
                 superAdmin ? (
-                  ''
+                  ""
                 ) : (
-                  <Grid
-                    item
-                    xs={12}
-                  >
+                  <Grid item xs={12}>
                     <StyledTextField
                       className={classes.inputField}
-                      type='text'
-                      id='brandName'
-                      label='Sub Domain*'
-                      variant='outlined'
+                      type="text"
+                      id="brandName"
+                      label="Sub Domain*"
+                      variant="outlined"
                       error={
                         errors.brandName || validationErrors.subdomain
                           ? true
@@ -866,91 +834,75 @@ const UserManagement = ({ history }) => {
                           validationErrors.subdomain.message)
                       }
                       value={formValues.brandName}
-                      name='brandName'
+                      name="brandName"
                       onChange={handleChange}
                       disabled={false}
                     />
                   </Grid>
                 )
               ) : (
-                ' '
+                " "
               )}
-              <Grid
-                item
-                xs={12}
-                md={6}
-              >
+              <Grid item xs={12} md={6}>
                 <StyledTextField
                   className={classes.inputField}
-                  type='text'
-                  id='firstName'
-                  label='First Name*'
-                  variant='outlined'
+                  type="text"
+                  id="firstName"
+                  label="First Name*"
+                  variant="outlined"
                   error={errors.firstName ? true : false}
                   helperText={errors && errors.firstName}
                   value={formValues.firstName}
-                  name='firstName'
-                  title='First Name'
+                  name="firstName"
+                  title="First Name"
                   // ref={firstNameInput}
                   onChange={handleChange}
                 />
               </Grid>
-              <Grid
-                item
-                xs={12}
-                md={6}
-              >
+              <Grid item xs={12} md={6}>
                 <StyledTextField
                   className={classes.inputField}
-                  type='text'
-                  id='lastName'
-                  label='Last Name*'
-                  variant='outlined'
+                  type="text"
+                  id="lastName"
+                  label="Last Name*"
+                  variant="outlined"
                   error={errors.lastName ? true : false}
                   helperText={errors && errors.lastName}
                   value={formValues.lastName}
-                  title='Last Name'
-                  name='lastName'
+                  title="Last Name"
+                  name="lastName"
                   onChange={handleChange}
                 />
               </Grid>
-              <Grid
-                item
-                xs={12}
-                md={6}
-              >
+              <Grid item xs={12} md={6}>
                 <StyledTextField
                   item
                   className={classes.inputField}
-                  type='text'
-                  id='email'
-                  label='Email*'
-                  variant='outlined'
+                  type="text"
+                  id="email"
+                  label="Email*"
+                  variant="outlined"
                   error={errors.email || validationErrors.email ? true : false}
                   helperText={
                     (errors && errors.email) ||
                     (validationErrors.email && validationErrors.email.message)
                   }
                   value={formValues.email}
-                  name='email'
-                  title='Email'
+                  name="email"
+                  title="Email"
                   onChange={handleChange}
                 />
               </Grid>
               {user.role === constant.CUSTOMER_ADMIN_NAME && (
-                <Grid
-                  item
-                  xs={12}
-                  md={6}
-                >
+                <Grid item xs={12} md={6}>
                   <StyledTextField
                     item
                     lg={6}
                     className={classes.inputField}
-                    type='text'
-                    id='employeeNumber'
-                    label='Employee Number*'
-                    variant='outlined'
+                    type="text"
+                    id="employeeNumber"
+                    label="Employee Number*"
+                    variant="outlined"
                     error={
                       errors.employeeNumber || validationErrors.employeeNumber
                         ? true
@@ -962,26 +914,22 @@ const UserManagement = ({ history }) => {
                         validationErrors.employeeNumber)
                     }
                     value={formValues.employeeNumber}
-                    name='employeeNumber'
-                    title='Employee Number'
+                    name="employeeNumber"
+                    title="Employee Number"
                     onChange={handleChange}
                   />
                 </Grid>
               )}
               {user.role === constant.CUSTOMER_ADMIN_NAME && (
-                <Grid
-                  item
-                  xs={12}
-                  md={6}
-                >
+                <Grid item xs={12} md={6}>
                   <StyledTextField
                     item
                     lg={6}
                     className={classes.inputField}
-                    type='text'
-                    id='position'
-                    label='Position*'
-                    variant='outlined'
+                    type="text"
+                    id="position"
+                    label="Position*"
+                    variant="outlined"
                     error={
                       errors.position || validationErrors.position
                         ? true
@@ -992,25 +940,21 @@ const UserManagement = ({ history }) => {
                       (validationErrors.position && validationErrors.position)
                     }
                     value={formValues.position}
-                    name='position'
-                    title='Position'
+                    name="position"
+                    title="Position"
                     onChange={handleChange}
                   />
                 </Grid>
               )}
-              <Grid
-                item
-                xs={12}
-                md={6}
-              >
+              <Grid item xs={12} md={6}>
                 <StyledTextField
                   item
                   lg={6}
                   className={classes.inputField}
-                  type='text'
-                  id='phoneNumber'
-                  label='Phone Number*'
-                  variant='outlined'
+                  type="text"
+                  id="phoneNumber"
+                  label="Phone Number*"
+                  variant="outlined"
                   error={
                     errors.phoneNumber || validationErrors.contact_number
                       ? true
@@ -1022,28 +966,24 @@ const UserManagement = ({ history }) => {
                       validationErrors.contact_number.message)
                   }
                   value={formValues.phoneNumber}
-                  name='phoneNumber'
-                  title='Phone Number'
+                  name="phoneNumber"
+                  title="Phone Number"
                   onChange={handleChange}
                 />
               </Grid>
               {user.role === constant.SUPER_ADMIN_NAME ? (
                 superAdmin ? (
-                  ''
+                  ""
                 ) : (
-                  <Grid
-                    item
-                    xs={12}
-                    md={6}
-                  >
+                  <Grid item xs={12} md={6}>
                     <StyledTextField
                       item
                       lg={6}
                       className={classes.inputField}
-                      type='text'
-                      id='userAccountsLimt'
-                      label='No. of Account Limit*'
-                      variant='outlined'
+                      type="text"
+                      id="userAccountsLimt"
+                      label="No. of Account Limit*"
+                      variant="outlined"
                       error={
                         errors.userAccountsLimt ||
                         validationErrors.user_accounts_limit
@@ -1056,33 +996,29 @@ const UserManagement = ({ history }) => {
                           validationErrors.user_accounts_limit.message)
                       }
                       value={formValues.userAccountsLimt}
-                      name='userAccountsLimt'
-                      title='No. of Account Limit'
+                      name="userAccountsLimt"
+                      title="No. of Account Limit"
                       onChange={handleChange}
                     />
                   </Grid>
                 )
               ) : (
-                ''
+                ""
               )}
 
               {user.role === constant.SUPER_ADMIN_NAME ? (
                 superAdmin ? (
-                  ' '
+                  " "
                 ) : (
-                  <Grid
-                    item
-                    xs={12}
-                    md={6}
-                  >
+                  <Grid item xs={12} md={6}>
                     <StyledTextField
                       item
                       lg={6}
                       className={classes.inputField}
-                      type='text'
-                      id='socialMediaProfilesLimt'
-                      label='No. of Social Media Profile Limit*'
-                      variant='outlined'
+                      type="text"
+                      id="socialMediaProfilesLimt"
+                      label="No. of Social Media Profile Limit*"
+                      variant="outlined"
                       error={
                         errors.socialMediaProfilesLimt ||
                         validationErrors.social_media_profiles_limit
@@ -1095,58 +1031,48 @@ const UserManagement = ({ history }) => {
                           validationErrors.social_media_profiles_limit.message)
                       }
                       value={formValues.socialMediaProfilesLimt}
-                      name='socialMediaProfilesLimt'
-                      title='No. of Social Media Profile Limit'
+                      name="socialMediaProfilesLimt"
+                      title="No. of Social Media Profile Limit"
                       onChange={handleChange}
                     />
                   </Grid>
                 )
               ) : (
-                ''
+                ""
               )}
 
               {user.role === constant.SUPER_ADMIN_NAME ? (
-                ''
+                ""
               ) : (
-                <Grid
-                  item
-                  xs={12}
-                  md={6}
-                >
-                  <FormControl
-                    style={{ width: '100%' }}
-                    variant='outlined'
-                  >
+                <Grid item xs={12} md={6}>
+                  <FormControl style={{ width: "100%" }} variant="outlined">
                     <Select
                       style={{
-                        width: '100%',
+                        width: "100%",
                         borderRadius: 12,
-                        color: 'rgba(0, 0, 0, 0.5)',
+                        color: "rgba(0, 0, 0, 0.5)",
                       }}
-                      aria-label='role'
-                      name='role'
-                      value={formValues.role ? formValues.role : ''}
+                      aria-label="role"
+                      name="role"
+                      value={formValues.role ? formValues.role : ""}
                       error={errors.role ? true : false}
                       onChange={handleChange}
                       MenuProps={menuProps}
                       displayEmpty
-                      defaultValue='customer-admin'
+                      defaultValue="customer-admin"
                     >
-                      <MenuItem
-                        value=''
-                        disabled
-                      >
+                      <MenuItem value="" disabled>
                         User Role*
                       </MenuItem>
-                      <MenuItem value='customer-admin'>Admin</MenuItem>
-                      <MenuItem value='customer-viewer'>Viewer</MenuItem>
+                      <MenuItem value="customer-admin">Admin</MenuItem>
+                      <MenuItem value="customer-viewer">Viewer</MenuItem>
                     </Select>
                     {errors.role ? (
                       <FormHelperText className={classes.errorHelperText}>
                         User Role is Required
                       </FormHelperText>
                     ) : (
-                      ''
+                      ""
                     )}
                   </FormControl>
                 </Grid>
@@ -1159,21 +1085,17 @@ const UserManagement = ({ history }) => {
                   className={classes.fileUploadConatiner}
                 >
                   {superAdmin ? (
-                    ''
+                    ""
                   ) : (
-                    <Grid
-                      item
-                      xs={12}
-                      lg={6}
-                    >
+                    <Grid item xs={12} lg={6}>
                       <UploadImg
-                        id='upload-logo'
-                        title='Upload Logo'
-                        name='logo'
+                        id="upload-logo"
+                        title="Upload Logo"
+                        name="logo"
                         defaultImg={
                           editData.CustomerSubdomain
                             ? editData.CustomerSubdomain.logo
-                            : ''
+                            : ""
                         }
                         getSelectedData={(item) => {
                           logoImageHandler(item);
@@ -1184,32 +1106,28 @@ const UserManagement = ({ history }) => {
                         }
                       />
                       <Typography className={classes.imgError}>
-                        {' '}
+                        {" "}
                         {(errors && errors.logo) ||
                           (validationErrors.logo &&
                             validationErrors.logo.message) ||
                           (validationErrors.brand_logo_size &&
-                            validationErrors.brand_logo_size)}{' '}
+                            validationErrors.brand_logo_size)}{" "}
                       </Typography>
                     </Grid>
                   )}
 
                   {superAdmin ? (
-                    ''
+                    ""
                   ) : (
-                    <Grid
-                      item
-                      xs={12}
-                      lg={6}
-                    >
+                    <Grid item xs={12} lg={6}>
                       <UploadImg
-                        id='upload-banner'
-                        title='Upload Banner'
-                        name='featured_image'
+                        id="upload-banner"
+                        title="Upload Banner"
+                        name="featured_image"
                         defaultImg={
                           editData.CustomerSubdomain
                             ? editData.CustomerSubdomain.feature_image
-                            : ''
+                            : ""
                         }
                         getSelectedData={(item) => {
                           bannerImageHandler(item);
@@ -1220,18 +1138,18 @@ const UserManagement = ({ history }) => {
                         }
                       />
                       <Typography className={classes.imgError}>
-                        {' '}
+                        {" "}
                         {(errors && errors.featured_image) ||
                           (validationErrors.featured_image &&
                             validationErrors.featured_image.message) ||
                           (validationErrors.brand_featured_size &&
-                            validationErrors.brand_featured_size)}{' '}
+                            validationErrors.brand_featured_size)}{" "}
                       </Typography>
                     </Grid>
                   )}
                 </Grid>
               ) : (
-                ''
+                ""
               )}
             </Grid>
 
@@ -1240,18 +1158,15 @@ const UserManagement = ({ history }) => {
                 disabled={userFormSubmitting}
                 onClick={handleCancel}
                 style={{
-                  backgroundColor: '#49fcea',
-                  borderColor: '#49fcea',
+                  backgroundColor: "#49fcea",
+                  borderColor: "#49fcea",
                   marginRight: 30,
                 }}
               >
                 Cancel
               </Buttons>
-              <Buttons
-                type='submit'
-                disabled={userFormSubmitting}
-              >
-                {Object.keys(editData).length === 0 ? 'Save' : 'Update'}
+              <Buttons type="submit" disabled={userFormSubmitting}>
+                {Object.keys(editData).length === 0 ? "Save" : "Update"}
 
                 {userFormSubmitting && <Spinner size={24} />}
               </Buttons>

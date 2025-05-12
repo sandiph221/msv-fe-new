@@ -9,9 +9,9 @@ import {
   useMediaQuery,
 } from "@mui/material";
 
-import CallMadeIcon from "@mui/icons-material/CallMade";
-import CallReceivedIcon from "@mui/icons-material/CallReceived";
-import RemoveIcon from "@mui/icons-material/Remove";
+import CallMadeIcon from '@material-ui/icons/CallMade';
+import CallReceivedIcon from '@material-ui/icons/CallReceived';
+import RemoveIcon from '@material-ui/icons/Remove';
 import Spinner from "../Spinner";
 import { numbersFormat } from "utils/functions.js";
 import { Styles } from "./Styles";

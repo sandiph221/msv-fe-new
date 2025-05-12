@@ -11,11 +11,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { formatImage, formatNumber } from "utils/functions.js";
 import Spinner from "../../Components/Spinner";
 
-import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
+import RemoveCircleOutlineOutlinedIcon from '@material-ui/icons/RemoveCircleOutlineOutlined';
 import Alert from "../../Components/AlertBox/Alert";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { Link, withRouter } from "react-router-dom";
-import SystemUpdateAltIcon from "@mui/icons-material/SystemUpdateAlt";
+import SystemUpdateAltIcon from '@material-ui/icons/SystemUpdateAlt';
 import {
   deletePagesInfo,
   updatePagesInfo,

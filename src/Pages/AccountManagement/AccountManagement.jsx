@@ -22,7 +22,7 @@ import styles from "./Styles";
 import Spinner from "../../Components/Spinner";
 
 import Alert from "../../Components/AlertBox/Alert";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import axios from "axios";
 import { toast } from "react-toastify";
 import * as constant from "../../utils/constant";

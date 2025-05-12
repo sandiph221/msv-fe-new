@@ -25,7 +25,7 @@ import {
   DeleteOutline as DeleteIcon,
   Link as LinkIcon,
   CheckCircle as ActiveIcon,
-} from "@mui/icons-material";
+} from "@material-ui/icons";
 import Layout from "../../Components/Layout";
 import Styles from "./Styles";
 import Buttons from "../../Components/Buttons/Buttons";

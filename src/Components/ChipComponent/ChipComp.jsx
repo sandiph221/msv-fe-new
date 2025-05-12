@@ -2,8 +2,8 @@
 import { makeStyles, withStyles } from '@mui/material/styles';
 import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
-import FaceIcon from '@mui/icons-material/Face';
-import DoneIcon from '@mui/icons-material/Done';
+import FaceIcon from '@material-ui/icons/Face';
+import DoneIcon from '@material-ui/icons/Done';
 
 const useStyles = makeStyles((theme) => ({
   root: {

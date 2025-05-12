@@ -12,19 +12,19 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from '@mui/material';
+} from "@mui/material";
 
-import AddIcon from '@mui/icons-material/Add';
-import { withRouter } from 'react-router-dom';
+import AddIcon from "@material-ui/icons/Add";
+import { withRouter } from "react-router-dom";
 
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import axios from 'axios';
-import Alert from 'Components/AlertBox/Alert';
-import { useEffect, useState } from 'react';
-import Layout from '../../Components/Layout';
-import styles from './Styles';
-import Buttons from 'Components/Buttons/Buttons';
-import { Delete, Edit } from '@mui/icons-material';
+import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
+import axios from "axios";
+import Alert from "Components/AlertBox/Alert";
+import { useEffect, useState } from "react";
+import Layout from "../../Components/Layout";
+import styles from "./Styles";
+import Buttons from "Components/Buttons/Buttons";
+import { Delete, Edit } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => styles(theme));
 
@@ -37,13 +37,13 @@ const SubscriptionSetting = ({ history }) => {
 
   const getSubscriptionPlans = async () => {
     try {
-      const subscriptionPlans = await axios.get('/subscription-plans');
+      const subscriptionPlans = await axios.get("/subscription-plans");
 
       if (subscriptionPlans) {
         setPlans(subscriptionPlans.data.data);
       }
     } catch (error) {
-      console.log('error', error);
+      console.log("error", error);
     }
   };
 
@@ -52,7 +52,7 @@ const SubscriptionSetting = ({ history }) => {
   }, []);
 
   const handleCreatePlan = () => {
-    history.push('/plan/create');
+    history.push("/plan/create");
   };
 
   const handleEditPlan = (id) => {
@@ -69,7 +69,7 @@ const SubscriptionSetting = ({ history }) => {
       await axios.delete(`/subscription-plans/${itemToDelete.id}`);
       getSubscriptionPlans().catch(console.log);
     } catch (error) {
-      console.log('error', error);
+      console.log("error", error);
     }
   };
 
@@ -82,18 +82,15 @@ const SubscriptionSetting = ({ history }) => {
             marginBottom: 30,
             width: "100%",
             padding: "8px 50px",
-            marginInline: "auto"
+            marginInline: "auto",
           }}
         >
-          <Typography
-            variant='h4'
-            gutterBottom
-          >
+          <Typography variant="h4" gutterBottom>
             Subscription Management
           </Typography>
 
           <Buttons
-            variant='contained'
+            variant="contained"
             startIcon={<AddIcon />}
             onClick={handleCreatePlan}
             className={classes.button}
@@ -101,12 +98,14 @@ const SubscriptionSetting = ({ history }) => {
             Create New Plan
           </Buttons>
 
-          <TableContainer style={{
-            marginTop: 24,
-            boxShadow: 'none',
-            border: '1px solid rgba(0,0,0,0.1)'
+          <TableContainer
+            style={{
+              marginTop: 24,
+              boxShadow: "none",
+              border: "1px solid rgba(0,0,0,0.1)",
             }}
-            component={Paper}>
+            component={Paper}
+          >
             <Table>
               <TableHead>
                 <TableRow>
@@ -120,38 +119,41 @@ const SubscriptionSetting = ({ history }) => {
                   <TableRow key={index}>
                     <TableCell>{plan.name}</TableCell>
                     <TableCell>{plan.description}</TableCell>
-                    <TableCell align="right" style={{ display: 'flex', gap: 4 }}>
+                    <TableCell
+                      align="right"
+                      style={{ display: "flex", gap: 4 }}
+                    >
                       <button
                         className={classes.actionButton}
                         onClick={() => deletePlan(plan)}
                       >
-                        <Delete/>
+                        <Delete />
                       </button>
                       <button
                         className={classes.actionButton}
                         onClick={() => handleEditPlan(plan.id)}
                       >
-                        <Edit/>
+                        <Edit />
                       </button>
                       <Alert
                         alert={itemToDelete}
                         icon={
                           <ErrorOutlineIcon
                             style={{
-                              fontSize: '5rem',
-                              color: '#d53042',
+                              fontSize: "5rem",
+                              color: "#d53042",
                               paddingBottom: 0,
                             }}
                           />
                         }
-                        title='Are you sure?'
-                        confirmBtn='DELETE'
+                        title="Are you sure?"
+                        confirmBtn="DELETE"
                         description="You're about to Delete the plan. This process cannot be undone."
                         open={deleteAlertOpen}
                         setOpen={setDeleteAlertOpen}
                         onConfirm={handleDelete}
-                        buttonbgcolor='#d53042'
-                        textColor='#fff'
+                        buttonbgcolor="#d53042"
+                        textColor="#fff"
                       />
                     </TableCell>
                   </TableRow>

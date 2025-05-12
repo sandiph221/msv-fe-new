@@ -13,12 +13,12 @@ import {
   MenuItem,
   makeStyles,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteIcon from "@material-ui/icons/Delete";
 import Layout from "../../Components/Layout";
 import styles from "./Styles";
 import axios from "axios";
 import Buttons from "Components/Buttons/Buttons";
-import { Add } from "@mui/icons-material";
+import { Add } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => styles(theme));
 

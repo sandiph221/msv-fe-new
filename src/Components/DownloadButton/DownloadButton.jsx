@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { IconButton } from '@mui/material';
-import GetAppIcon from '@mui/icons-material/GetApp';
+import GetAppIcon from '@material-ui/icons/GetApp';
 
 const StyledMenu = withStyles({
     

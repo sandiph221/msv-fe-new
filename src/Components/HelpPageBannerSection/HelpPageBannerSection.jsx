@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 
 import * as constant from '../../utils/constant';
-import SearchIcon from '@mui/icons-material/Search';
+import SearchIcon from '@material-ui/icons/Search';
 
 /* styled component starts */
 const StyledTextField = withStyles({

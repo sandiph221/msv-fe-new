@@ -8,12 +8,12 @@ import {
 } from "@mui/material";
 import { makeStyles, withStyles } from "@mui/material/styles";
 import Tooltip from "@mui/material/Tooltip";
-import CameraAltIcon from "@mui/icons-material/CameraAlt";
-import CommentIcon from "@mui/icons-material/Comment";
-import LinkIcon from "@mui/icons-material/Link";
-import PhotoAlbumIcon from "@mui/icons-material/PhotoAlbum";
-import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
-import VideocamIcon from "@mui/icons-material/Videocam";
+import CameraAltIcon from '@material-ui/icons/CameraAlt';
+import CommentIcon from '@material-ui/icons/Comment';
+import LinkIcon from '@material-ui/icons/Link';
+import PhotoAlbumIcon from '@material-ui/icons/PhotoAlbum';
+import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
+import VideocamIcon from '@material-ui/icons/Videocam';
 import * as moment from "moment-timezone";
 import { useState } from "react";
 import LazyLoad from "react-lazyload";

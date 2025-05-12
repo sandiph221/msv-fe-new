@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { HelpPageBannerSection } from "../../Components/HelpPageBannerSection/HelpPageBannerSection";
 import Layout from "../../Components/Layout/index";
 import Styles from "./Styles";
-import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import { Typography } from "@mui/material";
 import { withRouter } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";

@@ -29,9 +29,9 @@ import {
 } from "../../store/actions/AuthAction";
 import Spinner from "../../Components/Spinner";
 import styles from "./Styles";
-import MailOutlineIcon from "@mui/icons-material/MailOutline";
-import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-import ContactMailOutlinedIcon from "@mui/icons-material/ContactMailOutlined";
+import MailOutlineIcon from '@material-ui/icons/MailOutline';
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
+import ContactMailOutlinedIcon from '@material-ui/icons/ContactMailOutlined';
 // Password Requirements
 import * as constant from "../../utils/constant";
 import { toast } from "react-toastify";

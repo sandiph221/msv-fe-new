@@ -6,8 +6,8 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { OutlinedInput } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import CloseIcon from "@mui/icons-material/Close";
+import SearchIcon from '@material-ui/icons/Search';
+import CloseIcon from '@material-ui/icons/Close';
 
 const StyledTextField = withStyles({
   root: {

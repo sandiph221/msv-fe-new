@@ -6,8 +6,8 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import DateRangeIcon from "@mui/icons-material/DateRange";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import DateRangeIcon from '@material-ui/icons/DateRange';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {

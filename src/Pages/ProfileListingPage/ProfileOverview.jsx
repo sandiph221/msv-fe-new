@@ -26,11 +26,11 @@ import Layout from "../../Components/Layout";
 import { useSelector, useDispatch } from "react-redux";
 import SocialButton from "../../Components/SocialButton";
 import { SocialMediaCardLabels } from "../../Components/SocialMediaLabelsCard/SocialMediaLabelsCard";
-import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
-import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
-import PeopleIcon from "@mui/icons-material/People";
-import GroupAddIcon from "@mui/icons-material/GroupAdd";
-import ReplySharpIcon from "@mui/icons-material/ReplySharp";
+import FavoriteOutlinedIcon from '@material-ui/icons/FavoriteOutlined';
+import CommentOutlinedIcon from '@material-ui/icons/CommentOutlined';
+import PeopleIcon from '@material-ui/icons/People';
+import GroupAddIcon from '@material-ui/icons/GroupAdd';
+import ReplySharpIcon from '@material-ui/icons/ReplySharp';
 import SocialMediaPostsCard from "../../Components/SocialMediaPostsCard/SocialMediaPostsCard";
 import {
   getAddedProfileList,

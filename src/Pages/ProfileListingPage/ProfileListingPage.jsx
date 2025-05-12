@@ -19,7 +19,7 @@ import {
   Checkbox,
 } from "@mui/material";
 
-import SearchIcon from "@mui/icons-material/Search";
+import SearchIcon from '@material-ui/icons/Search';
 import Layout from "../../Components/Layout";
 import { Styles } from "./Styles";
 import { useSelector, useDispatch } from "react-redux";
@@ -32,7 +32,7 @@ import {
 import SocialButton from "../../Components/SocialButton";
 import MaterailDataTable from "../../Components/MaterialDataTable/MaterialDatatable";
 import AddProfileModal from "../../Components/AddProfileModal/AddProfileModal";
-import CompareIcon from "@mui/icons-material/Compare";
+import CompareIcon from '@material-ui/icons/Compare';
 import { withRouter, Link } from "react-router-dom";
 import PageTitle from "../../Components/PageTitle/PageTitle";
 import { toast } from "react-toastify";

@@ -1,6 +1,6 @@
 import { Grid, Link, Typography, makeStyles, withStyles } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import { ArrowForward } from "@mui/icons-material";
+import { ArrowForward } from "@material-ui/icons";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";

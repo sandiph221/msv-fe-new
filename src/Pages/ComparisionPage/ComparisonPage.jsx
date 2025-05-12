@@ -19,7 +19,7 @@ import {
   InputLabel,
   Select,
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
+import SearchIcon from '@material-ui/icons/Search';
 import { saveAs } from "file-saver";
 import Layout from "../../Components/Layout";
 import styles from "./Styles";
@@ -49,10 +49,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import MessageIcon from "@mui/icons-material/Message";
-import ReplySharpIcon from "@mui/icons-material/ReplySharp";
-import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import MessageIcon from '@material-ui/icons/Message';
+import ReplySharpIcon from '@material-ui/icons/ReplySharp';
+import RemoveCircleOutlineOutlinedIcon from '@material-ui/icons/RemoveCircleOutlineOutlined';
 import AddProfileComaprisonModal from "../../Components/AddProfileComparisonModal/AddProfileComparisonModal";
 import {
   Document,
@@ -67,7 +67,7 @@ import {
   View,
 } from "@react-pdf/renderer";
 
-import GetAppIcon from "@mui/icons-material/GetApp";
+import GetAppIcon from '@material-ui/icons/GetApp';
 import defaultLogo from "../../assets/images/msvfooterLogo.png";
 import likeReaction from "../../assets/images/likeReaction.png";
 import commentReaction from "../../assets/images/commentReaction.png";

@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 
 import AddModalForm from "../AddModalForm/AddModalForm";
-import CheckIcon from '@mui/icons-material/Check';
+import CheckIcon from '@material-ui/icons/Check';
 
 
 /* styled component starts */
