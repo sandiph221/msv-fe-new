@@ -20,11 +20,11 @@ import facebookImage from "../../assets/images/facebook.png";
 import Buttons from "../../Components/Buttons/Buttons";
 import Spinner from "../../Components/Spinner";
 import { formatServerImages, getSubDomain } from "utils/functions.js";
-// import {
-//   FacebookSignIn,
-//   ForgotPassword,
-//   SignIn,
-// } from "../../store/actions/AuthAction";
+import {
+  FacebookSignIn,
+  ForgotPassword,
+  SignIn,
+} from "../../store/actions/AuthAction";
 import * as constant from "../../utils/constant";
 import styles from "./Styles/index.js";
 
@@ -154,7 +154,7 @@ const Login = () => {
           signInParams.subdomain_id = `${subdomainID}`;
         }
 
-        // const createResponse = await dispatch(SignIn(signInParams));
+        const createResponse = await dispatch(SignIn(signInParams));
         setUserFormSubmiting(false);
         setErrors({});
       } catch (error) {
@@ -200,7 +200,7 @@ const Login = () => {
       setChangePasswordLoading(true);
 
       try {
-        // await dispatch(ForgotPassword(forgotEmail, subdomain));
+        await dispatch(ForgotPassword(forgotEmail, subdomain));
         setChangePasswordLoading(false);
         setErrors({});
       } catch (error) {
@@ -239,7 +239,7 @@ const Login = () => {
       // Extract access token from the response
       const accessToken = response.data.accessToken;
 
-      //   await dispatch(FacebookSignIn(accessToken, signInParams));
+      await dispatch(FacebookSignIn(accessToken, signInParams));
       setFacebookLoginLoading(false);
       setErrors({});
     } catch (error) {
@@ -361,7 +361,7 @@ const Login = () => {
                 </Grid>
                 <Grid item xs={12}>
                   <LoginSocialFacebook
-                    appId={process.env.REACT_APP_ID}
+                    appId={import.meta.env.VITE_REACT_APP_ID}
                     fieldsProfile={
                       "id,first_name,last_name,middle_name,name,name_format,picture,short_name,email"
                     }
