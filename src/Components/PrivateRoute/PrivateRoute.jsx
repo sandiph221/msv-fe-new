@@ -1,40 +1,36 @@
 import { getSubDomain } from "Functions";
 import NotPaidDashboard from "Pages/DashboardPage/NotPaidDashboard";
 import { useSelector } from "react-redux";
-import { Redirect, Route } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+
 const PrivateRoute = ({ component: Component, roles, ...rest }) => {
   const { isAuth, token, user } = useSelector((state) => state.auth);
   const { hasPaid } = useSelector((state) => state.settings);
   const subDomain = getSubDomain();
-  return (
-    <Route
-      {...rest}
-      render={(props) => {
-        //token from state
+  const location = useLocation();
 
-        if (!isAuth) {
-          // not logged in so redirect to login page with the return url
+  // Not logged in, redirect to login
+  if (!isAuth) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
 
-          return <Redirect to="/login" />;
-        }
+  // Super admin redirects to admin dashboard
+  if (isAuth && user && user.role === "super-admin") {
+    return <Navigate to="/admin/dashboard" replace />;
+  }
 
-        if (isAuth && user && user.role === "super-admin") {
-          return <Redirect to="/admin/dashboard" />;
-        }
-        if(subDomain && !hasPaid) {
-          return (
-            <NotPaidDashboard hasPaid={false} />
-          )
-        }
-        // if (isAuth && user && user.role !== "super-admin") {
-        //   return <Redirect to="/dashboard" />;
-        // }
+  // Subdomain with unpaid status
+  if (subDomain && !hasPaid) {
+    return <NotPaidDashboard hasPaid={false} />;
+  }
 
+  // If Component is provided, render it with props
+  if (Component) {
+    return <Component {...rest} />;
+  }
 
-        // authorised so return component
-        return <Component {...props} />;
-      }}
-    />
-  );
+  // Otherwise, render child routes
+  return <Outlet />;
 };
+
 export default PrivateRoute;

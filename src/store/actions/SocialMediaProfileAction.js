@@ -1,12 +1,11 @@
-import adddeSocialMedaiProfileList from './Data/AddedSocialMediaProfile';
-import interactionsData from './Data/interactions';
-import axios from 'axios';
-import topFollowers from './Data/TopFollowersData';
-import { toast } from 'react-toastify';
-import { Redirect } from 'react-router';
+import adddeSocialMedaiProfileList from "./Data/AddedSocialMediaProfile";
+import interactionsData from "./Data/interactions";
+import axios from "axios";
+import topFollowers from "./Data/TopFollowersData";
+import { toast } from "react-toastify";
 
 export const getAddedProfileList =
-  (searchQuery = '') =>
+  (searchQuery = "") =>
   (dispatch, getState) => {
     /* getting added profiles list in database */
     /*api request is to be made */
@@ -15,9 +14,9 @@ export const getAddedProfileList =
       getState().socialMediaProfileListReducer;
     const { startDate, endDate } = customDateRangeRed
       ? customDateRangeRed[0]
-      : '';
+      : "";
     dispatch({
-      type: 'GET_ADDED_PROFILE_LIST_START',
+      type: "GET_ADDED_PROFILE_LIST_START",
     });
 
     axios
@@ -34,7 +33,7 @@ export const getAddedProfileList =
           relative_fan_change: d.relative_fan_change + `%`,
         }));
         dispatch({
-          type: 'GET_ADDED_PROFILE_LIST',
+          type: "GET_ADDED_PROFILE_LIST",
           payload: newdata,
         });
       })
@@ -46,7 +45,7 @@ export const getAddedProfileList =
           );
         } else {
           dispatch({
-            type: 'SOCIAL_MEDIA_PROFILES_ERROR',
+            type: "SOCIAL_MEDIA_PROFILES_ERROR",
           });
         }
       });
@@ -56,14 +55,14 @@ export const searchSocialMediaProfiles = (query) => (dispatch, getState) => {
   /* searching profiles list from database */
   /* dispatching for loader state */
   dispatch({
-    type: 'SEARCH_SOCIAL_MEDIA_PROFILE_LIST_START',
+    type: "SEARCH_SOCIAL_MEDIA_PROFILE_LIST_START",
   });
   const { activeSocialMediaType } = getState().socialMediaProfileListReducer;
   axios
     .get(`/social-media/${activeSocialMediaType}/search-profiles/${query}`)
     .then((response) => {
       dispatch({
-        type: 'SEARCH_SOCIAL_MEDIA_PROFILE_LIST',
+        type: "SEARCH_SOCIAL_MEDIA_PROFILE_LIST",
         payload: response.data.data,
       });
     })
@@ -75,7 +74,7 @@ export const searchSocialMediaProfiles = (query) => (dispatch, getState) => {
         );
       } else {
         dispatch({
-          type: 'SOCIAL_MEDIA_PROFILES_ERROR',
+          type: "SOCIAL_MEDIA_PROFILES_ERROR",
         });
       }
     });
@@ -85,7 +84,7 @@ export const addProfileList = (profiles) => (dispatch, getState) => {
   /* api call to be requested */
   if (profiles.length !== 0) {
     dispatch({
-      type: 'ADD_PROFILE_LIST_TO_COMPARE_START',
+      type: "ADD_PROFILE_LIST_TO_COMPARE_START",
     });
     const { activeSocialMediaType } = getState().socialMediaProfileListReducer;
     axios
@@ -94,19 +93,19 @@ export const addProfileList = (profiles) => (dispatch, getState) => {
       })
       .then((response) => {
         dispatch({
-          type: 'ADD_PROFILE_LIST_TO_COMPARE',
+          type: "ADD_PROFILE_LIST_TO_COMPARE",
           payload: response.data.data,
         });
         dispatch(getAddedProfileList());
       })
-      .then(() => toast.success('Profile added successfully'))
+      .then(() => toast.success("Profile added successfully"))
       .catch((error) => {
         if (error.response) {
           toast.error(error.response.data.message);
           dispatch(socialMediaResponseError());
         } else {
           dispatch({
-            type: 'SOCIAL_MEDIA_PROFILES_ERROR',
+            type: "SOCIAL_MEDIA_PROFILES_ERROR",
           });
         }
       });
@@ -130,10 +129,10 @@ export const updateProfileColor =
         data
       )
       .then((response) => {
-        toast.success('Colour updated successfully');
+        toast.success("Colour updated successfully");
       })
       .catch((error) => {
-        toast.error('error occured');
+        toast.error("error occured");
       });
   };
 
@@ -151,7 +150,7 @@ export const deleteAddedProfileList = (profilesId) => (dispatch, getState) => {
     .then((response) => {
       toast.success(response.data.message);
       dispatch({
-        type: 'DELETING_ADDED_PROFILE_LIST',
+        type: "DELETING_ADDED_PROFILE_LIST",
         payload: response.data,
       });
       dispatch(getAddedProfileList());
@@ -162,7 +161,7 @@ export const deleteAddedProfileList = (profilesId) => (dispatch, getState) => {
         dispatch(socialMediaResponseError());
       } else {
         dispatch({
-          type: 'SOCIAL_MEDIA_PROFILES_ERROR',
+          type: "SOCIAL_MEDIA_PROFILES_ERROR",
         });
       }
     });
@@ -175,7 +174,7 @@ export const searchAddedProfileList = (query) => (dispatch) => {
     return profileList.profileName.toLowerCase().includes(query.toLowerCase());
   });
   dispatch({
-    type: 'SEARCH_ADDED_PROFILES_LIST',
+    type: "SEARCH_ADDED_PROFILES_LIST",
     payload: addedProfileList,
   });
 };
@@ -185,14 +184,14 @@ export const getSocialProfileBasic =
   (singleProfile) => (dispatch, getState) => {
     //loader start
     dispatch({
-      type: 'GET_PROFILE_BASIC_LOADER',
+      type: "GET_PROFILE_BASIC_LOADER",
     });
     /* api call to be made */
     const { activeSocialMediaType, customDateRangeRed } =
       getState().socialMediaProfileListReducer;
     const { startDate, endDate } = customDateRangeRed
       ? customDateRangeRed[0]
-      : '';
+      : "";
     axios
       .get(
         `social-media/${activeSocialMediaType}/profiles/${singleProfile}/basic`,
@@ -205,7 +204,7 @@ export const getSocialProfileBasic =
       )
       .then((response) => {
         dispatch({
-          type: 'GET_PROFILE_BASIC',
+          type: "GET_PROFILE_BASIC",
           payload: response.data.data,
         });
       })
@@ -215,7 +214,7 @@ export const getSocialProfileBasic =
           dispatch(socialMediaResponseError());
         } else {
           dispatch({
-            type: 'SOCIAL_MEDIA_PROFILES_ERROR',
+            type: "SOCIAL_MEDIA_PROFILES_ERROR",
           });
         }
       });
@@ -227,14 +226,14 @@ export const getSocialProfilelikes =
   (singleProfile) => (dispatch, getState) => {
     //loader start
     dispatch({
-      type: 'GET_PROFILE_LIKES_LOADER',
+      type: "GET_PROFILE_LIKES_LOADER",
     });
     /* api call to be made */
     const { activeSocialMediaType, customDateRangeRed } =
       getState().socialMediaProfileListReducer;
     const { startDate, endDate } = customDateRangeRed
       ? customDateRangeRed[0]
-      : '';
+      : "";
 
     axios
       .get(
@@ -248,7 +247,7 @@ export const getSocialProfilelikes =
       )
       .then((response) => {
         dispatch({
-          type: 'GET_PROFILE_LIKES',
+          type: "GET_PROFILE_LIKES",
           payload: response.data.data,
         });
       })
@@ -258,7 +257,7 @@ export const getSocialProfilelikes =
           dispatch(socialMediaResponseError());
         } else {
           dispatch({
-            type: 'SOCIAL_MEDIA_PROFILES_ERROR',
+            type: "SOCIAL_MEDIA_PROFILES_ERROR",
           });
         }
       });
@@ -270,14 +269,14 @@ export const getSocialProfileComments =
   (singleProfile) => (dispatch, getState) => {
     //loader start
     dispatch({
-      type: 'GET_PROFILE_COMMENTS_LOADER',
+      type: "GET_PROFILE_COMMENTS_LOADER",
     });
     /* api call to be made */
     const { activeSocialMediaType, customDateRangeRed } =
       getState().socialMediaProfileListReducer;
     const { startDate, endDate } = customDateRangeRed
       ? customDateRangeRed[0]
-      : '';
+      : "";
     axios
       .get(
         `social-media/${activeSocialMediaType}/profiles/${singleProfile}/comments`,
@@ -290,7 +289,7 @@ export const getSocialProfileComments =
       )
       .then((response) => {
         dispatch({
-          type: 'GET_PROFILE_COMMENTS',
+          type: "GET_PROFILE_COMMENTS",
           payload: response.data.data,
         });
       })
@@ -300,7 +299,7 @@ export const getSocialProfileComments =
           dispatch(socialMediaResponseError());
         } else {
           dispatch({
-            type: 'SOCIAL_MEDIA_PROFILES_ERROR',
+            type: "SOCIAL_MEDIA_PROFILES_ERROR",
           });
         }
       });
@@ -312,14 +311,14 @@ export const getSocialProfileInteractionAbsoluteGrowth =
   (singleProfile) => (dispatch, getState) => {
     //loader start
     dispatch({
-      type: 'GET_PROFILE_ABS_INTERACTION_START',
+      type: "GET_PROFILE_ABS_INTERACTION_START",
     });
     /* api call to be made */
     const { activeSocialMediaType, customDateRangeRed } =
       getState().socialMediaProfileListReducer;
     const { startDate, endDate } = customDateRangeRed
       ? customDateRangeRed[0]
-      : '';
+      : "";
 
     axios
       .get(
@@ -333,7 +332,7 @@ export const getSocialProfileInteractionAbsoluteGrowth =
       )
       .then((response) => {
         dispatch({
-          type: 'GET_PROFILE_ABS_INTERACTION',
+          type: "GET_PROFILE_ABS_INTERACTION",
           payload: response.data.data,
         });
       })
@@ -343,7 +342,7 @@ export const getSocialProfileInteractionAbsoluteGrowth =
           dispatch(socialMediaResponseError());
         } else {
           dispatch({
-            type: 'SOCIAL_MEDIA_PROFILES_ERROR',
+            type: "SOCIAL_MEDIA_PROFILES_ERROR",
           });
         }
       });
@@ -355,14 +354,14 @@ export const getSocialProfileShares =
   (singleProfile) => (dispatch, getState) => {
     //loader start
     dispatch({
-      type: 'GET_PROFILE_SHARES_LOADER',
+      type: "GET_PROFILE_SHARES_LOADER",
     });
     /* api call to be made */
     const { activeSocialMediaType, customDateRangeRed } =
       getState().socialMediaProfileListReducer;
     const { startDate, endDate } = customDateRangeRed
       ? customDateRangeRed[0]
-      : '';
+      : "";
     axios
       .get(
         `social-media/${activeSocialMediaType}/profiles/${singleProfile}/shares`,
@@ -375,7 +374,7 @@ export const getSocialProfileShares =
       )
       .then((response) => {
         dispatch({
-          type: 'GET_PROFILE_SHARES',
+          type: "GET_PROFILE_SHARES",
           payload: response.data.data,
         });
       })
@@ -385,7 +384,7 @@ export const getSocialProfileShares =
           dispatch(socialMediaResponseError());
         } else {
           dispatch({
-            type: 'SOCIAL_MEDIA_PROFILES_ERROR',
+            type: "SOCIAL_MEDIA_PROFILES_ERROR",
           });
         }
       });
@@ -398,14 +397,14 @@ export const getSocialProfileTopPost =
   (dispatch, getState) => {
     //loader start
     dispatch({
-      type: 'GET_PROFILE_TOP_POST_LOADER',
+      type: "GET_PROFILE_TOP_POST_LOADER",
     });
     /* api call to be made */
     const { activeSocialMediaType, customDateRangeRed } =
       getState().socialMediaProfileListReducer;
     const { startDate, endDate } = customDateRangeRed
       ? customDateRangeRed[0]
-      : '';
+      : "";
     axios
       .get(
         `social-media/${activeSocialMediaType}/profiles/${singleProfile}/top-posts`,
@@ -421,7 +420,7 @@ export const getSocialProfileTopPost =
       )
       .then((response) => {
         dispatch({
-          type: 'GET_PROFILE_TOP_POST',
+          type: "GET_PROFILE_TOP_POST",
           payload: response.data.data,
         });
       })
@@ -431,7 +430,7 @@ export const getSocialProfileTopPost =
           dispatch(socialMediaResponseError());
         } else {
           dispatch({
-            type: 'SOCIAL_MEDIA_PROFILES_ERROR',
+            type: "SOCIAL_MEDIA_PROFILES_ERROR",
           });
         }
       });
@@ -448,7 +447,7 @@ export const getMoreSocialProfileTopPost =
       getState().socialMediaProfileListReducer;
     const { startDate, endDate } = customDateRangeRed
       ? customDateRangeRed[0]
-      : '';
+      : "";
     axios
       .get(
         `social-media/${activeSocialMediaType}/profiles/${singleProfile}/top-posts`,
@@ -464,7 +463,7 @@ export const getMoreSocialProfileTopPost =
       )
       .then((response) => {
         dispatch({
-          type: 'GET_PROFILE_TOP_POST',
+          type: "GET_PROFILE_TOP_POST",
           payload: response.data.data,
         });
       })
@@ -474,7 +473,7 @@ export const getMoreSocialProfileTopPost =
           dispatch(socialMediaResponseError());
         } else {
           dispatch({
-            type: 'SOCIAL_MEDIA_PROFILES_ERROR',
+            type: "SOCIAL_MEDIA_PROFILES_ERROR",
           });
         }
       });
@@ -487,14 +486,14 @@ export const getSocialProfileGrowthFollowers =
   (singleProfile) => (dispatch, getState) => {
     //loader start
     dispatch({
-      type: 'GET_PROFILE_GROWTH_FOLLOWERS_LOADER',
+      type: "GET_PROFILE_GROWTH_FOLLOWERS_LOADER",
     });
     /* api call to be made */
     const { activeSocialMediaType, customDateRangeRed } =
       getState().socialMediaProfileListReducer;
     const { startDate, endDate } = customDateRangeRed
       ? customDateRangeRed[0]
-      : '';
+      : "";
     axios
       .get(
         `social-media/${activeSocialMediaType}/profiles/${singleProfile}/followers-absolute-growth`,
@@ -507,7 +506,7 @@ export const getSocialProfileGrowthFollowers =
       )
       .then((response) => {
         dispatch({
-          type: 'GET_PROFILE_GROWTH_FOLLOWERS',
+          type: "GET_PROFILE_GROWTH_FOLLOWERS",
           payload: response.data.data,
         });
       })
@@ -517,7 +516,7 @@ export const getSocialProfileGrowthFollowers =
           dispatch(socialMediaResponseError());
         } else {
           dispatch({
-            type: 'SOCIAL_MEDIA_PROFILES_ERROR',
+            type: "SOCIAL_MEDIA_PROFILES_ERROR",
           });
         }
       });
@@ -526,12 +525,12 @@ export const getSocialProfileGrowthFollowers =
 // / setting active social media type start
 export const setActiveSocialMediaType = (socialMediaType) => (dispatch) => {
   dispatch({
-    type: 'SET_ACTIVE_SOCIAL_MEDIA_TYPE',
+    type: "SET_ACTIVE_SOCIAL_MEDIA_TYPE",
     payload: socialMediaType,
   });
   dispatch(resetSelectedProfileForCompare());
   dispatch({
-    type: 'RESET_TOP_POST_ID',
+    type: "RESET_TOP_POST_ID",
   });
 };
 
@@ -539,7 +538,7 @@ export const setActiveSocialMediaType = (socialMediaType) => (dispatch) => {
 
 export const setCustomDateRangeAction = (dateRange) => (dispatch) => {
   dispatch({
-    type: 'SET_CUSTOM_DATE_RANGE',
+    type: "SET_CUSTOM_DATE_RANGE",
     payload: dateRange,
   });
 };
@@ -556,10 +555,10 @@ export const getSocialProfileFanGrowth =
       getState().socialMediaProfileListReducer;
     const { startDate, endDate } = customDateRangeRed
       ? customDateRangeRed[0]
-      : '';
+      : "";
 
     dispatch({
-      type: 'GET_FANS_GROWTH_DATA_LOADER',
+      type: "GET_FANS_GROWTH_DATA_LOADER",
     });
     axios
       .get(
@@ -569,7 +568,7 @@ export const getSocialProfileFanGrowth =
             start_date: startDate,
             end_date: endDate,
             profiles:
-              typeof fanGrowthSelectedProfiles === 'object'
+              typeof fanGrowthSelectedProfiles === "object"
                 ? fanGrowthSelectedProfiles
                 : [fanGrowthSelectedProfiles],
           },
@@ -577,7 +576,7 @@ export const getSocialProfileFanGrowth =
       )
       .then((response) => {
         dispatch({
-          type: 'GET_FANS_GROWTH_DATA',
+          type: "GET_FANS_GROWTH_DATA",
           payload: response.data.data,
         });
       })
@@ -587,7 +586,7 @@ export const getSocialProfileFanGrowth =
           dispatch(socialMediaResponseError());
         } else {
           dispatch({
-            type: 'SOCIAL_MEDIA_PROFILES_ERROR',
+            type: "SOCIAL_MEDIA_PROFILES_ERROR",
           });
         }
       });
@@ -603,10 +602,10 @@ export const getInteractions =
       getState().socialMediaProfileListReducer;
     const { startDate, endDate } = customDateRangeRed
       ? customDateRangeRed[0]
-      : '';
+      : "";
 
     dispatch({
-      type: 'GET_INTERACTIONS_DATA_LOADER',
+      type: "GET_INTERACTIONS_DATA_LOADER",
     });
 
     axios
@@ -617,7 +616,7 @@ export const getInteractions =
             start_date: startDate,
             end_date: endDate,
             profiles:
-              typeof interactionSelectedProfiles === 'object'
+              typeof interactionSelectedProfiles === "object"
                 ? interactionSelectedProfiles
                 : [interactionSelectedProfiles],
             per_1k_fans: interaction1kPerFans,
@@ -626,7 +625,7 @@ export const getInteractions =
       )
       .then((response) => {
         dispatch({
-          type: 'GET_INTERACTIONS_DATA',
+          type: "GET_INTERACTIONS_DATA",
           payload: response.data.data,
         });
       })
@@ -636,7 +635,7 @@ export const getInteractions =
           dispatch(socialMediaResponseError());
         } else {
           dispatch({
-            type: 'SOCIAL_MEDIA_PROFILES_ERROR',
+            type: "SOCIAL_MEDIA_PROFILES_ERROR",
           });
         }
       });
@@ -653,10 +652,10 @@ export const getPostTypeDistributions =
       getState().socialMediaProfileListReducer;
     const { startDate, endDate } = customDateRangeRed
       ? customDateRangeRed[0]
-      : '';
+      : "";
 
     dispatch({
-      type: 'GET_POSTS_BREAKDOWN_DATA_LOADER',
+      type: "GET_POSTS_BREAKDOWN_DATA_LOADER",
     });
 
     axios
@@ -671,7 +670,7 @@ export const getPostTypeDistributions =
       )
       .then((response) => {
         dispatch({
-          type: 'GET_POST_TYPE_DATA',
+          type: "GET_POST_TYPE_DATA",
           payload: response.data.data,
         });
       })
@@ -681,7 +680,7 @@ export const getPostTypeDistributions =
           dispatch(socialMediaResponseError());
         } else {
           dispatch({
-            type: 'SOCIAL_MEDIA_PROFILES_ERROR',
+            type: "SOCIAL_MEDIA_PROFILES_ERROR",
           });
         }
       });
@@ -697,10 +696,10 @@ export const getPostTypeDistributionsMultiple =
       getState().socialMediaProfileListReducer;
     const { startDate, endDate } = customDateRangeRed
       ? customDateRangeRed[0]
-      : '';
+      : "";
 
     dispatch({
-      type: 'GET_POSTS_BREAKDOWN_DATA_MULTIPLE_LOADER',
+      type: "GET_POSTS_BREAKDOWN_DATA_MULTIPLE_LOADER",
     });
 
     axios
@@ -711,7 +710,7 @@ export const getPostTypeDistributionsMultiple =
             start_date: startDate,
             end_date: endDate,
             profiles:
-              typeof selectProfile === 'object'
+              typeof selectProfile === "object"
                 ? selectProfile
                 : [selectProfile],
           },
@@ -719,7 +718,7 @@ export const getPostTypeDistributionsMultiple =
       )
       .then((response) => {
         dispatch({
-          type: 'GET_POST_TYPE_DATA_MULTIPLE',
+          type: "GET_POST_TYPE_DATA_MULTIPLE",
           payload: response.data.data,
         });
       })
@@ -729,7 +728,7 @@ export const getPostTypeDistributionsMultiple =
           dispatch(socialMediaResponseError());
         } else {
           dispatch({
-            type: 'SOCIAL_MEDIA_PROFILES_ERROR',
+            type: "SOCIAL_MEDIA_PROFILES_ERROR",
           });
         }
       });
@@ -744,10 +743,10 @@ export const getInteractionDistrbutions =
       getState().socialMediaProfileListReducer;
     const { startDate, endDate } = customDateRangeRed
       ? customDateRangeRed[0]
-      : '';
+      : "";
 
     dispatch({
-      type: 'GET_DISTRIBUTIONS_OF_INTERACTIONS',
+      type: "GET_DISTRIBUTIONS_OF_INTERACTIONS",
     });
 
     axios
@@ -758,7 +757,7 @@ export const getInteractionDistrbutions =
             start_date: startDate,
             end_date: endDate,
             profiles:
-              typeof selectProfile === 'object'
+              typeof selectProfile === "object"
                 ? selectProfile
                 : [selectProfile],
           },
@@ -766,7 +765,7 @@ export const getInteractionDistrbutions =
       )
       .then((response) => {
         dispatch({
-          type: 'GET_INTERACTIONS_DISTRIBUTIONS',
+          type: "GET_INTERACTIONS_DISTRIBUTIONS",
           payload: response.data.data,
         });
       })
@@ -776,7 +775,7 @@ export const getInteractionDistrbutions =
           dispatch(socialMediaResponseError());
         } else {
           dispatch({
-            type: 'SOCIAL_MEDIA_PROFILES_ERROR',
+            type: "SOCIAL_MEDIA_PROFILES_ERROR",
           });
         }
       });
@@ -787,7 +786,7 @@ export const getInteractionDistrbutions =
 /* profiles To compare on selecting checkbox from added social profiles list  */
 export const selectProfilesToComapre = (profiles) => (dispatch) => {
   dispatch({
-    type: 'SELECT_PROFILES_TO_COMPARE',
+    type: "SELECT_PROFILES_TO_COMPARE",
     payload: profiles,
   });
 };
@@ -795,26 +794,26 @@ export const selectProfilesToComapre = (profiles) => (dispatch) => {
 /* delete profile to compare */
 export const deleteSelectProfilesToCompare = (profileId) => (dispatch) => {
   dispatch({
-    type: 'DELETE_SELECT_PROFILES_TO_COMPARE',
+    type: "DELETE_SELECT_PROFILES_TO_COMPARE",
     payload: profileId,
   });
 };
 
 export const resetSelectedProfileForCompare = () => {
   return {
-    type: 'RESET_PROFILES_TO_COMPARE',
+    type: "RESET_PROFILES_TO_COMPARE",
   };
 };
 
 /* server response errror function */
 const socialMediaResponseError = () => {
   return {
-    type: 'SOCIAL_MEDIA_RES_ERROR',
+    type: "SOCIAL_MEDIA_RES_ERROR",
   };
 };
 const socialMediaResponseErrorWithMessage = (payload) => {
   return {
-    type: 'SOCIAL_MEDIA_RES_ERROR',
+    type: "SOCIAL_MEDIA_RES_ERROR",
     payload,
   };
 };
@@ -827,21 +826,21 @@ export const getContentNewsFeed =
     );
     //loader start
     dispatch({
-      type: 'GET_PROFILE_CONTENT_FEED',
+      type: "GET_PROFILE_CONTENT_FEED",
     });
     /* api call to be made */
     const { activeSocialMediaType, customDateRangeRed } =
       getState().socialMediaProfileListReducer;
     const { startDate, endDate } = customDateRangeRed
       ? customDateRangeRed[0]
-      : '';
+      : "";
     let feedTypesQuery =
       contentQueryParams.postTypes.length === 6 ||
       contentQueryParams.postTypes.length === 3
         ? []
-        : contentQueryParams.postTypes.filter((value) => value !== 'All Types');
+        : contentQueryParams.postTypes.filter((value) => value !== "All Types");
     let newFeedTypesQuery = feedTypesQuery;
-    if (activeSocialMediaType === 'facebook') {
+    if (activeSocialMediaType === "facebook") {
       newFeedTypesQuery = feedTypesQuery.map((val) => val.toLowerCase());
     }
     let contentFeedUrl = `social-media/${activeSocialMediaType}/content-news-feeds`;
@@ -852,7 +851,7 @@ export const getContentNewsFeed =
       page: contentQueryParams.currentPage,
       page_limit: contentQueryParams.page_limit
         ? contentQueryParams.page_limit
-        : '12',
+        : "12",
       sort_by: contentQueryParams.sortType,
     };
     if (contentQueryParams.selectedProfiles) {
@@ -866,7 +865,7 @@ export const getContentNewsFeed =
         })
         .then((response) => {
           dispatch({
-            type: 'GET_PROFILE_CONTENT_FEED_SUCCESS',
+            type: "GET_PROFILE_CONTENT_FEED_SUCCESS",
             payload: response.data.data,
           });
         })
@@ -876,7 +875,7 @@ export const getContentNewsFeed =
             dispatch(socialMediaResponseError());
           } else {
             dispatch({
-              type: 'SOCIAL_MEDIA_PROFILES_ERROR',
+              type: "SOCIAL_MEDIA_PROFILES_ERROR",
             });
           }
         });
@@ -884,7 +883,7 @@ export const getContentNewsFeed =
   };
 
 export const loadMoreContentNewsFeed =
-  (contentQueryParams, pageLimit, page = '1') =>
+  (contentQueryParams, pageLimit, page = "1") =>
   (dispatch, getState) => {
     const { activeSocialMediaType, customDateRangeRed } =
       getState().socialMediaProfileListReducer;
@@ -894,16 +893,16 @@ export const loadMoreContentNewsFeed =
     let feedTypesQuery =
       contentQueryParams.postTypes.length === 6
         ? []
-        : contentQueryParams.postTypes.filter((value) => value !== 'All Types');
+        : contentQueryParams.postTypes.filter((value) => value !== "All Types");
     let newFeedTypesQuery = feedTypesQuery;
-    if (activeSocialMediaType === 'facebook') {
+    if (activeSocialMediaType === "facebook") {
       newFeedTypesQuery = feedTypesQuery.map((val) => val.toLowerCase());
     }
 
     /* api call to be made */
     const { startDate, endDate } = customDateRangeRed
       ? customDateRangeRed[0]
-      : '';
+      : "";
     const { oldContentNewsFeed } =
       getState().socialMediaProfileListReducer.contentNewsFeed;
     //loader start
@@ -925,7 +924,7 @@ export const loadMoreContentNewsFeed =
       })
       .then((response) => {
         dispatch({
-          type: 'GET_PROFILE_CONTENT_FEED_SUCCESS',
+          type: "GET_PROFILE_CONTENT_FEED_SUCCESS",
           payload: response.data.data,
         });
       })
@@ -935,7 +934,7 @@ export const loadMoreContentNewsFeed =
           dispatch(socialMediaResponseError());
         } else {
           dispatch({
-            type: 'SOCIAL_MEDIA_PROFILES_ERROR',
+            type: "SOCIAL_MEDIA_PROFILES_ERROR",
           });
         }
       });
@@ -945,7 +944,7 @@ export const loadMoreContentNewsFeed =
 
 export const clearContentNewsFeed = () => (dispatch) => {
   dispatch({
-    type: 'CLEAR_PROFILE_CONTENT_FEED',
+    type: "CLEAR_PROFILE_CONTENT_FEED",
   });
 };
 
@@ -957,10 +956,10 @@ export const getSocialListeningtags = (query) => (dispatch, getState) => {
     getState().socialMediaProfileListReducer;
   const { startDate, endDate } = customDateRangeRed
     ? customDateRangeRed[0]
-    : '';
+    : "";
 
   dispatch({
-    type: 'GET_SOCIAL_LISTENING_TAGS_START',
+    type: "GET_SOCIAL_LISTENING_TAGS_START",
   });
 
   const searchKeyWords = query.map((value) => value.label);
@@ -975,7 +974,7 @@ export const getSocialListeningtags = (query) => (dispatch, getState) => {
     })
     .then((response) => {
       dispatch({
-        type: 'GET_SOCIAL_LISTENING_TAGS',
+        type: "GET_SOCIAL_LISTENING_TAGS",
         payload: response.data.data,
       });
     })
@@ -985,7 +984,7 @@ export const getSocialListeningtags = (query) => (dispatch, getState) => {
         dispatch(socialMediaResponseError());
       } else {
         dispatch({
-          type: 'SOCIAL_MEDIA_PROFILES_ERROR',
+          type: "SOCIAL_MEDIA_PROFILES_ERROR",
         });
       }
     });
@@ -1004,10 +1003,10 @@ export const getNoOfpeople =
         getState().socialMediaProfileListReducer;
       const { startDate, endDate } = customDateRangeRed
         ? customDateRangeRed[0]
-        : '';
+        : "";
 
       dispatch({
-        type: 'GET_NO_OF_PEOPLE_START',
+        type: "GET_NO_OF_PEOPLE_START",
       });
 
       axios
@@ -1028,11 +1027,11 @@ export const getNoOfpeople =
             response.data.data.is_downloading
           ) {
             dispatch({
-              type: 'SOCIAL_LISTENING_ERROR',
+              type: "SOCIAL_LISTENING_ERROR",
             });
           } else {
             dispatch({
-              type: 'GET_NO_OF_PEOPLE',
+              type: "GET_NO_OF_PEOPLE",
               payload: response.data.data,
             });
 
@@ -1044,7 +1043,7 @@ export const getNoOfpeople =
           }
 
           dispatch({
-            type: 'SOCIAL_LISTENING_ERROR_COMPLETE',
+            type: "SOCIAL_LISTENING_ERROR_COMPLETE",
           });
         })
         .catch((error) => {
@@ -1054,7 +1053,7 @@ export const getNoOfpeople =
             dispatch(socialMediaResponseError());
           } else {
             dispatch({
-              type: 'SOCIAL_LISTENING_ERROR',
+              type: "SOCIAL_LISTENING_ERROR",
             });
           }
         });
@@ -1072,10 +1071,10 @@ export const getNoOfMentions =
       getState().socialMediaProfileListReducer;
     const { startDate, endDate } = customDateRangeRed
       ? customDateRangeRed[0]
-      : '';
+      : "";
 
     dispatch({
-      type: 'GET_NO_OF_MENTIONS_START',
+      type: "GET_NO_OF_MENTIONS_START",
     });
 
     axios
@@ -1088,7 +1087,7 @@ export const getNoOfMentions =
       })
       .then((response) => {
         dispatch({
-          type: 'GET_NO_OF_MENTIONS',
+          type: "GET_NO_OF_MENTIONS",
           payload: response.data.data,
         });
       })
@@ -1098,7 +1097,7 @@ export const getNoOfMentions =
           dispatch(socialMediaResponseError());
         } else {
           dispatch({
-            type: 'SOCIAL_MEDIA_PROFILES_ERROR',
+            type: "SOCIAL_MEDIA_PROFILES_ERROR",
           });
         }
       });
@@ -1116,10 +1115,10 @@ export const getNoOfSocialInteraction =
       getState().socialMediaProfileListReducer;
     const { startDate, endDate } = customDateRangeRed
       ? customDateRangeRed[0]
-      : '';
+      : "";
 
     dispatch({
-      type: 'GET_NO_OF_SOCIAL_INTERACTIONS_START',
+      type: "GET_NO_OF_SOCIAL_INTERACTIONS_START",
     });
 
     axios
@@ -1132,7 +1131,7 @@ export const getNoOfSocialInteraction =
       })
       .then((response) => {
         dispatch({
-          type: 'GET_NO_OF_SOCIAL_INTERACTIONS',
+          type: "GET_NO_OF_SOCIAL_INTERACTIONS",
           payload: response.data.data,
         });
       })
@@ -1142,7 +1141,7 @@ export const getNoOfSocialInteraction =
           dispatch(socialMediaResponseError());
         } else {
           dispatch({
-            type: 'SOCIAL_MEDIA_PROFILES_ERROR',
+            type: "SOCIAL_MEDIA_PROFILES_ERROR",
           });
         }
       });
@@ -1200,10 +1199,10 @@ export const getEmojiChartData =
       getState().socialMediaProfileListReducer;
     const { startDate, endDate } = customDateRangeRed
       ? customDateRangeRed[0]
-      : '';
+      : "";
 
     dispatch({
-      type: 'GET_EMOJI_CHART_DATA_START',
+      type: "GET_EMOJI_CHART_DATA_START",
     });
 
     axios
@@ -1216,7 +1215,7 @@ export const getEmojiChartData =
       })
       .then((response) => {
         dispatch({
-          type: 'GET_EMOJI_CHART_DATA',
+          type: "GET_EMOJI_CHART_DATA",
           payload: response.data.data,
         });
       })
@@ -1226,7 +1225,7 @@ export const getEmojiChartData =
           dispatch(socialMediaResponseError());
         } else {
           dispatch({
-            type: 'SOCIAL_MEDIA_PROFILES_ERROR',
+            type: "SOCIAL_MEDIA_PROFILES_ERROR",
           });
         }
       });
@@ -1244,10 +1243,10 @@ export const getSentimentData =
       getState().socialMediaProfileListReducer;
     const { startDate, endDate } = customDateRangeRed
       ? customDateRangeRed[0]
-      : '';
+      : "";
 
     dispatch({
-      type: 'GET_SENTIMENT_TIME_DATA_START',
+      type: "GET_SENTIMENT_TIME_DATA_START",
     });
 
     axios
@@ -1263,7 +1262,7 @@ export const getSentimentData =
       )
       .then((response) => {
         dispatch({
-          type: 'GET_SENTIMENT_TIME_DATA',
+          type: "GET_SENTIMENT_TIME_DATA",
           payload: response.data.data,
         });
       })
@@ -1273,7 +1272,7 @@ export const getSentimentData =
           dispatch(socialMediaResponseError());
         } else {
           dispatch({
-            type: 'SOCIAL_MEDIA_PROFILES_ERROR',
+            type: "SOCIAL_MEDIA_PROFILES_ERROR",
           });
         }
       });
@@ -1281,32 +1280,32 @@ export const getSentimentData =
 
 export const resetSocialListeningData = () => (dispatch) => {
   dispatch({
-    type: 'RESET_SOCIAL_LISTENING_DATA',
+    type: "RESET_SOCIAL_LISTENING_DATA",
   });
 };
 
 export const setSearchQuery = (query) => (dispatch) => {
   dispatch({
-    type: 'SET_SEARCH_QUERY',
+    type: "SET_SEARCH_QUERY",
     payload: query,
   });
   dispatch({
-    type: 'RESET_SOCIAL_LISTENING_DATA',
+    type: "RESET_SOCIAL_LISTENING_DATA",
   });
 };
 export const deleteSearchQuery = (query) => (dispatch) => {
   dispatch({
-    type: 'DELETE_SEARCH_QUERY',
+    type: "DELETE_SEARCH_QUERY",
     payload: query,
   });
 };
 export const resetSearchQuery = () => (dispatch) => {
   dispatch({
-    type: 'RESET_SEARCH_QUERY',
+    type: "RESET_SEARCH_QUERY",
   });
 };
 const noOfPeopleEnd = () => (dispatch) => {
   dispatch({
-    type: 'GET_NO_OF_PEOPLE_END',
+    type: "GET_NO_OF_PEOPLE_END",
   });
 };
