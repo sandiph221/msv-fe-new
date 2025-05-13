@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 export const Cta = () => {
   return (
@@ -11,7 +10,7 @@ export const Cta = () => {
         phasellus mollis sit aliquam sit nullam.
       </p>
       <div className="flex items-center gap-4">
-        <button className="rounded-full text-background">
+        <button className="rounded-full text-background bg-primary px-6 py-3 text-base font-medium transition-colors duration-200 hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2">
           Get Started Now
         </button>
         <Link

@@ -8,4 +8,3 @@ export const siteConfig = {
     twitter: "https://twitter.com/mysocialview",
   },
 };
-z;

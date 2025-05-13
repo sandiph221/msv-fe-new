@@ -49,36 +49,47 @@ import HelpPageFaq from "./Pages/Help/HelpPageFaq";
 import HelpPageVideo from "./Pages/Help/HelpPageVideo";
 
 // Components
-import PrivateRoute from "./Components/PrivateRoute/PrivateRoute";
-import AdminRoute from "./Components/PrivateRoute/AdminRoutes";
+import PrivateLayout from "./Components/Layouts/PrivateLayout";
+import AdminLayout from "./Components/Layouts/AdminLayout";
 
 // Store & Utils
 import { ChangePassword } from "./store/actions/AuthAction";
-
+import PublicLayout from "./Components/Layouts/PublicLayout";
+import PricingPage from "./Pages/Web/components/PricingPage";
+import Homepage from "./Pages/Web/components/Homepage";
+import AboutPage from "./Pages/Web/components/AboutPage";
+import FAQPage from "./Pages/Web/components/FaqPage";
+import { Contact } from "./Pages/Web/components/ContactPage";
 // Web Pages
-import Homepage from "./Pages/Web/Homepage";
 
 function App() {
   return (
     <Routes>
-      {/* Public Routes */}
-      <Route path="/" element={<Homepage />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<RegisterPage />} />
-      <Route path="/card-details" element={<CardDetailPage />} />
+      <Route path="/" element={<PublicLayout />}>
+        <Route index element={<Homepage />} />
+        <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/admin-login" element={<RegisterPage />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/faq" element={<FAQPage />} />
+      </Route>
+
+      {/* <Route path="/card-details" element={<CardDetailPage />} /> */}
       <Route path="/change-password" element={<ChangePassword />} />
       <Route
         path="/change-password-from-mail"
         element={<ChangePasswordFromMail />}
       />
       {/* Admin Routes */}
-      <Route path="/admin" element={<AdminRoute />}>
+      <Route path="/admin" element={<AdminLayout />}>
         <Route path="dashboard" element={<AdminDashboardPage />} />
         <Route path="user-activity" element={<UserActivity />} />
         <Route path="analytics" element={<Analytics />} />
       </Route>
 
-      <Route path="/contact-support" element={<AdminRoute />}>
+      <Route path="/contact-support" element={<AdminLayout />}>
         <Route index element={<ContactSupport />} />
       </Route>
 
@@ -88,10 +99,9 @@ function App() {
 
       {/* Public Routes */}
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-      <Route path="/web" element={<Homepage />} />
 
       {/* Protected Routes */}
-      <Route path="/user" element={<PrivateRoute />}>
+      <Route path="/user" element={<PrivateLayout />}>
         <Route index element={<DashboardPage />} />
         <Route path="profile" element={<ProfilePage />} />
         <Route path="brand-overview" element={<ProfileOverview />} />

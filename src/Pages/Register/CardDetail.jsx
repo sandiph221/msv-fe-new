@@ -58,7 +58,7 @@ const CreditCardForm = () => {
 
   useEffect(() => {
     if (!registeredEmail) {
-      window.location.href = "/login";
+        window.location.href = "/login";
     } else {
       setFormValues((prevState) => ({
         ...prevState,

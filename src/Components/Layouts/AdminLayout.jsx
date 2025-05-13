@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 
-const AdminRoutes = () => {
+const AdminLayout = () => {
   const { isAuth, user } = useSelector((state) => state.auth);
   const location = useLocation();
 
@@ -19,4 +19,4 @@ const AdminRoutes = () => {
   return <Navigate to="/" replace />;
 };
 
-export default AdminRoutes;
+export default AdminLayout;

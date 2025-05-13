@@ -13,6 +13,7 @@ import {
   TextField,
   useMediaQuery,
   useTheme,
+  InputAdornment,
 } from "@material-ui/core";
 import { styled } from "@material-ui/core/styles";
 
@@ -54,6 +55,20 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
+const getHostName = () => {
+  if (window.location.host.includes("localhost")) {
+    return location.host; // For local development, return a default hostname
+  } else if (window.location.host.includes(".com")) {
+    if (window.location.host.includes("www")) {
+      return window.location.host.split(".")[1] + ".com";
+    } else {
+      return window.location.host;
+    }
+  } else {
+    return "ravenxai.com"; // Default fallback
+  }
+};
+
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -74,8 +89,10 @@ const Login = () => {
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
+    subdomain: "",
   });
   const [errors, setErrors] = useState({});
+  const [hostName, setHostName] = useState(getHostName());
 
   const subDomain = getSubDomain();
 
@@ -90,11 +107,12 @@ const Login = () => {
       if (user && user.role === constant.SUPER_ADMIN_NAME) {
         navigate("/admin/dashboard");
       } else {
-        navigate("/");
+        navigate("/user");
       }
-    } else {
-      navigate("/login");
     }
+    // else {
+    //   navigate("/login");
+    // }
 
     // Receive Response for Forgot password
     if (apiRes && apiRes.requestFrom) {
@@ -147,11 +165,17 @@ const Login = () => {
       setUserFormSubmiting(true);
 
       try {
-        let signInParams = formValues;
+        let signInParams = { ...formValues };
 
         //getting subdomain id is available
         if (subdomainID) {
           signInParams.subdomain_id = `${subdomainID}`;
+        }
+
+        // Add domain information
+        signInParams.domain = hostName;
+        if (formValues.subdomain) {
+          signInParams.full_domain = `${formValues.subdomain}.${hostName}`;
         }
 
         const createResponse = await dispatch(SignIn(signInParams));
@@ -236,6 +260,12 @@ const Login = () => {
         signInParams.subdomain_id = `${subdomainID}`;
       }
 
+      // Add domain information
+      signInParams.domain = hostName;
+      if (formValues.subdomain) {
+        signInParams.full_domain = `${formValues.subdomain}.${hostName}`;
+      }
+
       // Extract access token from the response
       const accessToken = response.data.accessToken;
 
@@ -259,10 +289,10 @@ const Login = () => {
   return (
     <div>
       <Grid container>
-        <Grid item xl={6} lg={6} md={12} sm={12} xs={12}>
+        <Grid container item xl={6} lg={6} md={12} sm={12} xs={12}>
           <div style={classes.root}>
             <div style={classes.loginTitle}>
-              <img src={formatServerImages(logoURL)} height="55" alt="server" />
+              <img src={formatServerImages(logoURL)} alt="server" />
             </div>
             {!showForgotPassword ? (
               <>
@@ -275,6 +305,32 @@ const Login = () => {
                 <Grid>
                   <form onSubmit={handleSubmit}>
                     <Grid container spacing={3} justifyContent="space-between">
+                      <Grid item xs={12}>
+                        <StyledTextField
+                          sx={classes.inputField}
+                          type="text"
+                          id="subdomain"
+                          label="Subdomain"
+                          variant="outlined"
+                          error={errors.subdomain ? true : false}
+                          helperText={errors && errors.subdomain}
+                          value={formValues.subdomain}
+                          name="subdomain"
+                          title="Subdomain"
+                          onChange={handleChange}
+                          fullWidth
+                          InputLabelProps={{
+                            sx: classes.placeHolder,
+                          }}
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <Typography>.{hostName}</Typography>
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+                      </Grid>
                       <Grid item xs={12}>
                         <StyledTextField
                           sx={classes.inputField}
@@ -529,7 +585,8 @@ const Login = () => {
               <Typography sx={classes.footerText}>Terms of Service</Typography>
             </div>
           </div>
-        </Grid>
+              </Grid>
+              
         {!isMobile && (
           <Grid sx={classes.loginBannerImg} item xl={6} lg={6}>
             {bannerURL && (

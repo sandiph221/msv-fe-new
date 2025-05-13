@@ -3,7 +3,7 @@ import NotPaidDashboard from "Pages/DashboardPage/NotPaidDashboard";
 import { useSelector } from "react-redux";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 
-const PrivateRoute = () => {
+const PrivateLayout = () => {
   const { isAuth, user } = useSelector((state) => state.auth);
   const { hasPaid } = useSelector((state) => state.settings);
   const subDomain = getSubDomain();
@@ -28,4 +28,4 @@ const PrivateRoute = () => {
   return <Outlet />;
 };
 
-export default PrivateRoute;
+export default PrivateLayout;
