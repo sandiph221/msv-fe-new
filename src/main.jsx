@@ -7,13 +7,14 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import store from "./store/index.js";
 import { getSubDomain } from "./utils/functions.js";
-import { createTheme, ThemeProvider } from "@material-ui/core";
+import { createTheme, ThemeProvider, CssBaseline } from "@material-ui/core";
 import { getSignInUser } from "./store/actions/AuthAction.js";
 import { SnackbarProvider } from "notistack";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./utils/axios.js";
 import { LoadLogoAndBanner } from "./store/actions/SettingActions.js";
+
 const AppWrapper = () => {
   const dispatch = useDispatch();
   const { logoBannerDataLoaded } = useSelector((state) => state.settings);
@@ -39,25 +40,35 @@ const AppWrapper = () => {
   return <App />;
 };
 
-const theme = createTheme((theme) => ({
+const theme = createTheme({
+  props: {
+    MuiButtonBase: {
+      disableRipple: true,
+    },
+    MuiOutlinedInputNotchedOutline: {
+      notched: true,
+    },
+  },
+  typography: {
+    fontFamily: ["Poppins", "sans-serif"].join(","),
+    whiteSpace: "nowrap !important",
+  },
   palette: {
     common: {
       darkGreen: "#33918a",
       lightGreen: "red",
       lightBlack: "#323132",
     },
-    primary: {},
-    secondary: {},
-    error: {},
   },
-}));
+});
 
 ReactDOM.render(
   <StrictMode>
     <Provider store={store}>
       <BrowserRouter>
         <ThemeProvider theme={theme}>
-          <AppWrapper />{" "}
+          <AppWrapper />
+          <CssBaseline />
         </ThemeProvider>
       </BrowserRouter>
     </Provider>

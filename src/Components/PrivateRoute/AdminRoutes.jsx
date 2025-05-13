@@ -1,24 +1,22 @@
-import { useSelector } from 'react-redux';
-import { Redirect, Route } from 'react-router-dom';
-const AdminRoutes = ({ component: Component, roles, ...rest }) => {
-  const { isAuth } = useSelector((state) => state.auth);
+import { useSelector } from "react-redux";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
-  return (
-    <Route
-      {...rest}
-      render={(props) => {
-        //token from state
+const AdminRoutes = () => {
+  const { isAuth, user } = useSelector((state) => state.auth);
+  const location = useLocation();
 
-        if (!isAuth) {
-          // not logged in so redirect to login page with the return url
-          return <Redirect to='/login' />;
-        }
+  // Not logged in, redirect to login
+  if (!isAuth) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
 
-        // authorised so return component
-        return <Component {...props} />;
-      }}
-    />
-  );
+  // Check if user has admin role
+  if (user && (user.role === "admin" || user.role === "super-admin")) {
+    return <Outlet />;
+  }
+
+  // User is logged in but not an admin, redirect to dashboard
+  return <Navigate to="/" replace />;
 };
 
 export default AdminRoutes;

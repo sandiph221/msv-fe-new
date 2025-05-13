@@ -262,7 +262,7 @@ const Login = () => {
         <Grid item xl={6} lg={6} md={12} sm={12} xs={12}>
           <div style={classes.root}>
             <div style={classes.loginTitle}>
-              {/* <img src={formatServerImages(logoURL)} height="55" alt="server" /> */}
+              <img src={formatServerImages(logoURL)} height="55" alt="server" />
             </div>
             {!showForgotPassword ? (
               <>
@@ -535,7 +535,7 @@ const Login = () => {
             {bannerURL && (
               <img
                 style={classes.loginImg}
-                // src={formatServerImages(bannerURL)}
+                src={formatServerImages(bannerURL)}
                 alt="Banner"
               />
             )}
