@@ -1,10 +1,8 @@
 import { Typography } from "@material-ui/core";
 import { useEffect, useState } from "react";
-import ReactExport from "react-data-export";
 import { useSelector } from "react-redux";
-import { totalEngagementPerKFans } from "utils/functions.js";
-const ExcelFile = ReactExport.ExcelFile;
-const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 export const ContentNewsFeedDataExport = ({
   timeRange,
@@ -132,36 +130,96 @@ export const ContentNewsFeedDataExport = ({
     },
   ];
 
+  const exportToExcel = () => {
+    // Create workbook
+    const wb = XLSX.utils.book_new();
+
+    // Create overview sheet
+    const overviewData = [
+      ["Overview", "", `${activeSocialMediaType} overview`],
+      ["", "", ""],
+      [
+        "Time Range",
+        "",
+        `${new Date(
+          customDateRangeRed[0].startDate
+        ).toDateString()} to ${new Date(
+          customDateRangeRed[0].endDate
+        ).toDateString()}`,
+      ],
+      ["", "", ""],
+      [
+        "pages name",
+        "",
+        `${selectedData ? selectedData.map((data) => data.name) : ""}`,
+      ],
+      [
+        "search keywords",
+        "",
+        `${chipData ? chipData.map((data) => data.label) : ""}`,
+      ],
+      [
+        "feed types",
+        "",
+        `${selectedPostTypes ? selectedPostTypes.map((data) => data) : ""}`,
+      ],
+    ];
+
+    const overviewWs = XLSX.utils.aoa_to_sheet(overviewData);
+
+    // Apply styles to overview sheet (bold for headers)
+    overviewWs["A1"] = { t: "s", v: "Overview", s: { font: { bold: true } } };
+    overviewWs["A3"] = { t: "s", v: "Time Range", s: { font: { bold: true } } };
+    overviewWs["A5"] = { t: "s", v: "pages name", s: { font: { bold: true } } };
+    overviewWs["A6"] = {
+      t: "s",
+      v: "search keywords",
+      s: { font: { bold: true } },
+    };
+    overviewWs["A7"] = { t: "s", v: "feed types", s: { font: { bold: true } } };
+
+    XLSX.utils.book_append_sheet(wb, overviewWs, "overview");
+
+    // Create most engaging posts sheet
+    if (profileTopPostExcellData.length > 0) {
+      const columns = profileTopPostExcellData[0].columns.map(
+        (col) => col.title
+      );
+      const data = profileTopPostExcellData[0].data.map((row) =>
+        row.map((cell) => cell.value)
+      );
+
+      const postsData = [columns, ...data];
+      const postsWs = XLSX.utils.aoa_to_sheet(postsData);
+
+      XLSX.utils.book_append_sheet(wb, postsWs, "most_engaging_post_overview");
+    }
+
+    // Generate Excel file and trigger download
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+    saveAs(blob, "Content Newsfeed.xlsx");
+  };
+
   return (
     <div>
-      <ExcelFile
-        filename="Content Newsfeed"
-        element={
-          <Typography
-            onClick={() => {
-              showDownloadSnackBar(true);
-              setTimeout(() => {
-                showDownloadSnackBar(false);
-              }, 2000);
-            }}
-            style={{ fontSize: 15, cursor: "pointer" }}
-          >
-            <img
-              style={{ width: 20, height: 20, marginRight: 5 }}
-              alt="xlsx logo"
-              src={xlsxLogo}
-            />{" "}
-            Export xlsx
-          </Typography>
-        }
+      <Typography
+        onClick={() => {
+          showDownloadSnackBar(true);
+          setTimeout(() => {
+            showDownloadSnackBar(false);
+          }, 2000);
+          exportToExcel();
+        }}
+        style={{ fontSize: 15, cursor: "pointer" }}
       >
-        <ExcelSheet dataSet={overviewDataSet} name="overview" />
-
-        <ExcelSheet
-          dataSet={profileTopPostExcellData}
-          name="most_engaging_post_overview "
-        />
-      </ExcelFile>
+        <img
+          style={{ width: 20, height: 20, marginRight: 5 }}
+          alt="xlsx logo"
+          src={xlsxLogo}
+        />{" "}
+        Export xlsx
+      </Typography>
     </div>
   );
 };

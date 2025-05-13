@@ -20,6 +20,14 @@ export default defineConfig({
       utils: path.resolve(__dirname, "./src/utils"),
     },
   },
+  optimizeDeps: {
+    include: ["xlsx"],
+  },
+  build: {
+    commonjsOptions: {
+      include: [/node_modules/, /xlsx/],
+    },
+  },
   css: {
     postcss: {
       plugins: [tailwindcss, autoprefixer],

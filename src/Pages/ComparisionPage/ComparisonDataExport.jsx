@@ -1,12 +1,8 @@
 import { Typography } from "@material-ui/core";
-import { Button } from "@material-ui/core";
 import { Component, useEffect, useState } from "react";
-import ReactExport from "react-data-export";
 import { useSelector } from "react-redux";
-
-const ExcelFile = ReactExport.ExcelFile;
-const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
-const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 const ComparisonDataExport = ({
   timeRange,
@@ -64,10 +60,10 @@ const ComparisonDataExport = ({
             if (Object.hasOwnProperty.call(datasets, key)) {
               const dataset = datasets[key];
               let profileDetails = [
-                { value: date.end },
-                { value: dataset.label },
-                { value: dataset.data[timelineIndex] },
-                { value: "" },
+                date.end,
+                dataset.label,
+                dataset.data[timelineIndex],
+                "",
               ];
               setInteractionDataCount((prevState) => [
                 ...prevState,
@@ -82,23 +78,19 @@ const ComparisonDataExport = ({
 
   useEffect(() => {
     if (interactionDataCount) {
-      setInteractionExcellData([
-        {
-          columns: [
-            { title: "Date" },
-            { title: "Page name" },
-            {
-              title: interaction1kPerFans
-                ? "1k per interactions data"
-                : "Interactions data",
-            },
-            { title: `Filter_by: ${interactionDateFilter}` },
-          ],
-          data: interactionDataCount,
-        },
-      ]);
+      setInteractionExcellData({
+        headers: [
+          "Date",
+          "Page name",
+          interaction1kPerFans
+            ? "1k per interactions data"
+            : "Interactions data",
+          `Filter_by: ${interactionDateFilter}`,
+        ],
+        data: interactionDataCount,
+      });
     }
-  }, [interactionDataCount]);
+  }, [interactionDataCount, interaction1kPerFans, interactionDateFilter]);
 
   //setting value for fan growth data for excell export
   useEffect(() => {
@@ -120,10 +112,10 @@ const ComparisonDataExport = ({
             if (Object.hasOwnProperty.call(datasets, key)) {
               const dataset = datasets[key];
               let profileDetails = [
-                { value: date.end },
-                { value: dataset.label },
-                { value: dataset.data[timelineIndex] },
-                { value: "" },
+                date.end,
+                dataset.label,
+                dataset.data[timelineIndex],
+                "",
               ];
               setFanGrowthDataCount((prevState) => [
                 ...prevState,
@@ -138,24 +130,19 @@ const ComparisonDataExport = ({
 
   useEffect(() => {
     if (fanGrowthDataCount) {
-      setFansGrowthExcellData([
-        {
-          columns: [
-            { title: "Date" },
-            { title: "Page name" },
-            {
-              title: "Fan growth data",
-            },
-            { title: `Filter_by: ${fanGrowthDateFilter}` },
-          ],
-          data: fanGrowthDataCount,
-        },
-      ]);
+      setFansGrowthExcellData({
+        headers: [
+          "Date",
+          "Page name",
+          "Fan growth data",
+          `Filter_by: ${fanGrowthDateFilter}`,
+        ],
+        data: fanGrowthDataCount,
+      });
     }
-  }, [fanGrowthDataCount]);
+  }, [fanGrowthDataCount, fanGrowthDateFilter]);
 
   //setting value of distributions of interaction data for excell export
-
   useEffect(() => {
     if (interactionDistributions && selectedProfilesListToComapre) {
       setDistributionInteractionDataCount([]);
@@ -164,10 +151,10 @@ const ComparisonDataExport = ({
       for (let i = 0; i < interactionDistributions.length; ++i) {
         if (interactionDistributions[i]) {
           let profileDetails = [
-            { value: interactionDistributions[i].page_name },
-            { value: interactionDistributions[i].total_shares },
-            { value: interactionDistributions[i].total_comments },
-            { value: interactionDistributions[i].total_reactions },
+            interactionDistributions[i].page_name,
+            interactionDistributions[i].total_shares,
+            interactionDistributions[i].total_comments,
+            interactionDistributions[i].total_reactions,
           ];
           setDistributionInteractionDataCount((prevState) => [
             ...prevState,
@@ -181,17 +168,10 @@ const ComparisonDataExport = ({
   useEffect(() => {
     //setting interaction distribution values in state to export data in excell format
     if (distributionInteractionDataCount) {
-      setDistributionInteractionExcellData([
-        {
-          columns: [
-            { title: "Page Name" },
-            { title: "Shares" },
-            { title: "Comments" },
-            { title: "Reactions" },
-          ],
-          data: distributionInteractionDataCount,
-        },
-      ]);
+      setDistributionInteractionExcellData({
+        headers: ["Page Name", "Shares", "Comments", "Reactions"],
+        data: distributionInteractionDataCount,
+      });
     }
   }, [distributionInteractionDataCount]);
 
@@ -209,12 +189,10 @@ const ComparisonDataExport = ({
             if (Object.hasOwnProperty.call(datasets, key)) {
               const dataset = datasets[key];
               let profileDetails = [
-                { value: label },
-                { value: dataset.label },
-                { value: dataset.data[labelsIndex] },
+                label,
+                dataset.label,
+                dataset.data[labelsIndex],
               ];
-              //setting the data for excell data
-              // setInteractionExcellData((prevState) => [...prevState, data]);
               setPostsDataMultipleDataCount((prevState) => [
                 ...prevState,
                 profileDetails,
@@ -228,21 +206,14 @@ const ComparisonDataExport = ({
 
   useEffect(() => {
     if (postsDataMultipleDataCount) {
-      setpostsDataMultipleExcellData([
-        {
-          columns: [
-            { title: "Labels" },
-            { title: "Page name" },
-            { title: "Multiple data post count" },
-          ],
-          data: postsDataMultipleDataCount,
-        },
-      ]);
+      setpostsDataMultipleExcellData({
+        headers: ["Labels", "Page name", "Multiple data post count"],
+        data: postsDataMultipleDataCount,
+      });
     }
   }, [postsDataMultipleDataCount]);
 
   //seting top post value for excell data export
-
   useEffect(() => {
     const { feeds, pages } = contentNewsFeed ? contentNewsFeed : "";
     setProfileTopPostCount([]);
@@ -250,126 +221,153 @@ const ComparisonDataExport = ({
       for (let i = 0; i < feeds.length; ++i) {
         if (feeds[i]) {
           let data = [
-            { value: i },
-            { value: feeds[i].feed_created_date },
-            { value: feeds[i].profile_info.page_name },
-            { value: feeds[i].feed_link },
-            { value: feeds[i].feed_type },
-            { value: feeds[i].caption },
-            // { value: feeds[i].attachment },
-            { value: feeds[i].feed_comment_count },
-            { value: feeds[i].feed_like_count },
-            { value: feeds[i].feed_share_count },
-            { value: feeds[i].total_engagement },
-            {
-              value: feeds[i].avg_interaction_per_1k_fans,
-            },
+            i,
+            feeds[i].feed_created_date,
+            feeds[i].profile_info.page_name,
+            feeds[i].feed_link,
+            feeds[i].feed_type,
+            feeds[i].caption,
+            feeds[i].feed_comment_count,
+            feeds[i].feed_like_count,
+            feeds[i].feed_share_count,
+            feeds[i].total_engagement,
+            feeds[i].avg_interaction_per_1k_fans,
           ];
           setProfileTopPostCount((prevState) => [...prevState, data]);
         }
       }
     }
   }, [contentNewsFeed]);
+
   useEffect(() => {
     if (profileTopPostCount) {
-      setProfileTopPostExcellData([
-        {
-          columns: [
-            { title: "#" },
-            { title: "Date" },
-            { title: "Page name" },
-            { title: "URL" },
-            { title: "Post type" },
-            { title: "Caption" },
-            // { title: "Post URL" },
-            { title: "Comment" },
-            { title: "Like" },
-            { title: "Share" },
-            { title: "Total engagement" },
-            { title: "Engagement per 1k fans" },
-          ],
-          data: profileTopPostCount,
-        },
-      ]);
+      setProfileTopPostExcellData({
+        headers: [
+          "#",
+          "Date",
+          "Page name",
+          "URL",
+          "Post type",
+          "Caption",
+          "Comment",
+          "Like",
+          "Share",
+          "Total engagement",
+          "Engagement per 1k fans",
+        ],
+        data: profileTopPostCount,
+      });
     }
   }, [profileTopPostCount]);
 
-  const overviewDataSet = [
-    {
-      columns: [
-        { title: "Overview", style: { font: { bold: true } } },
-        { title: "", style: { alignment: { vertical: "center" } } },
-        { title: "", style: { alignment: { vertical: "center" } } },
+  const overviewData = {
+    headers: ["Overview", "", ""],
+    data: [
+      ["", "", ""],
+      [
+        "Time Range",
+        "",
+        `${new Date(
+          customDateRangeRed[0].startDate
+        ).toDateString()} to ${new Date(
+          customDateRangeRed[0].endDate
+        ).toDateString()}`,
       ],
-      data: [
-        [{ value: " " }, { value: "" }, { value: "" }],
-        [
-          { value: "Time Range ", style: { font: { bold: true } } },
-          { value: "" },
-          {
-            value: `${new Date(
-              customDateRangeRed[0].startDate
-            ).toDateString()} to ${new Date(
-              customDateRangeRed[0].endDate
-            ).toDateString()} `,
-          },
-        ],
-        [{ value: " " }, { value: "" }, { value: "" }],
-        [
-          { value: "pages name", style: { font: { bold: true } } },
-          { value: " " },
-          {
-            value: `${selectedProfilesListToComapre.map((data) => data.name)}`,
-          },
-        ],
+      ["", "", ""],
+      [
+        "pages name",
+        "",
+        `${selectedProfilesListToComapre.map((data) => data.name)}`,
       ],
-    },
-  ];
+    ],
+  };
+
+  const exportToExcel = () => {
+    // Create a new workbook
+    const wb = XLSX.utils.book_new();
+
+    // Add overview sheet
+    const overviewWs = XLSX.utils.aoa_to_sheet([
+      overviewData.headers,
+      ...overviewData.data,
+    ]);
+    XLSX.utils.book_append_sheet(wb, overviewWs, "overview");
+
+    // Add interactions sheet
+    const interactionsWs = XLSX.utils.aoa_to_sheet([
+      interactionExcellData.headers,
+      ...interactionExcellData.data,
+    ]);
+    XLSX.utils.book_append_sheet(
+      wb,
+      interactionsWs,
+      "total_number_of_interactions"
+    );
+
+    // Add fan growth sheet
+    const fanGrowthWs = XLSX.utils.aoa_to_sheet([
+      fanGrowthExcellData.headers,
+      ...fanGrowthExcellData.data,
+    ]);
+    XLSX.utils.book_append_sheet(wb, fanGrowthWs, "fan_growth");
+
+    // Add post type overview sheet
+    const postTypeWs = XLSX.utils.aoa_to_sheet([
+      postsDataMultipleExcellData.headers,
+      ...postsDataMultipleExcellData.data,
+    ]);
+    XLSX.utils.book_append_sheet(wb, postTypeWs, "top_post_type_overview");
+
+    // Add distribution of interactions sheet
+    const distributionWs = XLSX.utils.aoa_to_sheet([
+      distributionInteractionExcellData.headers,
+      ...distributionInteractionExcellData.data,
+    ]);
+    XLSX.utils.book_append_sheet(
+      wb,
+      distributionWs,
+      "Distribution of interactions"
+    );
+
+    // Add most engaging posts sheet
+    const engagingPostsWs = XLSX.utils.aoa_to_sheet([
+      profileTopPostExcellData.headers,
+      ...profileTopPostExcellData.data,
+    ]);
+    XLSX.utils.book_append_sheet(
+      wb,
+      engagingPostsWs,
+      "most_engaging_post_overview"
+    );
+
+    // Generate Excel file
+    const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+
+    // Save the file
+    const blob = new Blob([wbout], { type: "application/octet-stream" });
+    saveAs(blob, "comparison-page.xlsx");
+  };
 
   return (
     <div>
-      <ExcelFile
-        filename="comparison-page"
-        element={
-          <Typography
-            onClick={() => {
-              onClick();
-
-              showDownloadSnackBar(true);
-              setTimeout(() => {
-                showDownloadSnackBar(false);
-              }, 2000);
-            }}
-            style={{ fontSize: 15, cursor: "pointer" }}
-          >
-            <img
-              style={{ width: 20, height: 20, marginRight: 5 }}
-              alt="pdf logo"
-              src={xlsxLogo}
-            />{" "}
-            Export xlsx
-          </Typography>
-        }
+      <Typography
+        onClick={() => {
+          onClick();
+          exportToExcel();
+          showDownloadSnackBar(true);
+          setTimeout(() => {
+            showDownloadSnackBar(false);
+          }, 2000);
+        }}
+        style={{ fontSize: 15, cursor: "pointer" }}
       >
-        <ExcelSheet dataSet={overviewDataSet} name="overview" />
-        <ExcelSheet
-          dataSet={interactionExcellData}
-          name="total_number_of_interactions"
-        />
-        <ExcelSheet dataSet={fanGrowthExcellData} name="fan_growth " />
-        <ExcelSheet
-          dataSet={postsDataMultipleExcellData}
-          name="top_post_type_overview"
-        />
-        <ExcelSheet
-          dataSet={distributionInteractionExcellData}
-          name="Distribution of interactions"
-        />
-        <ExcelSheet
-          dataSet={profileTopPostExcellData}
-          name="most_engaging_post_overview "
-        />
-      </ExcelFile>
+        <img
+          style={{ width: 20, height: 20, marginRight: 5 }}
+          alt="pdf logo"
+          src={xlsxLogo}
+        />{" "}
+        Export xlsx
+      </Typography>
     </div>
   );
 };

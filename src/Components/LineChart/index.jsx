@@ -4,7 +4,6 @@ import {
   Typography,
   useTheme,
   useMediaQuery,
- 
 } from "@material-ui/core";
 import { Line, Chart } from "react-chartjs-2";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";

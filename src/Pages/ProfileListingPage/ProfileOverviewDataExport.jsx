@@ -1,10 +1,8 @@
 import { Typography } from "@material-ui/core";
 import { useEffect, useState } from "react";
-import ReactExport from "react-data-export";
 import { useSelector } from "react-redux";
-import { totalEngagementPerKFans } from "utils/functions.js";
-const ExcelFile = ReactExport.ExcelFile;
-const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 export const ProfileOverviewDataExport = ({
   timeRange,
@@ -16,19 +14,15 @@ export const ProfileOverviewDataExport = ({
   xlsxLogo,
   onClick,
 }) => {
-  const [interactionExcellData, setInteractionExcellData] = useState([]);
-  const [interactionDataCount, setInteractionDataCount] = useState([]);
-  const [fanGrowthExcellData, setFansGrowthExcellData] = useState([]);
-  const [fanGrowthDataCount, setFanGrowthDataCount] = useState([]);
-  const [postsDataExcellData, setPostsDataExcellData] = useState([]);
-  const [postsDataCount, setPostsDataCount] = useState([]);
-  const [profileTopPostCount, setProfileTopPostCount] = useState([]);
-  const [profileTopPostExcellData, setProfileTopPostExcellData] = useState([]);
-  const [overviewCount, setOverviewCount] = useState([]);
+  const [interactionData, setInteractionData] = useState([]);
+  const [fanGrowthData, setFanGrowthData] = useState([]);
+  const [postsData, setPostsData] = useState([]);
+  const [profileTopPostData, setProfileTopPostData] = useState([]);
+  const [overviewData, setOverviewData] = useState([]);
 
   const {
-    interactionData,
-    postsData,
+    interactionData: interactionDataRedux,
+    postsData: postsDataRedux,
     profileTopPost,
     activeSocialMediaType,
     profileComments,
@@ -41,68 +35,47 @@ export const ProfileOverviewDataExport = ({
     profileAbsInteraction,
   } = useSelector((state) => state.socialMediaProfileListReducer);
 
-  //setting value for interactions data for excell export
+  // Process interaction data
   useEffect(() => {
     if (
-      interactionData &&
+      interactionDataRedux &&
       interactionDateFilter &&
       activeSocialMediaType &&
       customDateRangeRed
     ) {
-      setInteractionDataCount([]);
-      const { timeline, datasets } = interactionData;
+      const { timeline, datasets } = interactionDataRedux;
+      const processedData = [];
 
       for (const timelineIndex in timeline) {
         if (Object.hasOwnProperty.call(timeline, timelineIndex)) {
           const date = timeline[timelineIndex];
 
-          //finding label for this date
           for (const key in datasets) {
             if (Object.hasOwnProperty.call(datasets, key)) {
               const dataset = datasets[key];
-              let profileDetails = [
-                { value: date.end },
-                { value: dataset.label },
-                { value: dataset.data[timelineIndex] },
-                { value: "" },
-              ];
-              setInteractionDataCount((prevState) => [
-                ...prevState,
-                profileDetails,
-              ]);
+              processedData.push({
+                Date: date.end,
+                "Page name": dataset.label,
+                [interaction1kPerFans
+                  ? "1k per interactions data"
+                  : "Interactions data"]: dataset.data[timelineIndex],
+                [`Filter_by: ${interactionDateFilter}`]: "",
+              });
             }
           }
         }
       }
+      setInteractionData(processedData);
     }
   }, [
-    interactionData,
+    interactionDataRedux,
     interactionDateFilter,
     activeSocialMediaType,
     customDateRangeRed,
+    interaction1kPerFans,
   ]);
 
-  useEffect(() => {
-    if (interactionDataCount) {
-      setInteractionExcellData([
-        {
-          columns: [
-            { title: "Date" },
-            { title: "Page name" },
-            {
-              title: interaction1kPerFans
-                ? "1k per interactions data"
-                : "Interactions data",
-            },
-            { title: `Filter_by: ${interactionDateFilter}` },
-          ],
-          data: interactionDataCount,
-        },
-      ]);
-    }
-  }, [interactionDataCount]);
-
-  //setting value for fan growth data for excell export
+  // Process fan growth data
   useEffect(() => {
     if (
       fansGrowth &&
@@ -110,31 +83,27 @@ export const ProfileOverviewDataExport = ({
       activeSocialMediaType &&
       customDateRangeRed
     ) {
-      setFanGrowthDataCount([]);
       const { timeline, datasets } = fansGrowth;
+      const processedData = [];
 
       for (const timelineIndex in timeline) {
         if (Object.hasOwnProperty.call(timeline, timelineIndex)) {
           const date = timeline[timelineIndex];
 
-          //finding label for this date
           for (const key in datasets) {
             if (Object.hasOwnProperty.call(datasets, key)) {
               const dataset = datasets[key];
-              let profileDetails = [
-                { value: date.end },
-                { value: dataset.label },
-                { value: dataset.data[timelineIndex] },
-                { value: "" },
-              ];
-              setFanGrowthDataCount((prevState) => [
-                ...prevState,
-                profileDetails,
-              ]);
+              processedData.push({
+                Date: date.end,
+                "Page name": dataset.label,
+                "Fan growth data": dataset.data[timelineIndex],
+                [`Filter_by: ${fanGrowthDateFilter}`]: "",
+              });
             }
           }
         }
       }
+      setFanGrowthData(processedData);
     }
   }, [
     fansGrowth,
@@ -143,137 +112,75 @@ export const ProfileOverviewDataExport = ({
     customDateRangeRed,
   ]);
 
-  useEffect(() => {
-    if (fanGrowthDataCount) {
-      setFansGrowthExcellData([
-        {
-          columns: [
-            { title: "Date" },
-            { title: "Page name" },
-            {
-              title: "Fan growth data",
-            },
-            { title: `Filter_by: ${fanGrowthDateFilter}` },
-          ],
-          data: fanGrowthDataCount,
-        },
-      ]);
-    }
-  }, [fanGrowthDataCount]);
-
-  //setting value for published posts content breakdown data for excell export
+  // Process posts content breakdown data
   useEffect(() => {
     if (
-      postsData &&
+      postsDataRedux &&
       postTypeDateFilter &&
       customDateRangeRed &&
       activeSocialMediaType
     ) {
-      setPostsDataCount([]);
-      const { timeline, datasets } = postsData;
+      const { timeline, datasets } = postsDataRedux;
+      const processedData = [];
 
       for (const timelineIndex in timeline) {
         if (Object.hasOwnProperty.call(timeline, timelineIndex)) {
           const date = timeline[timelineIndex];
 
-          //finding label for this date
           for (const key in datasets) {
             if (Object.hasOwnProperty.call(datasets, key)) {
               const dataset = datasets[key];
-              let profileDetails = [
-                { value: date.end },
-                { value: dataset.label },
-                { value: dataset.data[timelineIndex] },
-                { value: "" },
-              ];
-              setPostsDataCount((prevState) => [...prevState, profileDetails]);
+              processedData.push({
+                Date: date.end,
+                labels: dataset.label,
+                "Post content breakdown": dataset.data[timelineIndex],
+                [`Filter_by: ${postTypeDateFilter}`]: "",
+              });
             }
           }
         }
       }
+      setPostsData(processedData);
     }
   }, [
-    postsData,
+    postsDataRedux,
     postTypeDateFilter,
     customDateRangeRed,
     activeSocialMediaType,
   ]);
 
-  useEffect(() => {
-    if (postsDataCount) {
-      setPostsDataExcellData([
-        {
-          columns: [
-            { title: "Date" },
-            { title: "labels" },
-            { title: "Post content breakdown" },
-            { title: `Filter_by: ${postTypeDateFilter}` },
-          ],
-          data: postsDataCount,
-        },
-      ]);
-    }
-  }, [postsDataCount]);
-
-  //setting profile top post data for excell export
-
+  // Process profile top post data
   useEffect(() => {
     if (profileTopPost && activeSocialMediaType) {
-      const { feeds } = profileTopPost ? profileTopPost : "";
-      setProfileTopPostCount([]);
+      const { feeds } = profileTopPost || {};
+      const processedData = [];
+
       if (feeds) {
         for (let i = 0; i < feeds.length; ++i) {
           if (feeds[i]) {
-            let data = [
-              { value: i },
-              { value: feeds[i].feed_created_date },
-              { value: feeds[i].profile_info.page_name },
-              { value: feeds[i].feed_link },
-              { value: feeds[i].feed_type },
-              { value: feeds[i].caption },
-              { value: feeds[i].attachment ? feeds[i].attachment : "null" },
-              { value: feeds[i].feed_comment_count },
-              { value: feeds[i].feed_like_count },
-              { value: feeds[i].feed_share_count },
-              { value: feeds[i].other_engagement },
-              { value: feeds[i].total_engagement },
-              {
-                value: feeds[i].avg_interaction_per_1k_fans,
-              },
-            ];
-            setProfileTopPostCount((prevState) => [...prevState, data]);
+            processedData.push({
+              "#": i,
+              Date: feeds[i].feed_created_date,
+              "Page name": feeds[i].profile_info.page_name,
+              URL: feeds[i].feed_link,
+              "Post type": feeds[i].feed_type,
+              Caption: feeds[i].caption,
+              "Post URL": feeds[i].attachment ? feeds[i].attachment : "null",
+              Comment: feeds[i].feed_comment_count,
+              Like: feeds[i].feed_like_count,
+              Share: feeds[i].feed_share_count,
+              "Other engagement": feeds[i].other_engagement,
+              "Total engagement": feeds[i].total_engagement,
+              "Engagement per 1k fans": feeds[i].avg_interaction_per_1k_fans,
+            });
           }
         }
       }
+      setProfileTopPostData(processedData);
     }
   }, [profileTopPost, customDateRangeRed, activeSocialMediaType]);
 
-  useEffect(() => {
-    if (profileTopPostCount) {
-      setProfileTopPostExcellData([
-        {
-          columns: [
-            { title: "#" },
-            { title: "Date" },
-            { title: "Page name" },
-            { title: "URL" },
-            { title: "Post type" },
-            { title: "Caption" },
-            { title: "Post URL" },
-            { title: "Comment" },
-            { title: "Like" },
-            { title: "Share" },
-            { title: "Other engagement" },
-            { title: "Total engagement" },
-            { title: "Engagement per 1k fans" },
-          ],
-          data: profileTopPostCount,
-        },
-      ]);
-    }
-  }, [profileTopPostCount]);
-
-  //set evulution of interaction date filter wise
+  // Process overview data
   useEffect(() => {
     if (
       profileShares &&
@@ -283,40 +190,25 @@ export const ProfileOverviewDataExport = ({
       customDateRangeRed &&
       activeSocialMediaType
     ) {
-      let data = [
-        [
-          { value: profileBasic.page_name },
-          { value: profileLikes.filter_type },
-          { value: profileLikes.total_likes_count },
-          { value: profileComments.total_comments_count },
-          {
-            value:
-              activeSocialMediaType === "facebook"
-                ? profileShares.total_shares_count
-                : "0",
-          },
-          { value: profileGrowthFollowers.followers_growth },
-          { value: profileAbsInteraction.total_interaction_count },
-        ],
-      ];
-      setOverviewCount([
+      const data = [
         {
-          columns: [
-            { title: "PageName" },
-            { title: "Date filter type" },
-            { title: "Likes" },
-            { title: "Comments" },
-            { title: "Shares" },
-            { title: "followers" },
-            { title: "Interactions" },
-          ],
-          data: data,
+          PageName: profileBasic.page_name,
+          "Date filter type": profileLikes.filter_type,
+          Likes: profileLikes.total_likes_count,
+          Comments: profileComments.total_comments_count,
+          Shares:
+            activeSocialMediaType === "facebook"
+              ? profileShares.total_shares_count
+              : "0",
+          followers: profileGrowthFollowers.followers_growth,
+          Interactions: profileAbsInteraction.total_interaction_count,
         },
-      ]);
+      ];
+      setOverviewData(data);
     }
   }, [
     profileShares,
-    profileShares,
+    profileComments,
     profileLikes,
     profileBasic,
     profileAbsInteraction,
@@ -325,80 +217,101 @@ export const ProfileOverviewDataExport = ({
     activeSocialMediaType,
   ]);
 
-  const overviewDataSet = [
-    {
-      columns: [
-        { title: "Overview", style: { font: { bold: true } } },
-        { title: "", style: { alignment: { vertical: "center" } } },
-        {
-          title: `${activeSocialMediaType} overview`,
-          style: { alignment: { vertical: "center" } },
-        },
+  const exportToExcel = () => {
+    // Create a new workbook
+    const wb = XLSX.utils.book_new();
+
+    // Create overview sheet
+    const overviewSheet = [
+      ["Overview", "", `${activeSocialMediaType} overview`],
+      ["", "", ""],
+      [
+        "Time Range",
+        "",
+        `${new Date(
+          customDateRangeRed[0].startDate
+        ).toDateString()} to ${new Date(
+          customDateRangeRed[0].endDate
+        ).toDateString()}`,
       ],
-      data: [
-        [{ value: " " }, { value: "" }, { value: "" }],
-        [
-          { value: "Time Range ", style: { font: { bold: true } } },
-          { value: "" },
-          {
-            value: `${new Date(
-              customDateRangeRed[0].startDate
-            ).toDateString()} to ${new Date(
-              customDateRangeRed[0].endDate
-            ).toDateString()} `,
-          },
-        ],
-        [{ value: " " }, { value: "" }, { value: "" }],
-        [
-          { value: "pages name", style: { font: { bold: true } } },
-          { value: " " },
-          { value: `${profileBasic ? profileBasic.page_name : ""}` },
-        ],
-      ],
-    },
-  ];
+      ["", "", ""],
+      ["pages name", "", profileBasic ? profileBasic.page_name : ""],
+    ];
+    const overviewWs = XLSX.utils.aoa_to_sheet(overviewSheet);
+
+    // Add sheets to workbook
+    XLSX.utils.book_append_sheet(wb, overviewWs, "overview");
+
+    // Add evolution_of_interactions sheet
+    if (overviewData.length > 0) {
+      const evolutionWs = XLSX.utils.json_to_sheet(overviewData);
+      XLSX.utils.book_append_sheet(
+        wb,
+        evolutionWs,
+        "evolution_of_interactions"
+      );
+    }
+
+    // Add total_number_of_interactions sheet
+    if (interactionData.length > 0) {
+      const interactionWs = XLSX.utils.json_to_sheet(interactionData);
+      XLSX.utils.book_append_sheet(
+        wb,
+        interactionWs,
+        "total_number_of_interactions"
+      );
+    }
+
+    // Add fan_growth sheet
+    if (fanGrowthData.length > 0) {
+      const fanGrowthWs = XLSX.utils.json_to_sheet(fanGrowthData);
+      XLSX.utils.book_append_sheet(wb, fanGrowthWs, "fan_growth");
+    }
+
+    // Add posts_content_break_down sheet
+    if (postsData.length > 0) {
+      const postsWs = XLSX.utils.json_to_sheet(postsData);
+      XLSX.utils.book_append_sheet(wb, postsWs, "posts_content_break_down");
+    }
+
+    // Add most_engaging_post_overview sheet
+    if (profileTopPostData.length > 0) {
+      const topPostWs = XLSX.utils.json_to_sheet(profileTopPostData);
+      XLSX.utils.book_append_sheet(
+        wb,
+        topPostWs,
+        "most_engaging_post_overview"
+      );
+    }
+
+    // Generate Excel file
+    const wbout = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+
+    // Save file
+    const blob = new Blob([wbout], { type: "application/octet-stream" });
+    saveAs(blob, "profile-overview.xlsx");
+
+    // Show download notification
+    onClick();
+    showDownloadSnackBar(true);
+    setTimeout(() => {
+      showDownloadSnackBar(false);
+    }, 2000);
+  };
 
   return (
     <div>
-      <ExcelFile
-        filename="profile-overview"
-        element={
-          <Typography
-            onClick={() => {
-              onClick();
-
-              showDownloadSnackBar(true);
-              setTimeout(() => {
-                showDownloadSnackBar(false);
-              }, 2000);
-            }}
-            style={{ fontSize: 15, cursor: "pointer" }}
-          >
-            <img
-              style={{ width: 20, height: 20, marginRight: 5 }}
-              alt="xlsx logo"
-              src={xlsxLogo}
-            />{" "}
-            Export xlsx
-          </Typography>
-        }
+      <Typography
+        onClick={exportToExcel}
+        style={{ fontSize: 15, cursor: "pointer" }}
       >
-        <ExcelSheet dataSet={overviewDataSet} name="overview" />
-        <ExcelSheet dataSet={overviewCount} name="evolution_of_interactions" />
-        <ExcelSheet
-          dataSet={interactionExcellData}
-          name="total_number_of_interactions"
-        />
-        <ExcelSheet dataSet={fanGrowthExcellData} name="fan_growth " />
-        <ExcelSheet
-          dataSet={postsDataExcellData}
-          name="posts_content_break_down"
-        />
-        <ExcelSheet
-          dataSet={profileTopPostExcellData}
-          name="most_engaging_post_overview "
-        />
-      </ExcelFile>
+        <img
+          style={{ width: 20, height: 20, marginRight: 5 }}
+          alt="xlsx logo"
+          src={xlsxLogo}
+        />{" "}
+        Export xlsx
+      </Typography>
     </div>
   );
 };
