@@ -61,6 +61,16 @@ import Homepage from "./Pages/Web/Homepage";
 function App() {
   return (
     <Routes>
+      {/* Public Routes */}
+      <Route path="/" element={<Homepage />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/card-details" element={<CardDetailPage />} />
+      <Route path="/change-password" element={<ChangePassword />} />
+      <Route
+        path="/change-password-from-mail"
+        element={<ChangePasswordFromMail />}
+      />
       {/* Admin Routes */}
       <Route path="/admin" element={<AdminRoute />}>
         <Route path="dashboard" element={<AdminDashboardPage />} />
@@ -72,16 +82,6 @@ function App() {
         <Route index element={<ContactSupport />} />
       </Route>
 
-      {/* Auth Routes */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<RegisterPage />} />
-      <Route path="/card-details" element={<CardDetailPage />} />
-      <Route path="/change-password" element={<ChangePassword />} />
-      <Route
-        path="/change-password-from-mail"
-        element={<ChangePasswordFromMail />}
-      />
-
       {/* Payment Routes */}
       <Route path="/payment/verify" element={<PaymentVerifyPage />} />
       <Route path="/payment/cancel" element={<PaymentCancelPage />} />
@@ -91,7 +91,7 @@ function App() {
       <Route path="/web" element={<Homepage />} />
 
       {/* Protected Routes */}
-      <Route path="/" element={<PrivateRoute />}>
+      <Route path="/user" element={<PrivateRoute />}>
         <Route index element={<DashboardPage />} />
         <Route path="profile" element={<ProfilePage />} />
         <Route path="brand-overview" element={<ProfileOverview />} />
