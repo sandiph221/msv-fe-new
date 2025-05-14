@@ -20,7 +20,7 @@ import {
   Container,
   CardContent,
 } from "@material-ui/core";
-import { useEffect, useRef, useState } from "react";
+import React,{ useEffect, useRef, useState } from "react";
 import Layout from "../../Components/Layout";
 import SearchIcon from '@material-ui/icons/Search';
 import HelpSectionList from "../../Components/HelpSectionList/HelpSectionList";

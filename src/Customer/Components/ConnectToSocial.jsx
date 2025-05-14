@@ -139,7 +139,7 @@ const ConnectToSocial = () => {
         </div>
       ) : (
         <LoginSocialFacebook
-          appId={process.env.REACT_APP_ID}
+          appId={import.meta.env.VITE_REACT_APP_ID}
           fieldsProfile={
             "id,first_name,last_name,middle_name,name,name_format,picture,short_name,email"
           }

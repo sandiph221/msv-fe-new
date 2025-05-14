@@ -1,15 +1,15 @@
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link ,useNavigate,useLocation} from "react-router-dom";
 import html2canvas from "html2canvas";
 import { saveAs } from "file-saver";
 import { SnackBar } from "../../Components/SnackBar/SnackBar";
+import React from "react";
 import { SnackBarDownload } from "../../Components/SnackBar/DownloadSnackBar";
 import {
   Avatar,
   Card,
   CardContent,
   CardMedia,
-  FormControl,
   Grid,
   InputLabel,
   makeStyles,
@@ -50,7 +50,6 @@ import FilterDays from "../../Components/FilterDays";
 import { CustomButton } from "../../Components/CustomButton/CustomButton";
 
 import BarChart from "../../Components/BarChart";
-import LineChart from "../../Components/LineChart";
 import Spinner from "../../Components/Spinner";
 import PageTitle from "../../Components/PageTitle/PageTitle";
 import { toast } from "react-toastify";
@@ -70,12 +69,7 @@ import { createUserReportDownloadActivity } from "../../store/actions/UserActivi
 
 const useStyles = makeStyles((theme) => Styles(theme));
 
-const StyledSelect = withStyles({
-  root: {
-    padding: 8,
-    border: "1px solid #BDBDBD",
-  },
-})(Select);
+
 
 const StyledMenuItem = withStyles({
   root: {
@@ -100,7 +94,9 @@ const StyledInputLabel = withStyles({
   },
 })(InputLabel);
 
-const ProfileOverview = ({ history }) => {
+const ProfileOverview = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
   const dispatch = useDispatch();
   const theme = useTheme();
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
@@ -200,13 +196,13 @@ const ProfileOverview = ({ history }) => {
   /* setting initial value for selecting profiles */
   React.useEffect(() => {
     if (addedProfileList && addedProfileList.length !== 0) {
-      if (history.location.state) {
-        setSelectProfile(history.location.state);
+      if (location.state) {
+        setSelectProfile(location.state);
       } else {
         setSelectProfile(addedProfileList[0].id);
       }
     }
-  }, [addedProfileList, history]);
+  }, [addedProfileList, ]);
 
   const getPostTypeQuery = (postTypes) => {
     let postTypeQuery = "";
@@ -640,7 +636,7 @@ const ProfileOverview = ({ history }) => {
       payload: selectProfile,
     });
 
-    history.push("/content-newsfeed");
+    navigate("/content-newsfeed");
   }
 
   //send download activity report

@@ -4,7 +4,7 @@ import { PhotoshopPicker } from "react-color";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProfileColor } from "../../store/actions/SocialMediaProfileAction";
 import { Styles } from "./Styles";
-
+import React from "react";
 const useStyles = makeStyles((theme) => Styles(theme));
 
 export const ColorPicker = ({ selectProfile, getColors }) => {

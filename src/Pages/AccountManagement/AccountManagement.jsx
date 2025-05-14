@@ -18,9 +18,10 @@ import {
 import { useEffect, useState } from "react";
 import { connect, useDispatch, useSelector } from "react-redux";
 import Layout from "../../Components/Layout";
+import { useNavigate } from "react-router-dom";
 import styles from "./Styles";
 import Spinner from "../../Components/Spinner";
-
+import React from "react";
 import Alert from "../../Components/AlertBox/Alert";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import axios from "axios";
@@ -50,7 +51,8 @@ const StyledTextField = withStyles({
 
 const useStyles = makeStyles((theme) => styles(theme));
 
-const AccountManagement = (props) => {
+const AccountManagement = () => {
+    const navigate= useNavigate();
   const { user } = useSelector((state) => state.auth);
   const theme = useTheme();
   const match = useMediaQuery(theme.breakpoints.down("md"));
@@ -103,7 +105,7 @@ const AccountManagement = (props) => {
   const handleDeleteAccount = async () => {
     try {
       await axios.delete(`/account/${user.id}`);
-      props.history.push("/logout");
+      navigate("/logout");
     } catch (error) {
       console.log("error", error);
     }

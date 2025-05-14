@@ -29,6 +29,7 @@ import "./SocialMediaPostsCard.css";
 import { Styles } from "./Styles";
 import React from "react";
 import Spinner from "../Spinner";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => Styles(theme));
 
@@ -38,7 +39,6 @@ const SocialMediaPostsCard = ({
   pageName,
   pagePicture,
   totalPageLikes,
-  history,
 }) => {
   const {
     attachment,
@@ -66,7 +66,7 @@ const SocialMediaPostsCard = ({
   );
 
   const { user } = useSelector((state) => state.auth);
-
+const navigate=useNavigate()
   let subdomain = user.CustomerSubdomain.subdomain;
 
   const [openModal, setOpenModal] = useState(false);
@@ -206,7 +206,7 @@ const SocialMediaPostsCard = ({
                 <Typography style={{ fontSize: 15, fontWeight: 600 }}>
                   <span
                     style={{ cursor: "pointer" }}
-                    onClick={() => history.push("/brand-overview", pageId)}
+                    onClick={() => navigate("/user/brand-overview", pageId)}
                   >
                     {pageName}
                   </span>

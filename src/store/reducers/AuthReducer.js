@@ -55,7 +55,9 @@ const AuthReducer = (state = initState, action) => {
         errorMessage: action.payload.old_password,
       };
 
-    case 'SIGNIN_FAILED':
+      case 'SIGNIN_FAILED':
+          break;
+      
 
     case 'LOGOUT':
       localStorage.clear();

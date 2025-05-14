@@ -32,7 +32,7 @@ const AppWrapper = () => {
 
   useEffect(() => {
     if (user) dispatch(getSignInUser(user.id));
-  }, [user]);
+  }, [dispatch, user?.id]);
 
   const shouldLoad = !getSubDomain() || logoBannerDataLoaded;
   if (!shouldLoad) return null;

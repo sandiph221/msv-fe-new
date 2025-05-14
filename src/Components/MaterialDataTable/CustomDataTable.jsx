@@ -7,7 +7,7 @@ import {
   useTheme,
   useMediaQuery,
 } from "@material-ui/core";
-import { useRef, useState } from "react";
+import React,{ useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { formatImage, formatNumber } from "utils/functions.js";
 import Spinner from "../Spinner/index";
@@ -20,6 +20,7 @@ import RemoveCircleOutlineOutlinedIcon from '@material-ui/icons/RemoveCircleOutl
 import Alert from "../AlertBox/Alert";
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { deleteAddedProfileList } from "../../store/actions/SocialMediaProfileAction";
+import { useNavigate } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   divTabelContent: {
     width: "100%",
@@ -125,9 +126,9 @@ const CustomDataTable = ({
   loader,
   selectedLabels,
   getSelectedProfileList,
-  history,
   allLabels,
 }) => {
+    const navigate = useNavigate();
   const theme = useTheme();
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
   const sm = useMediaQuery(theme.breakpoints.down("sm"));
@@ -417,7 +418,7 @@ const CustomDataTable = ({
                                 overflow: "hidden",
                               }}
                               onClick={() =>
-                                history.push("/brand-overview", d.id)
+                                navigate("/user/brand-overview", d.id)
                               }
                             >
                               {d.name}

@@ -60,6 +60,7 @@ import Homepage from "./Pages/Web/components/Homepage";
 import AboutPage from "./Pages/Web/components/AboutPage";
 import FAQPage from "./Pages/Web/components/FaqPage";
 import { Contact } from "./Pages/Web/components/ContactPage";
+import AdminLogin from "./Components/AdminLogin/AdminLogin";
 // Web Pages
 
 function App() {
@@ -71,7 +72,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/about" element={<AboutPage />} />
-        <Route path="/admin-login" element={<RegisterPage />} />
+        <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/faq" element={<FAQPage />} />
       </Route>

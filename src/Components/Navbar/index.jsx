@@ -1,5 +1,4 @@
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -15,36 +14,36 @@ import {
   Drawer,
   useTheme,
 } from "@material-ui/core";
+import { NavLink, Link, useLocation } from "react-router-dom";
 
-import { NavLink } from "react-router-dom";
-import { Link, useLocation } from "react-router-dom";
-
-import AccountBoxIcon from "@material-ui/icons/AccountBox";
-import DashboardIcon from "@material-ui/icons/Dashboard";
-import HelpIcon from "@material-ui/icons/Help";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import SettingsIcon from "@material-ui/icons/Settings";
-import AccountBox from "@material-ui/icons/AccountBox";
-import CardMembershipIcon from "@material-ui/icons/CardMembership";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import CompareIcon from "@material-ui/icons/Compare";
+// Icons
+import {
+  Dashboard as DashboardIcon,
+  Help as HelpIcon,
+  AccountCircle as AccountCircleIcon,
+  Settings as SettingsIcon,
+  AccountBox,
+  CardMembership as CardMembershipIcon,
+  ExitToApp as ExitToAppIcon,
+  Compare as CompareIcon,
+  SupervisorAccount as SupervisorAccountIcon,
+  Menu as MenuIcon,
+  Headset as HeadsetIcon,
+  CallSharp as CallSharpIcon,
+  BarChart,
+  CreditCard,
+  Description,
+} from "@material-ui/icons";
 
 import { useSelector, useDispatch } from "react-redux";
-
 import { SignOut } from "../../store/actions/AuthAction";
 import { Styles } from "./Styles";
 import * as constant from "../../utils/constant";
-import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
-import MenuIcon from "@material-ui/icons/Menu";
-import HeadsetIcon from "@material-ui/icons/Headset";
-import CallSharpIcon from "@material-ui/icons/CallSharp";
 import { formatServerImages } from "utils/functions.js";
-import { BarChart, CreditCard, Description } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => Styles(theme));
 
-/*Styled menu dropdown menu from navbar */
-
+// Styled menu dropdown menu from navbar
 const StyledMenuItem = withStyles({
   root: {
     "&.Mui-selected": {
@@ -67,13 +66,16 @@ const Navbar = () => {
   const { user } = useSelector((state) => state.auth);
   const { logoURL } = useSelector((state) => state.settings);
   const classes = useStyles({ xs, sm, md });
-  const [show, setShow] = useState(null);
+  const [userMenuAnchor, setUserMenuAnchor] = useState(null);
   const [state, setState] = useState({
     mobileView: false,
     drawerOpen: false,
   });
 
   const { mobileView, drawerOpen } = state;
+  const isSuperAdmin = user.role === constant.SUPER_ADMIN_NAME;
+  const isCustomerAdmin = user.role === constant.CUSTOMER_ADMIN_NAME;
+  const isCustomerViewer = user.role === constant.CUSTOMER_VIEWER_NAME;
 
   useEffect(() => {
     const setResponsiveness = () => {
@@ -83,100 +85,174 @@ const Navbar = () => {
     };
 
     setResponsiveness();
-
-    window.addEventListener("resize", () => setResponsiveness());
+    window.addEventListener("resize", setResponsiveness);
+    
+    return () => {
+      window.removeEventListener("resize", setResponsiveness);
+    };
   }, []);
 
-  const menuItem = () => (
+  const handleUserMenuOpen = (event) => {
+    setUserMenuAnchor(event.currentTarget);
+  };
+
+  const handleUserMenuClose = () => {
+    setUserMenuAnchor(null);
+  };
+
+  const handleLogout = async () => {
+    handleUserMenuClose();
+    try {
+      await dispatch(SignOut());
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
+  const handleDrawerToggle = () => {
+    setState((prevState) => ({ ...prevState, drawerOpen: !prevState.drawerOpen }));
+  };
+
+  // Navigation menu items
+  const navItems = [
+    {
+      to: isSuperAdmin ? "/admin/dashboard" : "/user",
+      icon: <DashboardIcon />,
+      text: "Dashboard",
+      selected: pathname === "/user" || pathname === "/admin/dashboard",
+      visible: true
+    },
+    {
+      to: "/user/brand-overview",
+      icon: <AccountBox />,
+      text: "Brand Overviews",
+      selected: pathname === "/user/brand-overview",
+      visible: !isSuperAdmin
+    },
+    {
+      to: "/user/comparision",
+      icon: <CompareIcon />,
+      text: "Comparison",
+      selected: pathname === "/user/comparision",
+      visible: !isSuperAdmin
+    },
+    {
+      to: "/user/social-listening",
+      icon: <HeadsetIcon />,
+      text: "Social Listening",
+      selected: pathname === "/user/social-listening",
+      visible: !isSuperAdmin
+    },
+    {
+      to: "/contact-support",
+      icon: <CallSharpIcon />,
+      text: "Customer support",
+      selected: pathname === "/contact-support",
+      visible: isSuperAdmin
+    },
+    {
+      to: "/user/help",
+      icon: <HelpIcon />,
+      text: "Help",
+      selected: pathname === "/user/help",
+      visible: true,
+      mobileOnly: true
+    }
+  ];
+
+  // User menu items
+  const userMenuItems = [
+    {
+      to: "/user/account-management",
+      icon: <AccountBox fontSize="small" />,
+      text: "Account Settings",
+      visible: isCustomerAdmin
+    },
+    {
+      to: "/user/subscription-details",
+      icon: <CreditCard fontSize="small" />,
+      text: "Subscription",
+      visible: isCustomerAdmin
+    },
+    {
+      to: "/user/user-management",
+      icon: <SupervisorAccountIcon fontSize="small" />,
+      text: "User Management",
+      visible: !isCustomerViewer
+    },
+    {
+      to: "/user/cms",
+      icon: <Description fontSize="small" />,
+      text: "Content Management",
+      visible: isSuperAdmin
+    },
+    {
+      to: "/user/subscription-management",
+      icon: <CardMembershipIcon fontSize="small" />,
+      text: "Subscription Management",
+      visible: isSuperAdmin
+    },
+    {
+      to: "/admin/analytics",
+      icon: <BarChart fontSize="small" />,
+      text: "Analytics",
+      visible: isSuperAdmin
+    },
+    {
+      to: "/admin/user-activity",
+      icon: <SupervisorAccountIcon fontSize="small" />,
+      text: "Activity Logs",
+      visible: isSuperAdmin
+    },
+    {
+      to: "",
+      icon: <ExitToAppIcon fontSize="small" />,
+      text: "Logout",
+      visible: true,
+      onClick: handleLogout
+    }
+  ];
+
+  const renderNavItems = () => (
     <>
-      <StyledMenuItem
-        size="small"
-        to={user.role === constant.SUPER_ADMIN_NAME ? "/admin/dashboard" : "/"}
-        component={Link}
-        className={classes.iconButton}
-        selected={pathname === "/" || pathname === "/admin/dashboard"}
-      >
-        {" "}
-        <DashboardIcon />
-        <Typography className={classes.navTextStyle}>Dashboard</Typography>
-      </StyledMenuItem>
-
-      {user.role !== constant.SUPER_ADMIN_NAME && (
-        <StyledMenuItem
-          to="/brand-overview"
-          component={Link}
-          activeclassname={classes.navbarActive}
-          className={classes.iconButton}
-          selected={pathname === "/brand-overview"}
-        >
-          {" "}
-          <AccountBoxIcon />
-          <Typography className={classes.navTextStyle}>
-            Brand Overviews
-          </Typography>
-        </StyledMenuItem>
-      )}
-
-      {user.role !== constant.SUPER_ADMIN_NAME && (
-        <StyledMenuItem
-          to="/comparision"
-          component={Link}
-          activeclassname={classes.navbarActive}
-          className={classes.iconButton}
-          selected={pathname === "/comparision"}
-        >
-          {" "}
-          <CompareIcon />
-          <Typography className={classes.navTextStyle}>Comparison</Typography>
-        </StyledMenuItem>
-      )}
-      {user.role !== constant.SUPER_ADMIN_NAME && (
-        <StyledMenuItem
-          to="/social-listening"
-          component={Link}
-          activeclassname={classes.navbarActive}
-          className={classes.iconButton}
-          selected={pathname === "/social-listening"}
-        >
-          {" "}
-          <HeadsetIcon />
-          <Typography className={classes.navTextStyle}>
-            Social Listening
-          </Typography>
-        </StyledMenuItem>
-      )}
-      {user.role == constant.SUPER_ADMIN_NAME && (
-        <StyledMenuItem
-          to="/contact-support"
-          component={Link}
-          activeclassname={classes.navbarActive}
-          className={classes.iconButton}
-          selected={pathname === "/contact-support"}
-        >
-          {" "}
-          <CallSharpIcon />
-          <Typography className={classes.navTextStyle}>
-            Customer support
-          </Typography>
-        </StyledMenuItem>
-      )}
-      <StyledMenuItem
-        to="/help"
-        component={Link}
-        activeclassname={classes.navbarActive}
-        className={classes.iconButton}
-        selected={pathname === "/help"}
-      >
-        <HelpIcon />{" "}
-        {mobileView ? (
-          <Typography className={classes.navTextStyle}>Help</Typography>
-        ) : (
-          ""
-        )}
-      </StyledMenuItem>
+      {navItems.map((item, index) => (
+        item.visible && (
+          <StyledMenuItem
+            key={index}
+            size="small"
+            to={item.to}
+            component={Link}
+            className={classes.iconButton}
+            selected={item.selected}
+          >
+            {item.icon}
+            <Typography className={classes.navTextStyle}>
+              {item.text}
+            </Typography>
+          </StyledMenuItem>
+        )
+      ))}
     </>
   );
-  const logo = () => (
+
+  const renderUserMenuItems = () => (
+    <>
+      {userMenuItems.map((item, index) => (
+        item.visible && (
+          <MenuItem
+            key={index}
+            component={Link}
+            to={item.to}
+            onClick={item.onClick || handleUserMenuClose}
+          >
+            {item.icon} <Box mx={0.5}>{item.text}</Box>
+          </MenuItem>
+        )
+      ))}
+    </>
+  );
+
+  const renderLogo = () => (
     <NavLink to="/" className={classes.title}>
       <img
         className={classes.title}
@@ -186,211 +262,68 @@ const Navbar = () => {
     </NavLink>
   );
 
-  const displayDesktop = () => {
-    return (
-      <Toolbar style={{ display: "flex", flexGrow: 1, padding: 0 }}>
-        {logo()}
-        <div style={{ display: "flex" }}>{menuItem()}</div>
-      </Toolbar>
-    );
-  };
+  const renderDesktopView = () => (
+    <Toolbar style={{ display: "flex", flexGrow: 1, padding: 0 }}>
+      {renderLogo()}
+      <div style={{ display: "flex" }}>{renderNavItems()}</div>
+    </Toolbar>
+  );
 
-  const displayMobile = () => {
-    const handleDrawerOpen = () =>
-      setState((prevState) => ({ ...prevState, drawerOpen: true }));
-    const handleDrawerClose = () =>
-      setState((prevState) => ({ ...prevState, drawerOpen: false }));
-
-    return (
-      <Toolbar
-        style={{
-          display: "flex",
-          flexGrow: 1,
-          flexDirection: "row-reverse",
-          justifyContent: "space-between",
-        }}
-        disableGutters
+  const renderMobileView = () => (
+    <Toolbar
+      style={{
+        display: "flex",
+        flexGrow: 1,
+        flexDirection: "row-reverse",
+        justifyContent: "space-between",
+      }}
+      disableGutters
+    >
+      <IconButton
+        edge="start"
+        aria-label="menu"
+        aria-haspopup="true"
+        onClick={handleDrawerToggle}
       >
-        <IconButton
-          {...{
-            edge: "start",
-            "aria-label": "menu",
-            "aria-haspopup": "true",
-            onClick: handleDrawerOpen,
-          }}
-        >
-          <MenuIcon style={{ color: "#323132" }} />
-        </IconButton>
+        <MenuIcon style={{ color: "#323132" }} />
+      </IconButton>
 
-        <Drawer
-          {...{
-            anchor: "right",
-            open: drawerOpen,
-            onClose: handleDrawerClose,
-          }}
-        >
-          <div style={{ padding: "50px 10px" }}>{menuItem()}</div>
-        </Drawer>
+      <Drawer
+        anchor="right"
+        open={drawerOpen}
+        onClose={handleDrawerToggle}
+      >
+        <div style={{ padding: "50px 10px" }}>{renderNavItems()}</div>
+      </Drawer>
 
-        <div>{logo()}</div>
-      </Toolbar>
-    );
-  };
-
-  const handleClick = (event) => {
-    setShow(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setShow(null);
-  };
-  useEffect(() => {
-    // console.log("State Update", logoURL)
-  }, [logoURL]);
+      <div>{renderLogo()}</div>
+    </Toolbar>
+  );
 
   return (
     <AppBar position="fixed" className={classes.appBar}>
-      {mobileView ? displayMobile() : displayDesktop()}
+      {mobileView ? renderMobileView() : renderDesktopView()}
 
       <Button
         id="navbar-menu-item"
         className={classes.icons}
-        onClick={handleClick}
+        onClick={handleUserMenuOpen}
       >
         <AccountCircleIcon fontSize="large" />
       </Button>
+      
       <Menu
-        id="simple-menu"
-        anchorEl={show}
+        id="user-menu"
+        anchorEl={userMenuAnchor}
         keepMounted
-        open={Boolean(show)}
-        onClose={handleClose}
+        open={Boolean(userMenuAnchor)}
+        onClose={handleUserMenuClose}
         style={{
           top: 60,
           left: -30,
         }}
       >
-        {user.role === constant.CUSTOMER_ADMIN_NAME && (
-          <Box>
-            <MenuItem
-              component={Link}
-              to="/account-management"
-              onClick={() => {
-                handleClose();
-              }}
-            >
-              <AccountBox fontSize="small" />{" "}
-              <Box mx={0.5}>Account Settings</Box>
-            </MenuItem>
-            <MenuItem
-              component={Link}
-              to="/subscription-details"
-              onClick={() => {
-                handleClose();
-              }}
-            >
-              <CreditCard fontSize="small" /> <Box mx={0.5}>Subscription</Box>
-            </MenuItem>
-            {/* <MenuItem
-              component={Link}
-              to='/customer-admin-setting'
-              onClick={() => {
-                handleClose();
-              }}
-            >
-              <SettingsIcon fontSize='small' /> <Box mx={0.5}>Settings</Box>
-            </MenuItem> */}
-          </Box>
-        )}
-        {/* <MenuItem
-          component={Link}
-          to='/profile'
-          onClick={handleClose}
-        >
-          {' '}
-          <AccountCircleIcon fontSize='small' />
-          <Box mx={0.5}>Profile</Box>
-        </MenuItem> */}
-
-        <MenuItem
-          component={Link}
-          to="/user-management"
-          onClick={() => {
-            handleClose();
-          }}
-        >
-          {user.role !== constant.CUSTOMER_VIEWER_NAME && (
-            <React.Fragment>
-              <SupervisorAccountIcon fontSize="small" />
-              <Box mx={0.5}>User Management</Box>
-            </React.Fragment>
-          )}
-        </MenuItem>
-
-        {user.role === constant.SUPER_ADMIN_NAME && (
-          <Box>
-            <MenuItem
-              component={Link}
-              to="/cms"
-              onClick={() => {
-                handleClose();
-              }}
-            >
-              <Description fontSize="small" />
-              <Box mx={0.5}>Content Management</Box>
-            </MenuItem>
-            <MenuItem
-              component={Link}
-              to="/subscription-management"
-              onClick={() => {
-                handleClose();
-              }}
-            >
-              {user.role !== constant.CUSTOMER_VIEWER_NAME ? (
-                <React.Fragment>
-                  <CardMembershipIcon fontSize="small" />
-                  <Box mx={0.5}>Subscription Management</Box>
-                </React.Fragment>
-              ) : (
-                ""
-              )}
-            </MenuItem>
-            <MenuItem
-              component={Link}
-              to="/admin/analytics"
-              onClick={() => {
-                handleClose();
-              }}
-            >
-              <BarChart fontSize="small" />
-              <Box mx={0.5}>Analytics</Box>
-            </MenuItem>
-            <MenuItem
-              component={Link}
-              to="/admin/user-activity"
-              onClick={() => {
-                handleClose();
-              }}
-            >
-              <SupervisorAccountIcon fontSize="small" />
-              <Box mx={0.5}>Activity Logs</Box>
-            </MenuItem>
-          </Box>
-        )}
-
-        <MenuItem
-          component={Link}
-          to=""
-          onClick={async () => {
-            handleClose();
-            try {
-              await dispatch(SignOut());
-            } catch (error) {}
-          }}
-        >
-          {" "}
-          <ExitToAppIcon fontSize="small" /> <Box mx={0.5}>Logout</Box>
-        </MenuItem>
+        {renderUserMenuItems()}
       </Menu>
     </AppBar>
   );

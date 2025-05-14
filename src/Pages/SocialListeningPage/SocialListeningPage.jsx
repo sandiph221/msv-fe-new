@@ -7,7 +7,7 @@ import {
   useTheme,
   useMediaQuery,
 } from "@material-ui/core";
-import { useEffect } from "react";
+import React,{ useEffect } from "react";
 import Layout from "../../Components/Layout";
 import PageTitle from "../../Components/PageTitle/PageTitle";
 import SocialButton from "../../Components/SocialButton";
