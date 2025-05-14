@@ -25,6 +25,18 @@ export const SignIn = (user) => async (dispatch) =>
       });
   });
 
+  export const SignInTokenOnly  = async (user) => {
+    
+      const response = await axios.post("/sign-in", user);
+      if (response.status && response.data) {
+        // localStorage.setItem("token", response.data.data.token);
+        return JSON.stringify(response.data);
+      } else {
+        throw new Error(response.data);
+      }
+
+};
+
 export const FacebookSignIn = (accessToken, user) => async (dispatch) =>
   new Promise(function (resolve, reject) {
     /* api call to Login User */

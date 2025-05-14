@@ -61,6 +61,7 @@ import AboutPage from "./Pages/Web/components/AboutPage";
 import FAQPage from "./Pages/Web/components/FaqPage";
 import { Contact } from "./Pages/Web/components/ContactPage";
 import AdminLogin from "./Components/AdminLogin/AdminLogin";
+import SubdomainLogin from "./Components/SubdomainLogin/SubdomainLogin";
 // Web Pages
 
 function App() {
@@ -74,7 +75,8 @@ function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/faq" element={<FAQPage />} />
+              <Route path="/faq" element={<FAQPage />} />
+              <Route path="/subdomain-login" element={<SubdomainLogin />}/>
       </Route>
 
       {/* <Route path="/card-details" element={<CardDetailPage />} /> */}

@@ -100,7 +100,7 @@ const Navbar = () => {
     setUserMenuAnchor(null);
   };
 
-  const handleLogout = async () => {
+    const handleLogout = async () => {
     handleUserMenuClose();
     try {
       await dispatch(SignOut());

@@ -25,6 +25,7 @@ import {
   FacebookSignIn,
   ForgotPassword,
   SignIn,
+  SignInTokenOnly,
 } from "../../store/actions/AuthAction";
 import * as constant from "../../utils/constant";
 import styles from "./Styles/index.js";
@@ -168,14 +169,14 @@ const Login = () => {
         let signInParams = { ...formValues };
 
         //getting subdomain id is available
-        if (subdomainID) {
-          signInParams.subdomain_id = `${subdomainID}`;
-        }
-
+     
         // Add domain information
-
-        const createResponse = await dispatch(SignIn(signInParams));
-        setUserFormSubmiting(false);
+          const createResponse = await SignInTokenOnly(signInParams);
+          if (createResponse) { 
+              location.href=`http://${signInParams.subdomain}.${import.meta.env.VITE_DOMAIN_NAME}/subdomain-login?code=${encodeURIComponent(createResponse)}`;
+          }         
+          
+          setUserFormSubmiting(false);
         setErrors({});
       } catch (error) {
         /* error caught while creating customer */
