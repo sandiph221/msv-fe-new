@@ -1,4 +1,3 @@
-
 import {
   TextField,
   Avatar,
@@ -11,35 +10,35 @@ import {
   withStyles,
   useMediaQuery,
   useTheme,
-} from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
-import { useDispatch, useSelector } from 'react-redux';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import RotateLeftIcon from '@material-ui/icons/RotateLeft';
-import Cards from '../Cards';
-import Buttons from '../Buttons/Buttons';
+} from "@material-ui/core";
+import SearchIcon from "@material-ui/icons/Search";
+import { useDispatch, useSelector } from "react-redux";
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
+import RotateLeftIcon from "@material-ui/icons/RotateLeft";
+import Cards from "../Cards";
+import Buttons from "../Buttons/Buttons";
+import React from "react";
 import {
   GetCustomer,
   PaginateCustomer,
   SearchCustomer,
-} from '../../store/actions/CustomersAction';
-import Spinner from '../Spinner';
-import Styles from './Styles';
-import Alert from '../AlertBox/Alert';
-import { DeleteCustomer } from '../../store/actions/CustomersAction';
-import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
-
+} from "../../store/actions/CustomersAction";
+import Spinner from "../Spinner";
+import Styles from "./Styles";
+import Alert from "../AlertBox/Alert";
+import { DeleteCustomer } from "../../store/actions/CustomersAction";
+import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 const useStyles = makeStyles((theme) => Styles(theme));
 
 const StyledTextField = withStyles({
   root: {
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
+    "& .MuiOutlinedInput-root": {
+      "& fieldset": {
         borderRadius: 12,
       },
     },
-    '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-      borderColor: '#E0E0E0',
+    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#E0E0E0",
     },
   },
 })(TextField);
@@ -57,7 +56,7 @@ const Sidebar = ({
   handleCancle,
 }) => {
   const theme = useTheme();
-  const xs = useMediaQuery(theme.breakpoints.down('xs'));
+  const xs = useMediaQuery(theme.breakpoints.down("xs"));
 
   const [page, setPage] = React.useState(1);
   // const [open, setOpen] = React.useState(false);
@@ -65,7 +64,7 @@ const Sidebar = ({
   const [searchPage, setSearchPage] = React.useState(1);
   const [searchMore, setSearchMore] = React.useState(false);
   const [load, setLoad] = React.useState(false);
-  const [search, setSearch] = React.useState('');
+  const [search, setSearch] = React.useState("");
   const dispatch = useDispatch();
   const [confirmOpen, setConfirmOpen] = React.useState(false);
   const [itemToDelete, setItemToDelete] = React.useState(null);
@@ -160,8 +159,8 @@ const Sidebar = ({
       <div
         className={classes.sidebar}
         style={{}}
-        anchor='left'
-        variant='permanent'
+        anchor="left"
+        variant="permanent"
       >
         <div className={classes.asideTop}>
           <div className={classes.userContainer}>
@@ -169,13 +168,13 @@ const Sidebar = ({
               <strong>User Management</strong>
             </Typography>
             <Buttons
-              size='small'
+              size="small"
               className={classes.iconButtonContainer}
-              color='inherit'
+              color="inherit"
               onClick={addUserData}
-              variant='outlined'
+              variant="outlined"
             >
-              <PersonAddIcon size='small' />
+              <PersonAddIcon size="small" />
               {/* {!newMatch && openDrawer && ( */}
               <Typography className={classes.navTextStyle}>Add User</Typography>
               {/* )} */}
@@ -184,14 +183,14 @@ const Sidebar = ({
           <StyledTextField
             fullWidth
             className={classes.textField}
-            hintText='Search by Name'
-            variant='outlined'
-            placeholder='Search'
+            hintText="Search by Name"
+            variant="outlined"
+            placeholder="Search"
             value={search}
             InputProps={{
               startAdornment: (
-                <InputAdornment position='start'>
-                  <SearchIcon style={{ color: '#323132' }} />
+                <InputAdornment position="start">
+                  <SearchIcon style={{ color: "#323132" }} />
                 </InputAdornment>
               ),
               // endAdornment: (
@@ -241,7 +240,7 @@ const Sidebar = ({
               // )
             )
           ) : (
-            <Typography align='center'>No Users Found!</Typography>
+            <Typography align="center">No Users Found!</Typography>
           )}
 
           <ListItem>
@@ -262,13 +261,13 @@ const Sidebar = ({
                     (search ? (
                       <Buttons
                         className={classes.loadBtn}
-                        variant='outlined'
+                        variant="outlined"
                         onClick={() => {
                           setSearchPage(searchPage + 1);
                           setSearchMore(true);
                         }}
                       >
-                        Load More{' '}
+                        Load More{" "}
                         <RotateLeftIcon className={classes.loadBtnIcon} />
                       </Buttons>
                     ) : (
@@ -279,7 +278,7 @@ const Sidebar = ({
                           setLoad(true);
                         }}
                       >
-                        Load More{' '}
+                        Load More{" "}
                         <RotateLeftIcon className={classes.loadBtnIcon} />
                       </Buttons>
                     )))}
@@ -292,13 +291,13 @@ const Sidebar = ({
         <Alert
           alert={itemToDelete}
           icon={<ErrorOutlineIcon className={classes.alertIcon} />}
-          title='Are you sure?'
-          confirmBtn='DELETE'
+          title="Are you sure?"
+          confirmBtn="DELETE"
           description="You're about to Delete the user. This process cannot be undone."
           open={confirmOpen}
           setOpen={setConfirmOpen}
           onConfirm={handleDelete}
-          buttonbgcolor='#f50057'
+          buttonbgcolor="#f50057"
         />
       }
     </React.Fragment>

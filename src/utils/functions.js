@@ -53,10 +53,10 @@ export const formatImage = (activeMedia, subdomain, imageLink) => {
 
   if (subdomainCheck) {
     return `https://${subdomainCheck.toLowerCase()}.${
-      process.env.REACT_APP_IMAGE_URL
+      import.meta.env.VITE_REACT_APP_IMAGE_URL
     }${imageLink}`;
   } else {
-    return `https://${process.env.REACT_APP_IMAGE_URL}${imageLink}`;
+    return `https://${import.meta.env.VITE_REACT_APP_IMAGE_URL}${imageLink}`;
   }
 };
 
@@ -65,10 +65,10 @@ export const formatVideo = (activeMedia, subdomain, videoLink) => {
 
   if (subdomainCheck) {
     return `https://${subdomainCheck.toLowerCase()}.${
-      process.env.REACT_APP_IMAGE_URL
+      import.meta.env.VITE_REACT_APP_IMAGE_URL
     }${videoLink}`;
   } else {
-    return `https://${process.env.REACT_APP_IMAGE_URL}${videoLink}`;
+    return `https://${import.meta.env.VITE_REACT_APP_IMAGE_URL}${videoLink}`;
   }
 };
 

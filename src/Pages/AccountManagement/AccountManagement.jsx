@@ -22,7 +22,7 @@ import styles from "./Styles";
 import Spinner from "../../Components/Spinner";
 
 import Alert from "../../Components/AlertBox/Alert";
-import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
+import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import axios from "axios";
 import { toast } from "react-toastify";
 import * as constant from "../../utils/constant";
@@ -38,6 +38,7 @@ import { formatServerImages } from "utils/functions.js";
 import { UpdateCustomerBanner } from "../../store/actions/CustomersAction";
 import ConnectToSocial from "../../Customer/Components/ConnectToSocial";
 
+console.log("AccountManagement rendered");
 const StyledTextField = withStyles({
   root: {
     borderRadius: 15,
@@ -90,6 +91,7 @@ const AccountManagement = (props) => {
   };
 
   useEffect(() => {
+    console.log("AccountManagement useEffect");
     dispatch(getSignInUser(user.id));
   }, []);
 

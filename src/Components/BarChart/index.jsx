@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Avatar,
   Box,
@@ -16,11 +17,16 @@ import {
 } from "@material-ui/core";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import { useEffect } from "react";
-import { Bar, Chart } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
+import { Chart, registerables } from "chart.js";
 import { useSelector } from "react-redux";
 import { formatImage } from "utils/functions.js";
 import { CustomButton } from "../CustomButton/CustomButton";
 
+// Register Chart.js components
+Chart.register(...registerables);
+
+// Rest of your styles and styled components...
 const useStyles = makeStyles((test) => ({
   unselected: {
     backgroundColor: "transparent !important",
@@ -124,7 +130,7 @@ const StyledInputLabel = withStyles({
 
 const BarChart = ({
   chartTitle,
-  adddeSocialMedaiProfile,
+  adddeSocialMedaiProfile = [],
   graphTitle,
   chartData,
   getSelectedProfile,
@@ -151,13 +157,31 @@ const BarChart = ({
   const [open, setOpen] = React.useState(false);
   const [checkedValue, setCheckedValue] = React.useState([]);
 
+  // Create a valid default data structure for the chart
+  const [validChartData, setValidChartData] = React.useState({
+    labels: [],
+    datasets: [],
+  });
+
   const { activeSocialMediaType } = useSelector(
     (state) => state.socialMediaProfileListReducer
   );
 
   const { user } = useSelector((state) => state.auth);
 
-  let subdomain = user.CustomerSubdomain.subdomain;
+  let subdomain = user?.CustomerSubdomain?.subdomain || "";
+
+  // Ensure chartData is properly formatted
+  useEffect(() => {
+    if (chartData && typeof chartData === "object") {
+      // Make sure datasets is an array
+      const formattedData = {
+        labels: chartData.labels || [],
+        datasets: Array.isArray(chartData.datasets) ? chartData.datasets : [],
+      };
+      setValidChartData(formattedData);
+    }
+  }, [chartData]);
 
   useEffect(() => {
     const setResponsiveness = () => {
@@ -169,26 +193,36 @@ const BarChart = ({
     setResponsiveness();
 
     window.addEventListener("resize", () => setResponsiveness());
+
+    return () => {
+      window.removeEventListener("resize", setResponsiveness);
+    };
   }, []);
 
-  Chart.Tooltip.positioners.custom = function (elements, position) {
+  // Define custom tooltip positioner
+  if (!Chart.defaults.plugins.tooltip.positioners) {
+    Chart.defaults.plugins.tooltip.positioners = {};
+  }
+
+  Chart.defaults.plugins.tooltip.positioners.custom = function (
+    elements,
+    position
+  ) {
     if (!elements.length) {
       return false;
     }
     var offset = 0;
     let heightOffset = 0;
-    //adjust the offset left or right depending on the event position
-    if (elements[0]._chart.width / 2 > position.x) {
+
+    if (elements[0].element.chart.width / 2 > position.x) {
       offset = 20;
     }
-    if (elements[0]._chart.height / 2 < position.y) {
+    if (elements[0].element.chart.height / 2 < position.y) {
       heightOffset = -70;
     } else {
       heightOffset = 70;
     }
-    // if(elements[0]._chart.width / 2 > position.y) {
-    //   heightOffset = 70
-    // }
+
     return {
       x: position.x + offset,
       y: position.y + heightOffset,
@@ -197,24 +231,22 @@ const BarChart = ({
 
   const chart = React.createRef();
 
-  Chart.pluginService.register({
-    afterDraw: function (chart, easing) {
-      if (chart.tooltip._active && chart.tooltip._active.length) {
-        const activePoint = chart.controller.tooltip._active[0];
+  // Create a custom plugin for the vertical line on hover
+  const verticalLinePlugin = {
+    id: "verticalLine",
+    afterDraw: (chart) => {
+      if (chart.tooltip?._active && chart.tooltip._active.length) {
+        const activePoint = chart.tooltip._active[0];
         const ctx = chart.ctx;
-        const x = activePoint.tooltipPosition().x;
-        const topY = chart.scales["y-axis-0"]
-          ? chart.scales["y-axis-0"].top
-          : "";
-        const bottomY = chart.scales["y-axis-0"]
-          ? chart.scales["y-axis-0"].bottom
-          : "";
+        const x = activePoint.element.x;
+        const topY = chart.scales.y.top;
+        const bottomY = chart.scales.y.bottom;
 
         ctx.save();
         ctx.beginPath();
         ctx.moveTo(x, topY);
         ctx.lineTo(x, bottomY);
-        ctx.lineWidth = activePoint._view.width;
+        ctx.lineWidth = activePoint.element.width;
         ctx.strokeStyle = "#ddd9d9";
         ctx.globalAlpha = 0.9;
         ctx.globalCompositeOperation = "destination-over";
@@ -222,131 +254,144 @@ const BarChart = ({
         ctx.restore();
       }
     },
-  });
+  };
+
+  // Register the plugin
+  Chart.register(verticalLinePlugin);
 
   // Chart JS Options
   var chartOptions = {
     responsive: true,
     maintainAspectRatio: true,
-    // Default legend display false
-    legend: {
-      display: false,
+    plugins: {
+      legend: {
+        display: false,
+      },
+      title: {
+        display: true,
+        text: graphTitle || "",
+        position: "left",
+      },
+      tooltip: {
+        mode: "x",
+        displayColors: true,
+        intersect: false,
+        enabled: true,
+        padding: 20,
+        titleFont: {
+          size: 18,
+        },
+        titleSpacing: 10,
+        bodyFont: {
+          size: 18,
+        },
+        xPadding: 18,
+        yPadding: 18,
+        yAlign: "center",
+        caretSize: 12,
+        position: "custom",
+        titleMarginBottom: 18,
+        callbacks: {
+          title: function (tooltipItems) {
+            if (tooltipItems && tooltipItems.length > 0) {
+              const dataPointsIndex = tooltipItems[0].dataIndex;
+              const dateRange = validChartData.timeline
+                ? validChartData.timeline.filter(
+                    (date, index) => index == dataPointsIndex
+                  )
+                : [];
+              if (dateRange && dateRange.length !== 0) {
+                if (dateFilter === "day") {
+                  return `${
+                    dateRange[0]?.start
+                      ? new Date(dateRange[0].start)
+                          .toDateString()
+                          .split(" ")[1]
+                      : ""
+                  } ${
+                    dateRange[0]?.start
+                      ? new Date(dateRange[0].start)
+                          .toDateString()
+                          .split(" ")[2]
+                      : ""
+                  } `;
+                } else {
+                  return `From : ${
+                    dateRange[0]?.start
+                      ? new Date(dateRange[0].start)
+                          .toDateString()
+                          .split(" ")[1]
+                      : ""
+                  } ${
+                    dateRange[0]?.start
+                      ? new Date(dateRange[0].start)
+                          .toDateString()
+                          .split(" ")[2]
+                      : ""
+                  }  To: ${
+                    dateRange[0]?.end
+                      ? new Date(dateRange[0].end).toDateString().split(" ")[1]
+                      : ""
+                  } ${
+                    dateRange[0]?.end
+                      ? new Date(dateRange[0].end).toDateString().split(" ")[2]
+                      : ""
+                  }`;
+                }
+              } else {
+                return tooltipItems[0].label
+                  ? tooltipItems[0].label.toUpperCase()
+                  : "";
+              }
+            }
+            return "";
+          },
+        },
+      },
     },
     scales: {
-      xAxes: [
-        {
-          gridLines: {
-            display: false,
-            drawBorder: true,
-            color: "rgb(153, 21, 21)",
-            offsetGridLines: true,
-          },
-          ticks: {
-            fontColor: "#323132",
-            fontSize: 14,
-            fontStyle: 600,
-            fontFamily: "'Poppins', sans-serif",
+      x: {
+        grid: {
+          display: false,
+          drawBorder: true,
+          color: "rgb(153, 21, 21)",
+          offset: true,
+        },
+        ticks: {
+          color: "#323132",
+          font: {
+            size: 14,
+            weight: 600,
+            family: "'Poppins', sans-serif",
           },
         },
-      ],
-      yAxes: [
-        {
-          gridLines: {
-            drawBorder: false,
-          },
-          ticks: {
-            fontColor: "#757575",
-            fontSize: 12,
-            fontFamily: "'Poppins', sans-serif",
-            precision: noDecimalPoint ? 0 : 1,
-          },
+      },
+      y: {
+        grid: {
+          drawBorder: false,
         },
-      ],
-    },
-    // Graph Title
-    title: {
-      display: true,
-      text: graphTitle,
-      position: "left",
+        ticks: {
+          color: "#757575",
+          font: {
+            size: 12,
+            family: "'Poppins', sans-serif",
+          },
+          precision: noDecimalPoint ? 0 : 1,
+        },
+      },
     },
     hover: {
       mode: "y",
       intersect: false,
-      label: false,
-    },
-    tooltips: {
-      // Disable the on-canvas tooltip
-      mode: "x",
-      displayColors: true,
-      intersect: false,
-      enabled: true,
-      padding: 20,
-      titleFontSize: 18,
-      titleSpacing: 10,
-      bodyFontSize: 18,
-      xPadding: 18,
-      yPadding: 18,
-      yAlign: "center",
-      caretSize: 12,
-      position: "custom",
-      titleMarginBottom: 18,
-      callbacks: {
-        title: function (tooltipItem) {
-          if (tooltipItem) {
-            const dataPointsIndex = tooltipItem.map((data) => {
-              return `${data.index}`;
-            });
-            const dateRange = chartData.timeline
-              ? chartData.timeline.filter(
-                  (date, index) => index == dataPointsIndex
-                )
-              : [];
-            if (dateRange && dateRange.length !== 0) {
-              if (dateFilter === "day") {
-                return `${
-                  dateRange
-                    ? new Date(dateRange[0].start).toDateString().split(" ")[1]
-                    : ""
-                } ${
-                  dateRange
-                    ? new Date(dateRange[0].start).toDateString().split(" ")[2]
-                    : ""
-                } `;
-              } else {
-                return `From : ${
-                  dateRange
-                    ? new Date(dateRange[0].start).toDateString().split(" ")[1]
-                    : ""
-                } ${
-                  dateRange
-                    ? new Date(dateRange[0].start).toDateString().split(" ")[2]
-                    : ""
-                }  To: ${
-                  dateRange
-                    ? new Date(dateRange[0].end).toDateString().split(" ")[1]
-                    : ""
-                } ${
-                  dateRange
-                    ? new Date(dateRange[0].end).toDateString().split(" ")[2]
-                    : ""
-                }`;
-              }
-            } else {
-              return tooltipItem.map((item) => item.label.toUpperCase());
-            }
-          }
-        },
-      },
     },
   };
+
   /* fires on selecting profiles */
   useEffect(() => {
-    if (selectProfiles && selectProfiles.length !== 0) {
+    if (selectProfiles && selectProfiles.length !== 0 && getSelectedProfile) {
       getSelectedProfile(selectProfiles, dateFilter, kPerFans);
-      // Updating Chart
-      chart.current.chartInstance.update();
     }
-  }, [dateFilter, kPerFans, selectProfiles]);
+  }, [dateFilter, kPerFans, selectProfiles, getSelectedProfile]);
 
   const updateAddedProfiles = (id) => {
     setOpen(true);
@@ -360,36 +405,6 @@ const BarChart = ({
     }
   };
 
-  const updateSelectedProfiles = (id) => {
-    /* data fetched through api call*/
-    // if profile is selected, Unselect it and update state
-    setOpen(true);
-    if (selectProfiles.includes(id)) {
-      const unselectProfile = selectProfiles.filter(
-        (selectProfiles) => selectProfiles !== id
-      );
-      setSelectProfiles(unselectProfile);
-    }
-    // if profile is not selected add to state
-    else {
-      setSelectProfiles((prevState) => [...prevState, id]);
-    }
-  };
-
-  // useEffect(() => {
-  //   // setSelectProfiles(
-  //   //   adddeSocialMedaiProfile.length === 0
-  //   //     ? []
-  //   //     : [adddeSocialMedaiProfile[0].id]
-  //   // );
-  //   // setSelectProfiles((prevState) => [...prevState, adddeSocialMedaiProfile[0].id])
-  //   // setAddProfiles(
-  //   //   adddeSocialMedaiProfile.length === 0
-  //   //     ? []
-  //   //     : [adddeSocialMedaiProfile[0].id]
-  //   // );
-  // }, [adddeSocialMedaiProfile]);
-
   // Date Filter onchange validations and functions
   const handleAlignment = (event, newAlignment) => {
     setColor(event.target.checked ? "blue" : "default");
@@ -399,7 +414,6 @@ const BarChart = ({
   };
 
   // handle function to fetch data per 1000 fans
-
   const handle1KperFans = () => {
     setKPerFnas(!kPerFans);
   };
@@ -434,6 +448,7 @@ const BarChart = ({
   };
 
   const classes = useStyles({ xs });
+
   return (
     <Box style={{ maxWidth: "100vw" }}>
       <div>
@@ -553,13 +568,29 @@ const BarChart = ({
               minWidth: mobileView.mobileView ? "600px" : "100%",
             }}
           >
-            <Bar
-              ref={chart}
-              id={chartId ? chartId : "my-chart"}
-              data={chartData}
-              options={chartOptions}
-              height={height}
-            />
+            {validChartData.datasets && validChartData.datasets.length > 0 ? (
+              <Bar
+                ref={chart}
+                id={chartId ? chartId : "my-chart"}
+                data={validChartData}
+                options={chartOptions}
+                height={height}
+              />
+            ) : (
+              <div
+                style={{
+                  height: height || 200,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  textAlign: "center",
+                }}
+              >
+                <Typography variant="body1">
+                  No data available for the chart
+                </Typography>
+              </div>
+            )}
           </div>
         </div>
         <div
@@ -591,8 +622,9 @@ const BarChart = ({
                   const profileList = adddeSocialMedaiProfile.filter(
                     (profile) => profile.id === data
                   );
-                  const string = profileList.map((data, index) => (
+                  return profileList.map((data, index) => (
                     <img
+                      key={`${data.id}-${index}`}
                       style={{
                         height: 25,
                         width: 25,
@@ -604,10 +636,9 @@ const BarChart = ({
                         subdomain,
                         data.picture
                       )}
+                      alt={data.name || "Profile"}
                     />
                   ));
-
-                  return string;
                 })}
               </Typography>
             </div>
@@ -720,7 +751,7 @@ const BarChart = ({
                     ) : (
                       <StyledMenuItem value="" selected={true}>
                         <Typography style={{ fontSize: 15, fontWeight: 600 }}>
-                          No Data Avialable
+                          No Data Available
                         </Typography>{" "}
                       </StyledMenuItem>
                     )}

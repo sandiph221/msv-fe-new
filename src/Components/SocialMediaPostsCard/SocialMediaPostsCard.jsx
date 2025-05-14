@@ -8,12 +8,12 @@ import {
 } from "@material-ui/core";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
-import CameraAltIcon from '@material-ui/icons/CameraAlt';
-import CommentIcon from '@material-ui/icons/Comment';
-import LinkIcon from '@material-ui/icons/Link';
-import PhotoAlbumIcon from '@material-ui/icons/PhotoAlbum';
-import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary';
-import VideocamIcon from '@material-ui/icons/Videocam';
+import CameraAltIcon from "@material-ui/icons/CameraAlt";
+import CommentIcon from "@material-ui/icons/Comment";
+import LinkIcon from "@material-ui/icons/Link";
+import PhotoAlbumIcon from "@material-ui/icons/PhotoAlbum";
+import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
+import VideocamIcon from "@material-ui/icons/Videocam";
 import * as moment from "moment-timezone";
 import { useState } from "react";
 import LazyLoad from "react-lazyload";
@@ -27,7 +27,7 @@ import { Angry, Care, Haha, Like, Love, Wow } from "../logosandicons";
 import { PostDetailsModal } from "./PostDetailsModal";
 import "./SocialMediaPostsCard.css";
 import { Styles } from "./Styles";
-
+import React from "react";
 import Spinner from "../Spinner";
 
 const useStyles = makeStyles((theme) => Styles(theme));

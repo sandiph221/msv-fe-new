@@ -1,4 +1,4 @@
-
+import React from "react";
 import {
   Avatar,
   Typography,
@@ -30,10 +30,10 @@ import {
   numbersFormat,
   totalEngagementPerKFans,
 } from "utils/functions.js";
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import MessageIcon from '@material-ui/icons/Message';
-import ReplySharpIcon from '@material-ui/icons/ReplySharp';
-import CloseIcon from '@material-ui/icons/Close';
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import MessageIcon from "@material-ui/icons/Message";
+import ReplySharpIcon from "@material-ui/icons/ReplySharp";
+import CloseIcon from "@material-ui/icons/Close";
 import { useSelector } from "react-redux";
 import ReactPlayer from "react-player";
 import { Haha, Like, Love, Wow, Care, Angry } from "../logosandicons";

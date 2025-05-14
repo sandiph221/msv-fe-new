@@ -173,10 +173,6 @@ const Login = () => {
         }
 
         // Add domain information
-        signInParams.domain = hostName;
-        if (formValues.subdomain) {
-          signInParams.full_domain = `${formValues.subdomain}.${hostName}`;
-        }
 
         const createResponse = await dispatch(SignIn(signInParams));
         setUserFormSubmiting(false);
@@ -261,10 +257,6 @@ const Login = () => {
       }
 
       // Add domain information
-      signInParams.domain = hostName;
-      if (formValues.subdomain) {
-        signInParams.full_domain = `${formValues.subdomain}.${hostName}`;
-      }
 
       // Extract access token from the response
       const accessToken = response.data.accessToken;
@@ -585,8 +577,8 @@ const Login = () => {
               <Typography sx={classes.footerText}>Terms of Service</Typography>
             </div>
           </div>
-              </Grid>
-              
+        </Grid>
+
         {!isMobile && (
           <Grid sx={classes.loginBannerImg} item xl={6} lg={6}>
             {bannerURL && (

@@ -1,4 +1,3 @@
-
 import Layout from "../../Components/Layout";
 import {
   Box,
@@ -20,7 +19,7 @@ import { formatServerImages } from "utils/functions.js";
 import ConnectToSocial from "../../Customer/Components/ConnectToSocial";
 
 const useStyles = makeStyles((theme) => styles(theme));
-
+console.log("CustomerAdminsetting rendered");
 const UserManagement = (props) => {
   const [userFormSubmitting, setUserFormSubmitting] = React.useState(false);
   const { user } = useSelector((state) => state.auth);

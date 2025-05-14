@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import React from "react";
 import {
   Container,
   Grid,
@@ -56,8 +57,6 @@ const ProfilePage = () => {
   const theme = useTheme();
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
   const sm = useMediaQuery(theme.breakpoints.down("sm"));
-  const md = useMediaQuery(theme.breakpoints.down("md"));
-  const lg = useMediaQuery(theme.breakpoints.down("lg"));
 
   const { changePasswordLoading } = useSelector((state) => state.auth);
 
@@ -70,7 +69,6 @@ const ProfilePage = () => {
   const [formValues, setFormValues] = React.useState({});
   const [errors, setErrors] = React.useState({});
   const [switchFormPassword, setSwitchFormPassword] = React.useState(false);
-  const [profileUpdatedValue, setProfileUpdatedValue] = React.useState({});
 
   const handleChange = (event) => {
     setPasswordValues((prevState) => ({
@@ -121,7 +119,7 @@ const ProfilePage = () => {
     if (Object.keys(formErrors).length === 0) {
       setUserFormSubmiting(true);
       try {
-        let response = await dispatch(
+        await dispatch(
           ChangePassword(
             passwordValues.newPassword,
             passwordValues.confirmNewPassword
@@ -191,7 +189,7 @@ const ProfilePage = () => {
           updateCustomerFromProfile(formValues)
         );
         setUserFormSubmiting(false);
-        const user = updateResponse.data.data;
+        updateResponse.data.data;
       } catch (error) {
         if (error.response) {
           toast.error(error.response.data.message);
