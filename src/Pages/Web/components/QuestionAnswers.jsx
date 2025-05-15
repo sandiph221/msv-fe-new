@@ -4,6 +4,7 @@ import {
   AccordionSummary,
   AccordionDetails,
   Typography,
+  Box,
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { makeStyles } from "@material-ui/core/styles";
@@ -11,12 +12,55 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
+    maxWidth: "900px",
+    margin: "0 auto",
+  },
+  accordion: {
+    margin: "16px 0",
+    borderRadius: "12px !important",
+    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
+    "&:before": {
+      display: "none",
+    },
+    "&.Mui-expanded": {
+      margin: "16px 0",
+    },
+    transition: "all 0.3s ease",
+    border: "none",
+    overflow: "hidden",
+  },
+  accordionExpanded: {
+    backgroundColor: "rgba(63, 81, 181, 0.04)",
   },
   heading: {
-    fontWeight: 500,
+    fontWeight: 600,
+    fontSize: "1.1rem",
+    color: theme.palette.primary.main,
+  },
+  accordionSummary: {
+    padding: "8px 24px",
+    "&.Mui-expanded": {
+      minHeight: "64px",
+      borderBottom: `1px solid rgba(63, 81, 181, 0.12)`,
+    },
+    "& .MuiAccordionSummary-content": {
+      margin: "16px 0",
+    },
+  },
+  expandIcon: {
+    color: theme.palette.primary.main,
+    fontSize: "1.5rem",
+    transition: "transform 0.3s ease",
   },
   accordionDetails: {
     display: "block",
+    padding: "24px 32px",
+    backgroundColor: "rgba(63, 81, 181, 0.02)",
+  },
+  answerText: {
+    color: "#424242",
+    lineHeight: 1.7,
+    fontSize: "1rem",
   },
 }));
 
@@ -28,142 +72,75 @@ export const QuestionAnswers = () => {
     setExpanded(isExpanded ? panel : false);
   };
 
+  const faqData = [
+    {
+      id: "panel1",
+      question: "What is Lorem by Ipsum?",
+      answer: "Lorem by Ipsum (LBI) is a critical process where individuals can gain citizenship by investing in a country. The process involves applying to a government-approved program, undergoing a background check, and, if approved, making an economic contribution and receiving citizenship. The specifics of CBI programs vary by country."
+    },
+    {
+      id: "panel2",
+      question: "Can I get a new account and keep my current one?",
+      answer: "Lorem by Ipsum (LBI) is a critical process where individuals can gain citizenship by investing in a country. The process involves applying to a government-approved program, undergoing a background check, and, if approved, making an economic contribution and receiving citizenship. The specifics of CBI programs vary by country."
+    },
+    {
+      id: "panel3",
+      question: "What platforms are supported by MSV?",
+      answer: "Lorem by Ipsum (LBI) is a critical process where individuals can gain citizenship by investing in a country. The process involves applying to a government-approved program, undergoing a background check, and, if approved, making an economic contribution and receiving citizenship. The specifics of CBI programs vary by country."
+    },
+    {
+      id: "panel4",
+      question: "What are the minimum requirements?",
+      answer: "Lorem by Ipsum (LBI) is a critical process where individuals can gain citizenship by investing in a country. The process involves applying to a government-approved program, undergoing a background check, and, if approved, making an economic contribution and receiving citizenship. The specifics of CBI programs vary by country."
+    },
+    {
+      id: "panel5",
+      question: "How fast is the process of getting a subscription?",
+      answer: "Lorem by Ipsum (LBI) is a critical process where individuals can gain citizenship by investing in a country. The process involves applying to a government-approved program, undergoing a background check, and, if approved, making an economic contribution and receiving citizenship. The specifics of CBI programs vary by country."
+    }
+  ];
+
   return (
-    <div className={`${classes.root} w-full`}>
-      <Accordion
-        expanded={expanded === "panel1"}
-        onChange={handleChange("panel1")}
-        className="border-b"
+    <Box className={classes.root}>
+      <Typography 
+        variant="h4" 
+        align="center" 
+        gutterBottom 
+        style={{ 
+          marginBottom: "40px", 
+          fontWeight: 600,
+          color: "#333"
+        }}
       >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-          className="py-4"
+        Frequently Asked Questions
+      </Typography>
+      
+      {faqData.map((faq) => (
+        <Accordion
+          key={faq.id}
+          expanded={expanded === faq.id}
+          onChange={handleChange(faq.id)}
+          className={`${classes.accordion} ${expanded === faq.id ? classes.accordionExpanded : ''}`}
         >
-          <Typography className={classes.heading}>
-            What is Lorem by Ipsum?
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails className={classes.accordionDetails}>
-          <Typography className="text-gray-700">
-            Lorem by Ipsum (LBI) is a critical process where individuals can
-            gain citizenship by investing in a country. The process involves
-            applying to a government-approved program, undergoing a background
-            check, and, if approved, making an economic contribution and
-            receiving citizenship. The specifics of CBI programs vary by
-            country.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-
-      <Accordion
-        expanded={expanded === "panel2"}
-        onChange={handleChange("panel2")}
-        className="border-b"
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel2a-content"
-          id="panel2a-header"
-          className="py-4"
-        >
-          <Typography className={classes.heading}>
-            Can I get a new account and keep my current one?
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails className={classes.accordionDetails}>
-          <Typography className="text-gray-700">
-            Lorem by Ipsum (LBI) is a critical process where individuals can
-            gain citizenship by investing in a country. The process involves
-            applying to a government-approved program, undergoing a background
-            check, and, if approved, making an economic contribution and
-            receiving citizenship. The specifics of CBI programs vary by
-            country.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-
-      <Accordion
-        expanded={expanded === "panel3"}
-        onChange={handleChange("panel3")}
-        className="border-b"
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel3a-content"
-          id="panel3a-header"
-          className="py-4"
-        >
-          <Typography className={classes.heading}>
-            What platforms are supported by MSV?
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails className={classes.accordionDetails}>
-          <Typography className="text-gray-700">
-            Lorem by Ipsum (LBI) is a critical process where individuals can
-            gain citizenship by investing in a country. The process involves
-            applying to a government-approved program, undergoing a background
-            check, and, if approved, making an economic contribution and
-            receiving citizenship. The specifics of CBI programs vary by
-            country.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-
-      <Accordion
-        expanded={expanded === "panel4"}
-        onChange={handleChange("panel4")}
-        className="border-b"
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel4a-content"
-          id="panel4a-header"
-          className="py-4"
-        >
-          <Typography className={classes.heading}>
-            What are the minimum requirements?
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails className={classes.accordionDetails}>
-          <Typography className="text-gray-700">
-            Lorem by Ipsum (LBI) is a critical process where individuals can
-            gain citizenship by investing in a country. The process involves
-            applying to a government-approved program, undergoing a background
-            check, and, if approved, making an economic contribution and
-            receiving citizenship. The specifics of CBI programs vary by
-            country.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-
-      <Accordion
-        expanded={expanded === "panel5"}
-        onChange={handleChange("panel5")}
-        className="border-b"
-      >
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel5a-content"
-          id="panel5a-header"
-          className="py-4"
-        >
-          <Typography className={classes.heading}>
-            How fast is the process of getting a subscription?
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails className={classes.accordionDetails}>
-          <Typography className="text-gray-700">
-            Lorem by Ipsum (LBI) is a critical process where individuals can
-            gain citizenship by investing in a country. The process involves
-            applying to a government-approved program, undergoing a background
-            check, and, if approved, making an economic contribution and
-            receiving citizenship. The specifics of CBI programs vary by
-            country.
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
-    </div>
+          <AccordionSummary
+            expandIcon={
+              <ExpandMoreIcon className={classes.expandIcon} />
+            }
+            aria-controls={`${faq.id}-content`}
+            id={`${faq.id}-header`}
+            className={classes.accordionSummary}
+          >
+            <Typography className={classes.heading}>
+              {faq.question}
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails className={classes.accordionDetails}>
+            <Typography className={classes.answerText}>
+              {faq.answer}
+            </Typography>
+          </AccordionDetails>
+        </Accordion>
+      ))}
+    </Box>
   );
 };

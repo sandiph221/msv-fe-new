@@ -278,322 +278,291 @@ const Login = () => {
       }
     }
   };
-
-  return (
-    <div>
-      <Grid container>
-        <Grid container item xl={6} lg={6} md={12} sm={12} xs={12}>
-          <div style={classes.root}>
-            <div style={classes.loginTitle}>
-              <img src={formatServerImages(logoURL)} alt="server" />
-            </div>
-            {!showForgotPassword ? (
-              <>
-                <div className="loginWrapper">
-                  <Typography sx={classes.loginWelcome}>Log In</Typography>
-                  <Typography sx={classes.loginDesc}>
-                    Please log in to your account using email & password
-                  </Typography>
-                </div>
-                <Grid>
-                  <form onSubmit={handleSubmit}>
-                    <Grid container spacing={3} justifyContent="space-between">
-                      <Grid item xs={12}>
-                        <StyledTextField
-                          sx={classes.inputField}
-                          type="text"
-                          id="subdomain"
-                          label="Subdomain"
-                          variant="outlined"
-                          error={errors.subdomain ? true : false}
-                          helperText={errors && errors.subdomain}
-                          value={formValues.subdomain}
-                          name="subdomain"
-                          title="Subdomain"
-                          onChange={handleChange}
-                          fullWidth
-                          InputLabelProps={{
-                            sx: classes.placeHolder,
-                          }}
-                          InputProps={{
-                            endAdornment: (
-                              <InputAdornment position="end">
-                                <Typography>.{hostName}</Typography>
-                              </InputAdornment>
-                            ),
-                          }}
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <StyledTextField
-                          sx={classes.inputField}
-                          type="text"
-                          id="email"
-                          label="Email"
-                          variant="outlined"
-                          error={errors.email ? true : false}
-                          helperText={errors && errors.email}
-                          value={formValues.email}
-                          name="email"
-                          title="Email"
-                          onChange={handleChange}
-                          fullWidth
-                          InputLabelProps={{
-                            sx: classes.placeHolder,
-                          }}
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <StyledTextField
-                          sx={classes.inputField}
-                          type="password"
-                          id="password"
-                          label="Password"
-                          variant="outlined"
-                          error={errors.password ? true : false}
-                          helperText={errors && errors.password}
-                          value={formValues.password}
-                          title="Password"
-                          name="password"
-                          onChange={handleChange}
-                          fullWidth
-                          InputLabelProps={{
-                            sx: classes.placeHolder,
-                          }}
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <div className="forgotpass-container">
-                          <FormControlLabel
-                            value="end"
-                            control={
-                              <Checkbox
-                                disableRipple
-                                disableFocusRipple
-                                color="primary"
-                                size="small"
-                              />
-                            }
-                            sx={classes.MuiFormControlLabel}
-                            label="Remember me"
-                            labelPlacement="end"
-                          />
-
-                          <Typography
-                            sx={{
-                              ...classes.forgotPassword,
-                              cursor: "pointer",
-                            }}
-                            onClick={switchForm}
-                          >
-                            Forgot Password
-                          </Typography>
-                        </div>
-                      </Grid>
-
-                      <Grid item xs={12}>
-                        <div style={classes.btnWrapper}>
-                          <Buttons
-                            sx={classes.MuiButton}
-                            fullWidth
-                            disableElevation
-                            type="submit"
-                            disabled={userFormSubmiting || facebookLoginLoading}
-                          >
-                            Log in
-                          </Buttons>
-                          {userFormSubmiting && <Spinner size={24} />}
-                        </div>
-                      </Grid>
-                    </Grid>
-                  </form>
-                </Grid>
-                <Grid item xs={12}>
-                  <LoginSocialFacebook
-                    appId={import.meta.env.VITE_REACT_APP_ID}
-                    fieldsProfile={
-                      "id,first_name,last_name,middle_name,name,name_format,picture,short_name,email"
-                    }
-                    onResolve={facebookLogin}
-                    onReject={(error) => {
-                      console.log({ error });
-                      toast.error("Failed to connect to Facebook");
-                      setFacebookLoginLoading(false);
-                    }}
-                  >
-                    <div
-                      style={{
-                        color: "#4267B2",
-                        fontSize: 15,
-                        fontWeight: "600",
-                        cursor: "pointer",
-                        opacity:
-                          userFormSubmiting || facebookLoginLoading
-                            ? "0.5"
-                            : "1",
-                        display: "flex",
-                        justifyContent: "center",
-                        paddingTop: 20,
-                        maxWidth: "50%",
-                        margin: "0 auto",
-                      }}
-                      onClick={() =>
-                        !userFormSubmiting &&
-                        !facebookLoginLoading &&
-                        setFacebookLoginLoading(true)
-                      }
-                    >
-                      <div
-                        style={{ display: "flex", justifyContent: "center" }}
-                      >
-                        <img
-                          style={{ height: 20 }}
-                          src={facebookImage}
-                          alt="Facebook"
-                        />
-                        <div style={{ paddingLeft: 5, whiteSpace: "nowrap" }}>
-                          Log in with Facebook
-                        </div>
-                      </div>
+    return (
+        <div className="min-h-screen">
+        <Grid container className="h-screen">
+          {/* Login Form Section */}
+          <Grid item xs={12} md={12} lg={6} className="flex items-center justify-center">
+            <div className="w-full max-w-md px-6 py-8 md:px-8">
+              {/* Logo */}
+              <div className="flex justify-center mb-8">
+                <img 
+                  src={formatServerImages(logoURL)} 
+                  alt="Company Logo" 
+                  className="h-12 object-contain"
+                />
+              </div>
+  
+              {!showForgotPassword ? (
+                <>
+                  {/* Login Form */}
+                  <div className="mb-6 text-center">
+                    <Typography variant="h4" className="font-bold text-gray-800 mb-2">
+                      Log In
+                    </Typography>
+                    <Typography variant="body1" className="text-gray-600">
+                      Please log in to your account using email & password
+                    </Typography>
+                  </div>
+  
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    {/* Subdomain Field */}
+                    <div>
+                      <TextField
+                        className="w-full"
+                        type="text"
+                        id="subdomain"
+                        label="Subdomain"
+                        variant="outlined"
+                        error={!!errors.subdomain}
+                        helperText={errors.subdomain}
+                        value={formValues.subdomain}
+                        name="subdomain"
+                        onChange={handleChange}
+                        fullWidth
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <Typography>.{hostName}</Typography>
+                            </InputAdornment>
+                          ),
+                          className: "rounded-lg"
+                        }}
+                      />
                     </div>
-                  </LoginSocialFacebook>
-                </Grid>
-                {!subDomain && (
-                  <Grid item xs={12}>
-                    <Link href="/register" color="inherit">
-                      Need an account? Register here.
-                    </Link>
-                  </Grid>
-                )}
-              </>
-            ) : (
-              <>
-                <div>
-                  <Typography sx={classes.loginWelcome}>
-                    Forgot Password
-                  </Typography>
-                  <Typography sx={classes.loginDesc}>
-                    Simply enter the email address you are registered with
-                    below. An email will be sent with a link to reset your
-                    Password.
-                  </Typography>
-                </div>
-                <div>
-                  <form onSubmit={handleForgotPassword}>
-                    <StyledTextField
-                      sx={classes.inputField}
+  
+                    {/* Email Field */}
+                    <div>
+                      <TextField
+                        className="w-full"
+                        type="text"
+                        id="email"
+                        label="Email"
+                        variant="outlined"
+                        error={!!errors.email}
+                        helperText={errors.email}
+                        value={formValues.email}
+                        name="email"
+                        onChange={handleChange}
+                        fullWidth
+                        InputProps={{
+                          className: "rounded-lg"
+                        }}
+                      />
+                    </div>
+  
+                    {/* Password Field */}
+                    <div>
+                      <TextField
+                        className="w-full"
+                        type="password"
+                        id="password"
+                        label="Password"
+                        variant="outlined"
+                        error={!!errors.password}
+                        helperText={errors.password}
+                        value={formValues.password}
+                        name="password"
+                        onChange={handleChange}
+                        fullWidth
+                        InputProps={{
+                          className: "rounded-lg"
+                        }}
+                      />
+                    </div>
+  
+                    {/* Remember Me & Forgot Password */}
+                    <div className="flex justify-between items-center">
+                      <FormControlLabel
+                        control={
+                          <Checkbox 
+                            color="primary" 
+                            size="small"
+                          />
+                        }
+                        label={
+                          <Typography variant="body2">
+                            Remember me
+                          </Typography>
+                        }
+                      />
+                      <Typography 
+                        variant="body2" 
+                        className="text-blue-600 cursor-pointer hover:underline"
+                        onClick={switchForm}
+                      >
+                        Forgot Password?
+                      </Typography>
+                    </div>
+  
+                    {/* Login Button */}
+                    <div className="relative">
+                      <Buttons
+                        fullWidth
+                        disableElevation
+                        type="submit"
+                        disabled={userFormSubmiting || facebookLoginLoading}
+                        className="py-3 rounded-lg"
+                      >
+                        Log in
+                      </Buttons>
+                      {userFormSubmiting && (
+                        <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                          <Spinner size={24} />
+                        </div>
+                      )}
+                    </div>
+                  </form>
+  
+                  {/* Facebook Login */}
+                  <div className="mt-6">
+                    <LoginSocialFacebook
+                      appId={import.meta.env.VITE_REACT_APP_ID}
+                      fieldsProfile="id,first_name,last_name,middle_name,name,name_format,picture,short_name,email"
+                      onResolve={facebookLogin}
+                      onReject={(error) => {
+                        console.log({ error });
+                        toast.error("Failed to connect to Facebook");
+                        setFacebookLoginLoading(false);
+                      }}
+                    >
+                      <div 
+                        className={`flex justify-center items-center text-[#4267B2] font-semibold cursor-pointer mt-4 ${
+                          (userFormSubmiting || facebookLoginLoading) ? 'opacity-50' : ''
+                        }`}
+                        onClick={() => 
+                          !userFormSubmiting && 
+                          !facebookLoginLoading && 
+                          setFacebookLoginLoading(true)
+                        }
+                      >
+                        <img 
+                          src={facebookImage} 
+                          alt="Facebook" 
+                          className="h-5 mr-2" 
+                        />
+                        <span>Log in with Facebook</span>
+                      </div>
+                    </LoginSocialFacebook>
+                  </div>
+  
+                  {/* Register Link */}
+                  {!subDomain && (
+                    <div className="mt-6 text-center">
+                      <Link href="/register" color="inherit" className="hover:underline">
+                        Need an account? Register here.
+                      </Link>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  {/* Forgot Password Form */}
+                  <div className="mb-6 text-center">
+                    <Typography variant="h4" className="font-bold text-gray-800 mb-2">
+                      Forgot Password
+                    </Typography>
+                    <Typography variant="body1" className="text-gray-600">
+                      Simply enter the email address you are registered with below. 
+                      An email will be sent with a link to reset your Password.
+                    </Typography>
+                  </div>
+  
+                  <form onSubmit={handleForgotPassword} className="space-y-6">
+                    <TextField
+                      className="w-full"
                       type="email"
                       id="forgotEmail"
                       label="Email"
                       variant="outlined"
-                      error={errors.email ? true : false}
-                      helperText={errors && errors.email}
+                      error={!!errors.email}
+                      helperText={errors.email}
                       value={forgotEmail}
                       name="forgotEmail"
-                      title="Email"
                       onChange={(event) => setForgotEmail(event.target.value)}
                       fullWidth
-                      InputLabelProps={{
-                        sx: classes.placeHolder,
+                      InputProps={{
+                        className: "rounded-lg"
                       }}
                     />
-
-                    <Grid
-                      sx={classes.forgotBtnContainer}
-                      container
-                      direction="row"
-                      justifyContent="space-between"
-                      alignItems="center"
-                    >
-                      <Grid item lg={6} xs={6}>
-                        <Button
-                          onClick={switchForm}
-                          sx={classes.forgotBtn}
-                          variant="contained"
-                          color="inherit"
+  
+                    <div className="flex justify-between gap-4">
+                      <Button
+                        onClick={switchForm}
+                        variant="outlined"
+                        className="w-1/2 py-2 rounded-lg"
+                      >
+                        Cancel
+                      </Button>
+                      <div className="relative w-1/2">
+                        <Buttons
+                          type="submit"
+                          fullWidth
+                          disabled={changePasswordLoading}
+                          className="py-2 rounded-lg"
                         >
-                          Cancel
-                        </Button>
-                      </Grid>
-
-                      <Grid item lg={6} xs={6} style={{ textAlign: "right" }}>
-                        <div style={classes.btnWrapper}>
-                          <Buttons
-                            type="submit"
-                            onClick={handleForgotPassword}
-                            sx={classes.forgotBtn}
-                            disabled={changePasswordLoading}
-                          >
-                            Reset
-                          </Buttons>
-                          {changePasswordLoading && <Spinner size={24} />}
-                        </div>
-                      </Grid>
-                    </Grid>
-
-                    <Grid
-                      container
-                      direction="row"
-                      justifyContent="center"
-                      alignItems="center"
-                    >
-                      <Grid item>
-                        <Typography
-                          className="forgot-password"
-                          sx={{ color: "#323132", fontWeight: "normal" }}
-                        >
-                          Remember your Password?
-                        </Typography>
-                      </Grid>
-                      {"    "}
-                      <Grid item onClick={switchForm}>
-                        <Typography
-                          className="forgot-password"
-                          sx={{ cursor: "pointer" }}
-                          onClick={switchForm}
-                        >
-                          &nbsp;Log in
-                        </Typography>
-                      </Grid>
-                    </Grid>
+                          Reset
+                        </Buttons>
+                        {changePasswordLoading && (
+                          <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                            <Spinner size={24} />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+  
+                    <div className="text-center mt-4">
+                      <Typography variant="body2" className="text-gray-700 inline">
+                        Remember your Password?
+                      </Typography>
+                      <Typography 
+                        variant="body2" 
+                        className="text-blue-600 cursor-pointer inline ml-1 hover:underline"
+                        onClick={switchForm}
+                      >
+                        Log in
+                      </Typography>
+                    </div>
+  
+                    {/* Register Link */}
+                    <div className="mt-4 text-center">
+                      <Link href="/register" color="inherit" className="hover:underline">
+                        Need an account? Register here.
+                      </Link>
+                    </div>
                   </form>
-                  <Grid item xs={12}>
-                    <Link href="/register" color="inherit">
-                      Need an account? Register here.
-                    </Link>
-                  </Grid>
-                </div>
-              </>
-            )}
-
-            <div style={classes.privacyPolicy}>
-              <Link
-                href="/privacy-policy"
-                color="inherit"
-                sx={classes.footerText}
-              >
-                Privacy
-              </Link>
-              <div>|</div>
-              <Typography sx={classes.footerText}>Terms of Service</Typography>
+                </>
+              )}
+  
+              {/* Footer Links */}
+              <div className="flex justify-center mt-8 space-x-2 text-gray-600">
+                <Link href="/privacy-policy" color="inherit" className="hover:underline">
+                  Privacy
+                </Link>
+                <span>|</span>
+                <Link href="/terms" color="inherit" className="hover:underline">
+                  Terms of Service
+                </Link>
+              </div>
             </div>
-          </div>
-        </Grid>
-
-        {!isMobile && (
-          <Grid sx={classes.loginBannerImg} item xl={6} lg={6}>
-            {bannerURL && (
-              <img
-                style={classes.loginImg}
-                src={formatServerImages(bannerURL)}
-                alt="Banner"
-              />
-            )}
           </Grid>
-        )}
-      </Grid>
-    </div>
-  );
+  
+          {/* Banner Image Section */}
+          {!isMobile && (
+            <Grid item lg={6} className="hidden lg:block relative h-screen bg-blue-50">
+              {bannerURL && (
+                <img
+                  src={formatServerImages(bannerURL)}
+                  alt="Login Banner"
+                  className="w-full h-full object-cover"
+                />
+              )}
+            </Grid>
+          )}
+        </Grid>
+      </div>
+)
+  
 };
 
 export default Login;

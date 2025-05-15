@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 
-
 export const Newsletter = () => {
   return (
     <div className="mt-12 flex w-full flex-wrap justify-between gap-8 rounded-3xl bg-accent p-8">
@@ -28,9 +27,11 @@ export const Newsletter = () => {
         <div className="flex gap-4">
           <input
             placeholder="Enter Your Email"
-            className="h-12 bg-background"
+            className="h-12 w-full rounded-md bg-background px-4 focus:outline-none focus:ring-2 focus:ring-primary"
           />
-          <button className="">Subscribe</button>
+          <button className="h-12 rounded-md bg-primary px-6 font-medium text-white hover:bg-primary/90 transition-colors">
+            Subscribe
+          </button>
         </div>
       </div>
     </div>

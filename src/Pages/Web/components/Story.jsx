@@ -5,11 +5,11 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles(() => ({
   button: {
     borderRadius: "9999px", // rounded-full
-    backgroundColor: "#673AB7", // primary color (adjust to match your theme)
+     backgroundColor: "rgba(237, 180, 89,1)", // primary color (adjust to match your theme)
     color: "white",
     textTransform: "none",
     "&:hover": {
-      backgroundColor: "#5E35B1", // slightly darker
+      backgroundColor:"rgba(237, 180, 89,0.5)", // slightly darker
     },
   },
 }));

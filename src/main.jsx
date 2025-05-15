@@ -60,7 +60,10 @@ const theme = createTheme({
       darkGreen: "#33918a",
       lightGreen: "red",
       lightBlack: "#323132",
-    },
+      },
+      primary: {
+          main:"#EDB459"
+      }
   },
 });
 

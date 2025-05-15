@@ -53,8 +53,8 @@ const useStyles = makeStyles((theme) => ({
     overflow: "hidden",
   },
   sectionHeader: {
-    backgroundColor: "rgba(63, 81, 181, 0.1)",
-  },
+    backgroundColor: "rgba(237, 180, 89,0.5)",
+},
   planTitle: {
     fontSize: "0.875rem",
     fontWeight: 600,
@@ -71,10 +71,12 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
   },
   cellCenter: {
-    textAlign: "center",
+      textAlign: "center",
+      
   },
   cellStart: {
-    textAlign: "left",
+      textAlign: "left",
+      
   },
   primaryButton: {
     marginTop: theme.spacing(2),
@@ -91,10 +93,10 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     maxWidth: "20rem",
     textTransform: "none",
-    backgroundColor: "rgba(63, 81, 181, 0.4)",
+    backgroundColor: "rgba(248, 226, 182, 1)",
     borderColor: "rgba(63, 81, 181, 0.3)",
     "&:hover": {
-      backgroundColor: "rgba(63, 81, 181, 0.5)",
+      backgroundColor: "rgba(237, 180, 89,0.5)",
     },
   },
   buttonIcon: {
