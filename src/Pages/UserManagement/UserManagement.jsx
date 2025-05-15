@@ -45,6 +45,7 @@ import {
   UpdateCustomer,
 } from "../../store/actions/CustomersAction";
 import * as constant from "../../utils/constant";
+import { useNavigate } from "react-router-dom";
 import { Styles } from "./Styles";
 import "./Styles/style.css";
 
@@ -61,7 +62,8 @@ const StyledTextField = withStyles({
   },
 })(TextField);
 
-const UserManagement = ({ history }) => {
+const UserManagement = () => {
+    const navigate = useNavigate();
   const dispatch = useDispatch();
   const [userFormSubmitting, setUserFormSubmitting] = React.useState(false);
   const [superAdmin, setSuperAdmin] = React.useState(false);
@@ -188,7 +190,7 @@ const UserManagement = ({ history }) => {
 
   React.useEffect(() => {
     if (user.role === constant.CUSTOMER_VIEWER_NAME) {
-      history.push("/admin/dashboard");
+      navigate("/admin/dashboard");
     }
   }, [user]);
 

@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core";
 import domtoimage from "dom-to-image";
 import { saveAs } from "file-saver";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -53,7 +54,8 @@ const StyledMenuItem = withStyles({
   },
 })(MenuItem);
 
-const DashboardPage = ({ history }) => {
+const DashboardPage = () => {
+    const navigate = useNavigate();
   const dispatch = useDispatch();
   const theme = useTheme();
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
@@ -400,7 +402,7 @@ const DashboardPage = ({ history }) => {
       type: "TOP_POST_ID",
       payload: selectProfile,
     });
-    history.push("/content-newsfeed");
+    navigate("/content-newsfeed");
   }
 
   return (

@@ -5,6 +5,7 @@ import {
   useTheme,
   useMediaQuery,
 } from "@material-ui/core";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useLocation } from "react-router-dom"; // Updated imports
 import TextField from "@material-ui/core/TextField";
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme) => styles(theme));
 const ChangePasswordFromMail = () => {
   const { logoURL, bannerURL } = useSelector((state) => state.settings);
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // Replace history with navigate
+  const navigate = useNavigate();
   const location = useLocation(); // For accessing URL parameters
   const theme = useTheme();
   const match = useMediaQuery(theme.breakpoints.down("md"));
@@ -83,7 +84,7 @@ const ChangePasswordFromMail = () => {
 
   React.useEffect(() => {
     if (password && password.status) {
-      navigate("/login"); // Replace history.push with navigate
+      navigate("/login"); 
     }
   }, [password, navigate]);
 

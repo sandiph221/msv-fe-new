@@ -14,12 +14,14 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { sentenceCase } from 'utils/string';
 import Layout from '../../Components/Layout';
+import { useNavigate } from 'react-router-dom';
 import styles from './Styles';
 
 const useStyles = makeStyles((theme) => styles(theme));
 
-const SubscriptionDetail = (props) => {
-  const theme = useTheme();
+const SubscriptionDetail = () => {
+    const theme = useTheme();
+    const navigate = useNavigate(); 
   const { user } = useSelector((state) => state.auth);
   const [currentSubscription, setCurrentSubscription] = useState();
   const [plans, setPlans] = useState([]);
@@ -183,7 +185,7 @@ const SubscriptionDetail = (props) => {
                     variant='contained'
                     color="secondary"
                     className={classes.button}
-                    onClick={() => props.history.push('/upgrade')}
+                    onClick={() => navigate('/upgrade')}
                   >
                     Change Plan
                   </Button>

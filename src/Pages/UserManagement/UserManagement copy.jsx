@@ -12,6 +12,7 @@ import {
   makeStyles,
   withStyles
 } from '@material-ui/core';
+import React from 'react';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
@@ -32,6 +33,7 @@ import {
   UpdateCustomer,
 } from '../../store/actions/CustomersAction';
 import * as constant from '../../utils/constant';
+import { useNavigate } from 'react-router-dom';
 import styles from './Styles';
 import './Styles/style.css';
 
@@ -48,11 +50,12 @@ const StyledTextField = withStyles({
   },
 })(TextField);
 
-const UserManagement = ({ history }) => {
+const UserManagement = () => {
   const [userFormSubmiting, setUserFormSubmiting] = React.useState(false);
   const [superAdmin, setSuperAdmin] = React.useState(false);
   const [customerAdmin, setCustomerAdmin] = React.useState(true);
-  const { user } = useSelector((state) => state.auth);
+    const { user } = useSelector((state) => state.auth);
+    const navigate = useNavigate();
   const dispatch = useDispatch();
   const [formValues, setFormValues] = React.useState({
     brandName: '',
@@ -111,7 +114,7 @@ const UserManagement = ({ history }) => {
   };
   React.useEffect(() => {
     if (user.role === constant.CUSTOMER_VIEWER_NAME) {
-      history.push('/admin/dashboard');
+      navigate('/admin/dashboard');
     }
   }, [user]);
 

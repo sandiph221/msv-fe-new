@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Container,
   Grid,
@@ -27,7 +27,7 @@ import FilterDays from "../../Components/FilterDays";
 import SocialButton from "../../Components/SocialButton";
 import { useDispatch, useSelector } from "react-redux";
 import PageTitle from "../../Components/PageTitle/PageTitle";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import BarChart from "../../Components/BarChart";
 import PieChart from "../../Components/PieChart";
 import {
@@ -145,9 +145,9 @@ const StyledMenuItem = withStyles({
   },
 })(MenuItem);
 
-const ComparisonPage = ({ history }) => {
+const ComparisonPage = () => {
   const [mobileView, setMobileView] = React.useState(false);
-
+    const navigate= useNavigate()
   React.useEffect(() => {
     const setResponsiveness = () => {
       return window.innerWidth < 1024
@@ -447,7 +447,7 @@ const ComparisonPage = ({ history }) => {
   //For adding top post profile id into reducer
 
   function addTopPostProfileId() {
-    history.push("/content-newsfeed");
+    navigate("/content-newsfeed");
   }
   const menuProps = {
     anchorOrigin: {

@@ -12,11 +12,13 @@ import {
 } from "../../store/actions/HelpPageAction";
 import parse from "html-react-parser";
 import Spinner from "../../Components/Spinner";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => Styles(theme));
 
-const HelpPageDoucment = ({ history }) => {
-  const classes = useStyles();
+const HelpPageDoucment = ( ) => {
+    const classes = useStyles();
+    const navigate= useNavigate();
   const dispatch = useDispatch();
   const [searchValue, setSearchValue] = useState("");
   const {
@@ -55,7 +57,7 @@ const HelpPageDoucment = ({ history }) => {
               cursor: "pointer",
               marginBottom: 60,
             }}
-            onClick={() => history.push("/help")}
+            onClick={() => navigate("/help")}
           >
             <KeyboardBackspaceIcon style={{ fontSize: 26, marginRight: 10 }} />
             <Typography style={{ fontSize: 20, fontWeight: 600 }}>

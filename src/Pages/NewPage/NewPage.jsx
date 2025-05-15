@@ -19,6 +19,7 @@ import Layout from "../../Components/Layout";
 import Styles from "./Styles";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useParams, useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   ...Styles(theme),
@@ -84,8 +85,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function NewPage({ history, match }) {
-  const theme = useTheme();
+function NewPage() {
+    const theme = useTheme();
+    const params = useParams();
+    const navigate = useNavigate();
   const classes = useStyles(theme);
   const [loading, setLoading] = useState(true);
   const [pageTitle, setPageTitle] = useState("");
@@ -103,7 +106,7 @@ function NewPage({ history, match }) {
     const fetchPlanData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`/pages/${match.params.id}`);
+        const response = await axios.get(`/pages/${params.id}`);
         console.log("Fetch Page", response.data);
         const data = response.data.data;
         setPageTitle(data.description.pageName);
@@ -116,7 +119,7 @@ function NewPage({ history, match }) {
     };
 
     fetchPlanData();
-  }, [match.params.id]);
+  }, [params.id]);
 
   const addSection = () => {
     setSections([
@@ -201,8 +204,8 @@ function NewPage({ history, match }) {
 
   const saveChanges = async () => {
     try {
-      if (match.params.id) {
-        await axios.put(`/pages/${match.params.id}`, {
+      if (params.id) {
+        await axios.put(`/pages/${params.id}`, {
           description: {
             pageName: pageTitle,
             sections: sections.map((section) => ({
@@ -214,7 +217,7 @@ function NewPage({ history, match }) {
           },
         });
         toast.success("Page updated successfully");
-        history.push("/cms");
+       navigate("/cms");
         return;
       }
       // Validate required fields
@@ -261,7 +264,7 @@ function NewPage({ history, match }) {
         ]);
         cleanupImagePreviews();
         toast.success("Page saved successfully");
-        history.push(`/cms`);
+        navigate(`/cms`);
       }
     } catch (error) {
       console.error("Save error:", error);

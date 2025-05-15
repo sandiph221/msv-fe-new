@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { HelpPageBannerSection } from "../../Components/HelpPageBannerSection/HelpPageBannerSection";
 import Layout from "../../Components/Layout/index";
 import Styles from "./Styles";
+import { useNavigate } from "react-router-dom";
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import { Typography } from "@material-ui/core";
 import HelpSectionList from "../../Components/HelpSectionList/HelpSectionList";
@@ -17,7 +18,10 @@ import Spinner from "../../Components/Spinner";
 
 const useStyles = makeStyles((theme) => Styles(theme));
 
-const HelpPageFaq = ({ history }) => {
+const HelpPageFaq = (
+    
+) => {
+    const navigate = useNavigate();
   const classes = useStyles();
   const dispatch = useDispatch();
   const {
@@ -77,7 +81,7 @@ const HelpPageFaq = ({ history }) => {
               cursor: "pointer",
               marginBottom: 60,
             }}
-            onClick={() => history.push("/help")}
+            onClick={() => navigate("/help")}
           >
             <KeyboardBackspaceIcon style={{ fontSize: 26, marginRight: 10 }} />
             <Typography style={{ fontSize: 20, fontWeight: 600 }}>

@@ -23,10 +23,13 @@ import Layout from "../../Components/Layout";
 import styles from "./Styles";
 import Buttons from "Components/Buttons/Buttons";
 import { Delete, Edit } from "@material-ui/icons";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => styles(theme));
 
-const SubscriptionSetting = ({ history }) => {
+const SubscriptionSetting = () => {
+    const navigate = useNavigate();
+
   const [plans, setPlans] = useState(null);
   const [itemToDelete, setItemToDelete] = useState(null);
   const [deleteAlertOpen, setDeleteAlertOpen] = useState(false);
@@ -50,11 +53,11 @@ const SubscriptionSetting = ({ history }) => {
   }, []);
 
   const handleCreatePlan = () => {
-    history.push("/plan/create");
+    navigate("/plan/create");
   };
 
   const handleEditPlan = (id) => {
-    history.push(`/plan/${id}`);
+    navigate(`/plan/${id}`);
   };
 
   const deletePlan = (data) => {

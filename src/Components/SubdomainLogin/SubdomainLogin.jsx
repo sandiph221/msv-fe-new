@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import Spinner from '../../Components/Spinner';
-import * as constant from '../../utils/constant';
-import { json } from 'd3';
+
 
 export default function SubdomainLogin() {
   const location = useLocation();

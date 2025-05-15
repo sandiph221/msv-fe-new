@@ -19,7 +19,7 @@ import {
   FormControl,
   Checkbox,
 } from "@material-ui/core";
-
+import { useNavigate } from "react-router-dom";
 import SearchIcon from '@material-ui/icons/Search';
 import Layout from "../../Components/Layout";
 import { Styles } from "./Styles";
@@ -78,7 +78,8 @@ const StyledInputLabel = withStyles({
   },
 })(InputLabel);
 
-const ProfileListingPage = ({ history }) => {
+const ProfileListingPage = () => {
+    const navigate = useNavigate();
   const theme = useTheme();
   const xs = useMediaQuery(theme.breakpoints.down("xs"));
   const dispatch = useDispatch();
@@ -217,13 +218,13 @@ const ProfileListingPage = ({ history }) => {
         selectedProfilesListToComapre.length !== 0
       ) {
         dispatch(selectProfilesToComapre(selectedProfiles));
-        history.push("/profile-comparison");
+        navigate("/profile-comparison");
       } else {
         toast.error("Select at least two or more profiles.");
       }
     } else if (page === "content") {
       dispatch(selectProfilesToComapre(selectedProfiles));
-      history.push("/content-newsfeed");
+      navigate("/content-newsfeed");
     }
   };
 

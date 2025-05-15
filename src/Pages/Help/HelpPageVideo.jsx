@@ -6,6 +6,7 @@ import Styles from "./Styles";
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import { Typography } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   getHelpVideoList,
   searchArticle,
@@ -15,8 +16,9 @@ import Spinner from "../../Components/Spinner";
 
 const useStyles = makeStyles((theme) => Styles(theme));
 
-const HelpPageVideo = ({ history }) => {
-  const classes = useStyles();
+const HelpPageVideo = () => {
+    const classes = useStyles();
+    const navigate = useNavigate();
   const dispatch = useDispatch();
   const [searchValue, setSearchValue] = useState("");
   const { videoList, videoListLoader, searchArticlesLoader, searchArticles } =
@@ -52,7 +54,7 @@ const HelpPageVideo = ({ history }) => {
               cursor: "pointer",
               marginBottom: 60,
             }}
-            onClick={() => history.push("/help")}
+            onClick={() => navigate("/help")}
           >
             <KeyboardBackspaceIcon style={{ fontSize: 26, marginRight: 10 }} />
             <Typography style={{ fontSize: 20, fontWeight: 600 }}>

@@ -8,19 +8,16 @@ import {
 } from "@material-ui/core";
 import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { formatImage, formatNumber } from "utils/functions.js";
 import Spinner from "../../Components/Spinner";
 
 import RemoveCircleOutlineOutlinedIcon from '@material-ui/icons/RemoveCircleOutlineOutlined';
 import Alert from "../../Components/AlertBox/Alert";
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
-import { Link} from "react-router-dom";
 import SystemUpdateAltIcon from '@material-ui/icons/SystemUpdateAlt';
 import {
   deletePagesInfo,
   updatePagesInfo,
 } from "../../store/actions/SuperAdminDashboardAction";
-import Moment from "moment-timezone";
 
 const useStyles = makeStyles((theme) => ({
   divTabelContent: {
@@ -131,10 +128,7 @@ const useStyles = makeStyles((theme) => ({
 const UserTable = ({
   data,
   loader,
-  selectedLabels,
-  getSelectedProfileList,
-  history,
-  allLabels,
+
 }) => {
   console.log("data", data);
   const classes = useStyles();

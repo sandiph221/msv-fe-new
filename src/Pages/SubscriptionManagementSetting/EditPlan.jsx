@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import {
-  Container,
   Typography,
   TextField,
   Button,
@@ -19,10 +18,12 @@ import axios from "axios";
 import Buttons from "Components/Buttons/Buttons";
 import { Editor } from "react-simple-wysiwyg";
 import { Add } from "@material-ui/icons";
-
+import { useNavigate, useParams } from "react-router-dom";
 const useStyles = makeStyles((theme) => styles(theme));
 
-const EditPlan = ({ history, match }) => {
+const EditPlan = () => {
+    const navigate = useNavigate();
+    const {params} = useParams();
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
   const [formValues, setFormValues] = useState({
@@ -43,7 +44,7 @@ const EditPlan = ({ history, match }) => {
         setLoading(true);
         // Replace this with your actual API call
         const response = await axios.get(
-          `/subscription-plans/${match.params.id}`
+          `/subscription-plans/${params.id}`
         );
         const data = response.data.data;
 
@@ -61,7 +62,7 @@ const EditPlan = ({ history, match }) => {
     };
 
     fetchPlanData();
-  }, [match.params.id]);
+  }, [params.id]);
 
   const handleAddSubscriptionDetail = () => {
     setFormValues((prevState) => ({
@@ -103,8 +104,8 @@ const EditPlan = ({ history, match }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`/subscription-plans/${match.params.id}`, formValues);
-      history.push("/subscription-management");
+      await axios.put(`/subscription-plans/${params.id}`, formValues);
+      navigate("/subscription-management");
     } catch (error) {
       console.error("Error updating plan:", error);
       // Handle error appropriately
@@ -284,7 +285,7 @@ const EditPlan = ({ history, match }) => {
                 </Buttons>
                 <Button
                   variant="outlined"
-                  onClick={() => history.push("/subscription-management")}
+                  onClick={() => navigate("/subscription-management")}
                 >
                   Cancel
                 </Button>

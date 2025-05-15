@@ -18,12 +18,13 @@ import styles from "./Styles";
 import axios from "axios";
 import Buttons from "Components/Buttons/Buttons";
 import { Add } from "@material-ui/icons";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => styles(theme));
 
-const CreatePlan = ({ history }) => {
+const CreatePlan = () => {
   const classes = useStyles();
-
+const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
     name: "",
     description: "",
@@ -77,7 +78,7 @@ const CreatePlan = ({ history }) => {
     e.preventDefault();
     try {
       await axios.post("/subscription-plans", formValues);
-      history.push("/subscription-management");
+      navigate("/subscription-management");
     } catch (error) {
       console.error("Error creating plan:", error);
       // Handle error appropriately
@@ -242,7 +243,7 @@ const CreatePlan = ({ history }) => {
               >
                 <Button
                   variant="outlined"
-                  onClick={() => history.push("/subscription-management")}
+                  onClick={() => navigate("/subscription-management")}
                 >
                   Cancel
                 </Button>
