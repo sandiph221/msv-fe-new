@@ -17,7 +17,7 @@ import { connect } from "react-redux";
 import styles from "./Styles";
 import { formatServerImages } from "utils/functions.js";
 import ConnectToSocial from "../../Customer/Components/ConnectToSocial";
-
+import React from "react";
 const useStyles = makeStyles((theme) => styles(theme));
 console.log("CustomerAdminsetting rendered");
 const UserManagement = (props) => {

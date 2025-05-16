@@ -16,7 +16,6 @@ import {
   InputAdornment,
 } from "@material-ui/core";
 import { styled } from "@material-ui/core/styles";
-
 import facebookImage from "../../assets/images/facebook.png";
 import Buttons from "../../Components/Buttons/Buttons";
 import Spinner from "../../Components/Spinner";
@@ -57,17 +56,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
 }));
 
 const getHostName = () => {
-  if (window.location.host.includes("localhost")) {
-    return location.host; // For local development, return a default hostname
-  } else if (window.location.host.includes(".com")) {
-    if (window.location.host.includes("www")) {
-      return window.location.host.split(".")[1] + ".com";
-    } else {
-      return window.location.host;
-    }
-  } else {
-    return "ravenxai.com"; // Default fallback
-  }
+return import.meta.env.VITE_DOMAIN_NAME;
 };
 
 const Login = () => {
@@ -87,15 +76,15 @@ const Login = () => {
   const [facebookLoginLoading, setFacebookLoginLoading] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [forgotEmail, setForgotEmail] = useState("");
+  const subDomain = getSubDomain();
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
-    subdomain: "",
+    subdomain: subDomain || "",
   });
   const [errors, setErrors] = useState({});
   const [hostName, setHostName] = useState(getHostName());
 
-  const subDomain = getSubDomain();
 
   // Create a styles object from the imported styles function
   const classes = {};
@@ -314,9 +303,10 @@ const Login = () => {
                         id="subdomain"
                         label="Subdomain"
                         variant="outlined"
-                        error={!!errors.subdomain}
+                                            error={!!errors.subdomain}
+                                            disabled={subDomain}
                         helperText={errors.subdomain}
-                        value={formValues.subdomain}
+                        value= { subDomain ||  formValues.subdomain}
                         name="subdomain"
                         onChange={handleChange}
                         fullWidth

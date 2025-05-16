@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { Link, useLocation } from "react-router-dom";
 import * as React from "react";
 import {
