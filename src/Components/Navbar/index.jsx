@@ -257,7 +257,7 @@ const Navbar = () => {
     );
 
     const renderUserMenuItems = () => (
-        <>
+        <div>
             {userMenuItems
                 .filter(item => item.visible)
                 .map((item, index) => (
@@ -270,7 +270,7 @@ const Navbar = () => {
                         {item.icon} <Box mx={0.5}>{item.text}</Box>
                     </MenuItem>
                 ))}
-        </>
+        </div>
     );
 
     const renderLogo = () => (

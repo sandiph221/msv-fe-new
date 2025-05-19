@@ -14,7 +14,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./utils/axios.js";
 import { LoadLogoAndBanner } from "./store/actions/SettingActions.js";
-
+import {EditorProvider} from "react-simple-wysiwyg"
 const AppWrapper = () => {
   const dispatch = useDispatch();
   const { logoBannerDataLoaded } = useSelector((state) => state.settings);
@@ -71,8 +71,10 @@ ReactDOM.render(
   <StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <ThemeProvider theme={theme}>
+                <ThemeProvider theme={theme}>
+                    <EditorProvider>
           <AppWrapper />
+                    </EditorProvider>
           <CssBaseline />
         </ThemeProvider>
       </BrowserRouter>

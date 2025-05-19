@@ -61,6 +61,8 @@ import FAQPage from "./Pages/Web/components/FaqPage";
 import { Contact } from "./Pages/Web/components/ContactPage";
 import AdminLogin from "./Components/AdminLogin/AdminLogin";
 import SubdomainLogin from "./Components/SubdomainLogin/SubdomainLogin";
+import { EditorProvider } from "react-simple-wysiwyg";
+
 // Web Pages
 
 function App() {
@@ -81,7 +83,7 @@ function App() {
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             </Route>
 
-      
+
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<Navigate to="/admin/dashboard" replace />} />
@@ -93,23 +95,20 @@ function App() {
                     path="subscription-management"
                     element={<SubscriptionSetting />}
                 />
+
                 <Route path="cms" element={<ContentManagement />} />
-                <Route path="cms/page">
-                    <Route path="new" element={<NewPage />} />
-                    <Route path=":id/edit" element={<NewPage />} />
-                </Route>
-                <Route path="cms/faq">
-                    <Route path="new" element={<FAQ />} />
-                    <Route path=":id/edit" element={<FAQ />} />
-                </Route>
-                <Route path="plan">
-                    <Route path="create" element={<CreatePlan />} />
-                    <Route path=":id" element={<EditPlan />} />
-                </Route>
-                <Route path="account-management" element={<AccountManagement />} />
+                <Route path="cms/page/new" element={<NewPage />} />
+                <Route path="cms/page/:id/edit" element={<NewPage />} />
+                <Route path="cms/faq/new" element={<FAQ />} />
+                <Route path="cms/faq/:id/edit" element={<FAQ />} />
+                <Route path="plan/create" element={<CreatePlan />} />
+                <Route path="plan/:id" element={<EditPlan />} />
                 <Route path="contact-support" element={<ContactSupport />} />
 
             </Route>
+
+
+
 
 
             {/* Protected Routes (customeradmin routes) */}
@@ -124,6 +123,8 @@ function App() {
                 <Route path="content-newsfeed" element={<ContentNewsFeedPage />} />
                 <Route path="subscription-details" element={<SubscriptionDetail />} />
                 <Route path="change-password" element={<ChangePassword />} />
+                <Route path="account-management" element={<AccountManagement />} />
+
                 <Route
                     path="change-password-from-mail"
                     element={<ChangePasswordFromMail />}

@@ -38,7 +38,7 @@ const SubscriptionSetting = () => {
 
   const getSubscriptionPlans = async () => {
     try {
-      const subscriptionPlans = await axios.get("/subscription-plans");
+      const subscriptionPlans = await axios.get("/subscription-plans-all");
 
       if (subscriptionPlans) {
         setPlans(subscriptionPlans.data.data);
@@ -52,12 +52,12 @@ const SubscriptionSetting = () => {
     getSubscriptionPlans().catch(console.log);
   }, []);
 
-  const handleCreatePlan = () => {
-    navigate("/plan/create");
+    const handleCreatePlan = () => {
+    navigate("/admin/plan/create");
   };
 
   const handleEditPlan = (id) => {
-    navigate(`/plan/${id}`);
+    navigate(`/admin/plan/${id}`);
   };
 
   const deletePlan = (data) => {
@@ -93,7 +93,7 @@ const SubscriptionSetting = () => {
           <Buttons
             variant="contained"
             startIcon={<AddIcon />}
-            onClick={handleCreatePlan}
+                      onClick={handleCreatePlan}
             className={classes.button}
           >
             Create New Plan

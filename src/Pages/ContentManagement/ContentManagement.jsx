@@ -167,7 +167,7 @@ const ExpandableRow = ({ page }) => {
         <TableCell align="right">
           <Tooltip title="Edit Page">
             <IconButton
-              href={`/cms/page/${page?.slug}/edit`}
+              href={`cms/page/${page?.slug}/edit`}
               size="small"
               className={classes.actionButton}
             >
@@ -333,7 +333,7 @@ const ContentManagement = () => {
             <Typography variant="h5" style={{ fontWeight: 600 }}>
               Site Pages
             </Typography>
-            <a href="/cms/page/new" style={{ textDecoration: "none" }}>
+            <a href="cms/page/new" style={{ textDecoration: "none" }}>
               <Buttons
                 variant="contained"
                 startIcon={<AddCircleOutline />}
@@ -377,7 +377,7 @@ const ContentManagement = () => {
             <Typography variant="h5" style={{ fontWeight: 600 }}>
               Frequently Asked Questions
             </Typography>
-            <a href="/cms/faq/new" style={{ textDecoration: "none" }}>
+            <a href="cms/faq/new" style={{ textDecoration: "none" }}>
               <Buttons
                 variant="contained"
                 startIcon={<AddCircleOutline />}
@@ -418,7 +418,7 @@ const ContentManagement = () => {
                       <TableCell align="right">
                         <Tooltip title="Edit FAQ">
                           <IconButton
-                            href={`/cms/faq/${faq.id}/edit`}
+                            href={`cms/faq/${faq.id}/edit`}
                             size="small"
                           >
                             <EditIcon fontSize="small" />

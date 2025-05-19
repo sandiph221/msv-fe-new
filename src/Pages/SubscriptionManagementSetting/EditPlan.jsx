@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => styles(theme));
 
 const EditPlan = () => {
     const navigate = useNavigate();
-    const {params} = useParams();
+    const params = useParams();
   const classes = useStyles();
   const [loading, setLoading] = useState(true);
   const [formValues, setFormValues] = useState({

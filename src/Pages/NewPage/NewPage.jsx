@@ -118,7 +118,7 @@ function NewPage() {
       }
     };
 
-    fetchPlanData();
+      fetchPlanData();
   }, [params.id]);
 
   const addSection = () => {
