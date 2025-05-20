@@ -154,7 +154,7 @@ const Navbar = () => {
             visible: !isSuperAdmin
         },
         {
-            to: "/contact-support",
+            to: "/admin/contact-support",
             icon: <CallSharpIcon />,
             text: "Customer Support",
             selected: pathname === "/contact-support",

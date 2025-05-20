@@ -45,7 +45,7 @@ export const creatRespondSupport = (supportData, id) => (dispatch) =>
       response: supportData.message,
     };
 
-    Axios.put(`/contact-support/${id}`, data)
+    Axios.put(`/contact-support/${id}/respond`, data)
       .then((response) => {
         toast.success(response.data.res_type);
         resolve(response);
