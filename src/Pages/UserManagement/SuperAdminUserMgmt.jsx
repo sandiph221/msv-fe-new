@@ -507,11 +507,11 @@ import {
       { id: "last_name", label: "Last Name", minWidth: 170 },
       { id: "email", label: "Email", minWidth: 170 },
       { id: "position", label: "Position", minWidth: 170 },
-      {
-        id: "subdomain",
-        label: "Subdomain",
-        minWidth: 170,
-        format: (value) => value.CustomerSubdomain.subdomain,
+        {
+            id: "subdomain",
+            label: "Subdomain",
+            minWidth: 170,
+            format: (value) => value.CustomerSubdomain ? value.CustomerSubdomain.subdomain : 'N/A',
       },
       { id: "action", label: "Action", minWidth: 80, align: "right" },
     ];

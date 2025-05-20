@@ -13,7 +13,7 @@ import {
   TableRow,
   Typography,
 } from "@material-ui/core";
-
+import { BiSync } from "react-icons/bi";
 import AddIcon from "@material-ui/icons/Add";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import axios from "axios";
@@ -24,6 +24,7 @@ import styles from "./Styles";
 import Buttons from "Components/Buttons/Buttons";
 import { Delete, Edit } from "@material-ui/icons";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const useStyles = makeStyles((theme) => styles(theme));
 
@@ -72,7 +73,17 @@ const SubscriptionSetting = () => {
     } catch (error) {
       console.log("error", error);
     }
-  };
+    };
+    const handleStripeSync = async () => {
+        try {
+            await axios.post("/subscription-plans-sync");
+            toast.success("Stripe Sync Successfully");
+        }
+        catch (err) {
+            console.log(err);
+            toast.error("Something went wrong");
+        }
+    }
 
   return (
     <Layout>
@@ -98,6 +109,15 @@ const SubscriptionSetting = () => {
           >
             Create New Plan
           </Buttons>
+
+                  <Buttons
+                      variant="contained"
+                      startIcon={<BiSync />}
+                      onClick={handleStripeSync}
+                      className={classes.button}
+                  >
+                      Sync with Stripe
+                  </Buttons>
 
           <TableContainer
             style={{
