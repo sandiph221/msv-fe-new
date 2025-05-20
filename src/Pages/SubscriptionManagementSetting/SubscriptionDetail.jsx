@@ -58,13 +58,7 @@ const SubscriptionDetail = () => {
   const currentPlanPrice = currentPlan ? currentPlan.PlanTypePrices.find(a => a.id  === currentSubscription?.plan_type_price_id) : null
 
   return (
-    <Layout>
-      <Grid
-        className={classes.row}
-        container
-        md={12}
-        spacing={0}
-      >
+
         <Container
           maxWidth='lg'
           lg={12}
@@ -185,7 +179,7 @@ const SubscriptionDetail = () => {
                     variant='contained'
                     color="secondary"
                     className={classes.button}
-                    onClick={() => navigate('/upgrade')}
+                    onClick={() => navigate('upgrade')}
                   >
                     Change Plan
                   </Button>
@@ -199,8 +193,6 @@ const SubscriptionDetail = () => {
           </Box>
         </Container>
 
-      </Grid>
-    </Layout>
   );
 };
 

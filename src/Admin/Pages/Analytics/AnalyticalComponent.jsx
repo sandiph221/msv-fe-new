@@ -55,12 +55,20 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   chartContainer: {
-    marginBottom: 32,
+    flex: 1,
     padding: 24,
     borderRadius: 8,
     backgroundColor: theme.palette.background.paper,
     border: "1px solid rgba(0, 0, 0, 0.23)",
     boxShadow: "none",
+  },
+  chartsRow: {
+    display: "flex",
+    gap: 24,
+    marginBottom: 32,
+    "@media (max-width: 960px)": {
+      flexDirection: "column",
+    },
   },
   chartHeader: {
     display: "flex",
@@ -180,73 +188,76 @@ function Analytics() {
           </Paper>
         </div>
 
-        {/* User Analytics */}
-        <Paper className={classes.chartContainer}>
-          <div className={classes.chartHeader}>
-            <Typography variant="h6">User Growth</Typography>
-            <Select
-              className={classes.roleFilter}
-              value={selectedRole}
-              onChange={(e) => setSelectedRole(e.target.value)}
-              variant="outlined"
-              size="small"
-            >
-              <MenuItem value="all">All Roles</MenuItem>
-              <MenuItem value="super-admin">Super Admin</MenuItem>
-              <MenuItem value="customer-admin">Customer Admin</MenuItem>
-              <MenuItem value="customer-viewer">Customer Viewer</MenuItem>
-            </Select>
-          </div>
-          <div className={classes.chartWrapper}>
-            <ResponsiveContainer>
-              {userStats.length > 0 ? (
-                <LineChart data={userStats}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="joinedDate" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line
-                    type="monotone"
-                    dataKey="count"
-                    stroke={"#FBE281"}
-                    name="Users"
-                  />
-                </LineChart>
-              ) : (
-                <Typography align="center" style={{ marginTop: "150px" }}>
-                  No user data available
-                </Typography>
-              )}
-            </ResponsiveContainer>
-          </div>
-        </Paper>
+        {/* Charts Row */}
+        <div className={classes.chartsRow}>
+          {/* User Analytics */}
+          <Paper className={classes.chartContainer}>
+            <div className={classes.chartHeader}>
+              <Typography variant="h6">User Growth</Typography>
+              <Select
+                className={classes.roleFilter}
+                value={selectedRole}
+                onChange={(e) => setSelectedRole(e.target.value)}
+                variant="outlined"
+                size="small"
+              >
+                <MenuItem value="all">All Roles</MenuItem>
+                <MenuItem value="super-admin">Super Admin</MenuItem>
+                <MenuItem value="customer-admin">Customer Admin</MenuItem>
+                <MenuItem value="customer-viewer">Customer Viewer</MenuItem>
+              </Select>
+            </div>
+            <div className={classes.chartWrapper}>
+              <ResponsiveContainer>
+                {userStats.length > 0 ? (
+                  <LineChart data={userStats}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="joinedDate" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Line
+                      type="monotone"
+                      dataKey="count"
+                      stroke={"#FBE281"}
+                      name="Users"
+                    />
+                  </LineChart>
+                ) : (
+                  <Typography align="center" style={{ marginTop: "150px" }}>
+                    No user data available
+                  </Typography>
+                )}
+              </ResponsiveContainer>
+            </div>
+          </Paper>
 
-        {/* Subscription Analytics */}
-        <Paper className={classes.chartContainer}>
-          <Typography variant="h6" gutterBottom>
-            Subscription Distribution
-          </Typography>
-          <div className={classes.chartWrapper}>
-            <ResponsiveContainer>
-              {subscriptionStats.subscriptions &&
-              subscriptionStats.subscriptions.length > 0 ? (
-                <BarChart data={subscriptionStats.subscriptions}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="planName" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="count" fill={"#FBE281"} name="Subscriptions" />
-                </BarChart>
-              ) : (
-                <Typography align="center" style={{ marginTop: "150px" }}>
-                  No subscription data available
-                </Typography>
-              )}
-            </ResponsiveContainer>
-          </div>
-        </Paper>
+          {/* Subscription Analytics */}
+          <Paper className={classes.chartContainer}>
+            <Typography variant="h6" gutterBottom>
+              Subscription Distribution
+            </Typography>
+            <div className={classes.chartWrapper}>
+              <ResponsiveContainer>
+                {subscriptionStats.subscriptions &&
+                subscriptionStats.subscriptions.length > 0 ? (
+                  <BarChart data={subscriptionStats.subscriptions}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="planName" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="count" fill={"#FBE281"} name="Subscriptions" />
+                  </BarChart>
+                ) : (
+                  <Typography align="center" style={{ marginTop: "150px" }}>
+                    No subscription data available
+                  </Typography>
+                )}
+              </ResponsiveContainer>
+            </div>
+          </Paper>
+        </div> {/* Close Charts Row */}
       </div>
     </Layout>
   );

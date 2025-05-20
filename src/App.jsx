@@ -87,10 +87,11 @@ function App() {
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<Navigate to="/admin/dashboard" replace />} />
-                <Route path="dashboard" element={<AdminDashboardPage />} />
+                <Route path="dashboard" element={<Analytics />} />
+                <Route path="dashboard/old" element={<AdminDashboardPage />} />
                 <Route path="user-activity" element={<UserActivity />} />
                 <Route path="user-management" element={<SuperAdminUserMgmt />} />
-                <Route path="analytics" element={<Analytics />} />
+                {/* <Route path="analytics" element={<Analytics />} /> */}
                 <Route
                     path="subscription-management"
                     element={<SubscriptionSetting />}
@@ -121,7 +122,6 @@ function App() {
                 <Route path="user-management" element={<CustomerAdminUserMgmt />} />
                 <Route path="social-listening" element={<SocialListeningPage />} />
                 <Route path="content-newsfeed" element={<ContentNewsFeedPage />} />
-                <Route path="subscription-details" element={<SubscriptionDetail />} />
                 <Route path="change-password" element={<ChangePassword />} />
                 <Route path="account-management" element={<AccountManagement />} />
 

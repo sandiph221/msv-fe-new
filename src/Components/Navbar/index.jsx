@@ -32,6 +32,7 @@ import {
     BarChart,
     CreditCard,
     Description,
+    Settings,
 } from "@material-ui/icons";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -172,23 +173,18 @@ const Navbar = () => {
     // User menu items configuration based on user role
     const userMenuItems = [
         {
-            to: "/user/account-management",
-            icon: <AccountBox fontSize="small" />,
-            text: "Account Settings",
-            visible: isCustomerAdmin
-        },
-        {
             to: "/user/profile",
             icon: <AccountBox fontSize="small" />,
-            text: "Profile",
+            text: "Edit Profile",
             visible: !isSuperAdmin
         },
         {
-            to: "/user/subscription-details",
-            icon: <CreditCard fontSize="small" />,
-            text: "Subscription",
+            to: "/user/account-management",
+            icon: <Settings fontSize="small" />,
+            text: "Settings",
             visible: isCustomerAdmin
         },
+  
         {
             to: "/user/user-management",
             icon: <SupervisorAccountIcon fontSize="small" />,
