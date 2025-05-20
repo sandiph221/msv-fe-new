@@ -74,7 +74,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/about" element={<AboutPage />} />
-                <Route path="/admin-login" element={<AdminLogin />} />
+                <Route path="/admin/login" element={<AdminLogin />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/faq" element={<FAQPage />} />
                 <Route path="/subdomain-login" element={<SubdomainLogin />} />

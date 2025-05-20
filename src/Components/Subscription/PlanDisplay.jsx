@@ -1,73 +1,4 @@
-import {
-    Grid,
-    Card,
-    CardContent,
-    Typography,
-    Box,
-    Chip,
-    Button,
-    useTheme,
-    alpha,
-    styled,
-    Divider
-} from "@material-ui/core";
-
-
-// Styled components
-const PriceItemContainer = styled(Box)(({ theme }) => ({
-    display: "flex",
-    flexDirection: 'row',
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-    textTransform: 'capitalize',
-    padding: theme.spacing(2),
-    transition: "background-color 0.3s ease",
-    borderRadius: theme.shape.borderRadius,
-    "&:hover": {
-        backgroundColor: alpha(theme.palette.primary.main, 0.04),
-    }
-}));
-
-const PlanCard = styled(Card)(({ theme }) => ({
-    display: "flex",
-    flexDirection: "column",
-    transition: "transform 0.3s ease, box-shadow 0.3s ease",
-    "&:hover": {
-        transform: "translateY(-4px)",
-        boxShadow: theme.shadows[4],
-    }
-}));
-
-const DiscountChip = styled(Chip)(({ theme }) => ({
-    marginLeft: theme.spacing(1),
-    backgroundColor: alpha(theme.palette.success.main, 0.1),
-    color: theme.palette.success.dark,
-    fontWeight: 600,
-}));
-
-const CurrentPlanButton = styled(Button)(({ theme }) => ({
-    borderRadius: 20,
-    padding: "4px 12px",
-    fontSize: "0.75rem",
-    backgroundColor: alpha(theme.palette.primary.main, 0.1),
-    color: theme.palette.primary.main,
-    fontWeight: 600,
-    "&:hover": {
-        backgroundColor: alpha(theme.palette.primary.main, 0.2),
-    }
-}));
-
-const SelectPlanButton = styled(Button)(({ theme }) => ({
-    borderRadius: 20,
-    padding: "4px 12px",
-    fontSize: "0.75rem",
-    borderColor: theme.palette.primary.main,
-    color: theme.palette.primary.main,
-    "&:hover": {
-        backgroundColor: alpha(theme.palette.primary.main, 0.1),
-    }
-}));
+import { useState } from "react";
 
 const PriceItem = ({
     id,
@@ -77,108 +8,100 @@ const PriceItem = ({
     discountPercentage,
     currentPlanId
 }) => {
-    const theme = useTheme();
     const isCurrentPlan = currentPlanId === id;
 
     return (
-        <PriceItemContainer>
-        <Box sx={{ flexGrow: 1 }}>
-            <Typography
-            sx={{
-                fontWeight: 600,
-                fontSize: "1rem",
-                color: theme.palette.mode === "dark" ? "#fff" : "#122740",
-                marginBottom: 0.5,
-            }}
-            >
-            {duration}
-            </Typography>
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Typography
-                variant="body2"
-                sx={{
-                fontSize: "0.875rem",
-                color: theme.palette.text.secondary,
-                }}
-            >
-                AUD {price}
-            </Typography>
-            {discountPercentage > 0 && (
-                <DiscountChip size="small" label={`${discountPercentage}% off`} />
-            )}
-            </Box>
-        </Box>
+        <div className="flex items-center justify-between w-full p-4 rounded-md transition-colors duration-300 hover:bg-blue-50">
+            <div className="flex-grow">
+                <h4 className="font-semibold text-gray-800 capitalize mb-1">
+                    {duration}
+                </h4>
+                <div className="flex items-center">
+                    <span className="text-sm text-gray-600">
+                        AUD {price}
+                    </span>
+                    {discountPercentage > 0 && (
+                        <span className="ml-2 px-2 py-0.5 text-xs font-semibold bg-green-100 text-green-800 rounded-full">
+                            {discountPercentage}% off
+                        </span>
+                    )}
+                </div>
+            </div>
 
-        <Box>
-            {isCurrentPlan ? (
-            <CurrentPlanButton size="small" variant="contained" disableElevation>
-                Current Plan
-            </CurrentPlanButton>
-            ) : (
-            <SelectPlanButton
-                onClick={handleClick}
-                size="small"
-                variant="outlined"
-            >
-                Select Plan
-            </SelectPlanButton>
-            )}
-        </Box>
-        </PriceItemContainer>
+            <div>
+                {isCurrentPlan ? (
+                    <button
+                        className="px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-700 cursor-default"
+                        disabled
+                    >
+                        Current Plan
+                    </button>
+                ) : (
+                    <button
+                        onClick={handleClick}
+                        className="px-3 py-1 text-xs font-semibold rounded-full border border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors duration-200"
+                    >
+                        Select Plan
+                    </button>
+                )}
+            </div>
+        </div>
     );
 };
 
 export default function PlanDisplay({
-    plans,
+    plans = [],
     onPlanClick,
     currentPlanId,
 }) {
+    const [hoveredPlan, setHoveredPlan] = useState(null);
+
+    if (!plans.length) {
+        return (
+            <div className="text-center py-8 text-gray-500">
+                No subscription plans available at the moment.
+            </div>
+        );
+    }
+
     return (
-        <Grid container spacing={3} style={{flexGrow: "1", alignItems: "center", justifyContent: "center", margin: 20}}>
-        {plans.map((plan) => (
-            <Grid key={`plan-${plan.id}`} item xs={12} sm={6} md={4}>
-            <PlanCard variant="outlined">
-                <CardContent sx={{ p: 3, flexGrow: 1 }}>
-                <Typography
-                    variant="h5"
-                    component="h2"
-                    sx={{
-                    mb: 1.5,
-                    fontWeight: 600,
-                    color: theme => theme.palette.mode === "dark" ? "#fff" : "#122740"
-                    }}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 py-6">
+            {plans.map((plan) => (
+                <div
+                    key={`plan-${plan.id}`}
+                    className={`border rounded-lg overflow-hidden transition-all duration-300 ${hoveredPlan === plan.id ? "transform -translate-y-1 shadow-lg" : "shadow"
+                        }`}
+                    onMouseEnter={() => setHoveredPlan(plan.id)}
+                    onMouseLeave={() => setHoveredPlan(null)}
                 >
-                    {plan.name}
-                </Typography>
-                <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ mb: 3 }}
-                >
-                    {plan.description}
-                </Typography>
+                    <div className="p-6 flex flex-col h-full">
+                        <h3 className="text-xl font-bold text-gray-800 mb-2">
+                            {plan.name}
+                        </h3>
+                        <p className="text-gray-600 text-sm mb-6 flex-grow">
+                            {plan.description}
+                        </p>
 
-                <Divider sx={{ my: 2 }} />
+                        <div className="h-px w-full bg-gray-200 my-4"></div>
 
-                <Box sx={{ mt: 2 }}>
-                    {plan.PlanTypePrices.map((price, index) => (
-                    <Box key={`price-${price.id}`}>
-                        {index > 0 && <Divider sx={{ my: 1 }} />}
-                        <PriceItem
-                        id={price.id}
-                        currentPlanId={currentPlanId}
-                        handleClick={() => onPlanClick(price)}
-                        duration={price.duration}
-                        price={price.price}
-                        discountPercentage={price.discount_percentage}
-                        />
-                    </Box>
-                    ))}
-                </Box>
-                </CardContent>
-            </PlanCard>
-            </Grid>
-        ))}
-        </Grid>
+                        <div className="mt-4">
+                            {plan.PlanTypePrices && plan.PlanTypePrices.map((price, index) => (
+                                <div key={`price-${price.id}`}>
+                                    {index > 0 && <div className="h-px w-full bg-gray-200 my-2"></div>}
+                                    <PriceItem
+                                        id={price.id}
+                                        currentPlanId={currentPlanId}
+                                        handleClick={() => onPlanClick(price)}
+                                        duration={price.duration}
+                                        price={price.price}
+                                        discountPercentage={price.discount_percentage}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </div>
     );
 }
