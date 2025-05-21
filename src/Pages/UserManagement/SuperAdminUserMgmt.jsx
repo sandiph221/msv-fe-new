@@ -11,6 +11,7 @@ import {
     Table,
     TableBody,
     TableCell,
+    Select,
     TableContainer,
     TableHead,
     TablePagination,
@@ -124,6 +125,7 @@ const SuperAdminUserManagement = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [selectedRow, setSelectedRow] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
+    const [selectedRole, setSelectedRole] = useState("super-admin");
 
     const { customers, getCustomersLoading } = useSelector((state) => state.customerInfo);
 
@@ -143,21 +145,18 @@ const SuperAdminUserManagement = () => {
     ];
 
     // Fetch customers on component mount
-    useEffect(() => {
-        fetchCustomers();
-    }, []);
 
     // Add useEffect for debounced search
     useEffect(() => {
         const handler = setTimeout(() => {
-            fetchSearchCustomers(searchQuery);
+            fetchSearchCustomers(searchQuery,selectedRole);
         }, 500); // Debounce for 500ms
 
         // Cleanup function to clear the timer if searchQuery changes
         return () => {
             clearTimeout(handler);
         };
-    }, [searchQuery, page]); // Rerun effect when searchQuery or page changes
+    }, [searchQuery, page ,selectedRole]); // Rerun effect when searchQuery or page changes
 
     // Update form values when editing a user
     useEffect(() => {
@@ -190,8 +189,8 @@ const SuperAdminUserManagement = () => {
         await dispatch(PaginateCustomer(page));
     }
 
-    async function fetchSearchCustomers(query) {
-        await dispatch(SearchCustomer(page, query));
+    async function fetchSearchCustomers(query,role) {
+        await dispatch(SearchCustomer(page, query,role));
     }
 
     // Event handlers
@@ -199,11 +198,6 @@ const SuperAdminUserManagement = () => {
         setSearchQuery(e.target.value);
     };
 
-    // Remove handleSearchSubmit as search will be automatic
-    // const handleSearchSubmit = (e) => {
-    //     e.preventDefault();
-    //     fetchSearchCustomers(searchQuery);
-    // };
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -443,6 +437,20 @@ const SuperAdminUserManagement = () => {
                                             ),
                                         }}
                                     />
+
+                                    <Select
+                                                    className={classes.roleFilter}
+                                                    value={selectedRole}
+                                                    onChange={(e) => setSelectedRole(e.target.value)}
+                                                    variant="outlined"
+                                                    size="small"
+                                                  >
+                                                    <MenuItem value="all">All Roles</MenuItem>
+                                                    <MenuItem value="super-admin">Super Admin</MenuItem>
+                                                    <MenuItem value="customer-admin">Customer Admin</MenuItem>
+                                                    <MenuItem value="customer-viewer">Customer Viewer</MenuItem>
+                                    </Select>
+                                    
                                 </Grid>
                             </Grid>
                             {/* End removed form element */}

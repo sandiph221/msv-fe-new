@@ -79,7 +79,7 @@ export const GetCustomer = () => (dispatch) => {
     });
 };
 
-export const SearchCustomer = (page, query) => (dispatch) => {
+export const SearchCustomer = (page, query,role) => (dispatch) => {
   dispatch({
     type: 'GET_CUSTOMER_REQUEST',
   });
@@ -88,7 +88,8 @@ export const SearchCustomer = (page, query) => (dispatch) => {
     .get('/users', {
       params: {
         page,
-        query,
+            query,
+        role
       },
     })
     .then((response) => {
