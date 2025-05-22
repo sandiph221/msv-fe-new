@@ -19,6 +19,9 @@ import {
     TextField,
     Typography,
     withStyles,
+    FormControl,
+    InputLabel,
+    Chip,
 } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import Layout from "../../Components/Layout";
@@ -28,6 +31,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Buttons from "Components/Buttons/Buttons";
 import UploadImg from "Components/UploadImg";
 import { connect, useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 import { toast } from "react-toastify";
 import Alert from "../../Components/AlertBox/Alert";
 import Spinner from "../../Components/Spinner";
@@ -77,9 +81,55 @@ const Styles = (theme) => ({
         fontSize: '0.75rem',
         marginTop: theme.spacing(0.5),
     },
+    filterSelect: {
+        minWidth: 150,
+        marginLeft: theme.spacing(1),
+    },
+    filterContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+    },
+    priceIdChips: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: theme.spacing(0.5),
+        marginTop: theme.spacing(1),
+        maxWidth: 400,
+    },
+    chip: {
+        margin: theme.spacing(0.5),
+    },
 });
 
 const useStyles = makeStyles((theme) => Styles(theme));
+
+const getAllPlans = async () => {
+    console.log("Fetching all subscription plans...");
+    try {
+        const subscriptionPlans = await axios.get("/subscription-plans-all");
+
+        if (subscriptionPlans) {
+            const a = subscriptionPlans.data.data;
+            const parsedData = [];
+            a.forEach(plan => {
+                const planName = plan.name;
+                plan.PlanTypePrices.forEach(priceDetails => {
+                    const duration = priceDetails.duration;
+                    parsedData.push({
+                        name: planName,
+                        id: priceDetails.id,
+                        duration: duration
+                    });
+                });
+            });
+            return parsedData;
+        }
+    } catch (error) {
+        console.error("Error fetching plans:", error);
+        return [];
+    }
+}
 
 const StyledTextField = withStyles({
     root: {
@@ -127,6 +177,14 @@ const SuperAdminUserManagement = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedRole, setSelectedRole] = useState("super-admin");
 
+    // New state for plan filters
+    const [planTypes, setPlanTypes] = useState([]);
+    const [frequencies, setFrequencies] = useState([]);
+    const [selectedPlanType, setSelectedPlanType] = useState("all");
+    const [selectedFrequency, setSelectedFrequency] = useState("all");
+    const [priceIds, setPriceIds] = useState([]);
+    const [plansData, setPlansData] = useState([]);
+
     const { customers, getCustomersLoading } = useSelector((state) => state.customerInfo);
 
     // Table columns definition
@@ -144,19 +202,74 @@ const SuperAdminUserManagement = () => {
         { id: "action", label: "Action", minWidth: 80, align: "right" },
     ];
 
-    // Fetch customers on component mount
+    // Fetch plans data on component mount
+    useEffect(() => {
+        const fetchPlans = async () => {
+            const plans = await getAllPlans();
+            setPlansData(plans || []);
+
+            // Extract unique plan types and frequencies
+            const uniquePlanTypes = [...new Set(plans.map(plan => plan.name))];
+            const uniqueFrequencies = [...new Set(plans.map(plan => plan.duration))];
+
+            setPlanTypes(uniquePlanTypes);
+            setFrequencies(uniqueFrequencies);
+        };
+
+        fetchPlans();
+    }, []);
+
+    // Update priceIds when plan type or frequency changes
+    useEffect(() => {
+        if (!plansData.length) return;
+
+        let filteredPriceIds = [];
+
+        // Case 1: Specific plan type and All frequencies
+        if (selectedPlanType !== "all" && selectedFrequency === "all") {
+            filteredPriceIds = plansData
+                .filter(plan => plan.name === selectedPlanType && plan.id !== null)
+                .map(plan => plan.id);
+        }
+        // Case 2: All plan types and specific frequency
+        else if (selectedPlanType === "all" && selectedFrequency !== "all") {
+            filteredPriceIds = plansData
+                .filter(plan => plan.duration === selectedFrequency && plan.id !== null)
+                .map(plan => plan.id);
+        }
+        // Case 3: Specific plan type and specific frequency
+        else if (selectedPlanType !== "all" && selectedFrequency !== "all") {
+            const matchingPlan = plansData.find(
+                plan => plan.name === selectedPlanType && plan.duration === selectedFrequency
+            );
+            if (matchingPlan && matchingPlan.id !== null) {
+                filteredPriceIds = [matchingPlan.id];
+            }
+        }
+        // Case 4: All plan types and All frequencies - no filtering needed
+        else if (selectedPlanType === "all" && selectedFrequency === "all") {
+            //loop through all plans and get all price ids
+            filteredPriceIds = plansData
+                .filter(plan => plan.id !== null)
+                .map(plan => plan.id);
+            }
+        setPriceIds(filteredPriceIds);
+        
+    }, [selectedPlanType, selectedFrequency, plansData]);
 
     // Add useEffect for debounced search
     useEffect(() => {
         const handler = setTimeout(() => {
-            fetchSearchCustomers(searchQuery,selectedRole);
+            
+            fetchSearchCustomers(searchQuery, selectedRole, priceIds);
+
         }, 500); // Debounce for 500ms
 
         // Cleanup function to clear the timer if searchQuery changes
         return () => {
             clearTimeout(handler);
         };
-    }, [searchQuery, page ,selectedRole]); // Rerun effect when searchQuery or page changes
+    }, [searchQuery, page, selectedRole, priceIds]); // Rerun effect when searchQuery, page, selectedRole, or priceIds changes
 
     // Update form values when editing a user
     useEffect(() => {
@@ -189,8 +302,8 @@ const SuperAdminUserManagement = () => {
         await dispatch(PaginateCustomer(page));
     }
 
-    async function fetchSearchCustomers(query,role) {
-        await dispatch(SearchCustomer(page, query,role));
+    async function fetchSearchCustomers(query, role, priceIds) {
+        await dispatch(SearchCustomer(page, query, role, priceIds));
     }
 
     // Event handlers
@@ -198,6 +311,13 @@ const SuperAdminUserManagement = () => {
         setSearchQuery(e.target.value);
     };
 
+    const handlePlanTypeChange = (e) => {
+        setSelectedPlanType(e.target.value);
+    };
+
+    const handleFrequencyChange = (e) => {
+        setSelectedFrequency(e.target.value);
+    };
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -404,6 +524,13 @@ const SuperAdminUserManagement = () => {
         }));
     };
 
+    // Helper function to truncate price IDs for display
+    const truncatePriceId = (priceId) => {
+        if (!priceId) return '';
+        if (priceId.length <= 12) return priceId;
+        return `${priceId.substring(0, 6)}...${priceId.substring(priceId.length - 6)}`;
+    };
+
     return (
         <Layout>
             <div className={classes.main}>
@@ -414,14 +541,13 @@ const SuperAdminUserManagement = () => {
                                 variant="contained"
                                 color="primary"
                                 onClick={() => handleModalOpen()}
-                                style={{ marginBottom: "16px",  marginRight: "16px" }}
-
+                                style={{ marginBottom: "16px", marginRight: "16px" }}
                             >
                                 Add User
                             </Buttons>
 
-                            {/* Removed form element around search */}
-                            <Grid container spacing={1} alignItems="center">
+                            {/* Search and Filter Section */}
+                            <Grid container spacing={1} alignItems="center" className={classes.filterContainer}>
                                 <Grid item>
                                     <StyledTextField
                                         className={classes.searchField}
@@ -431,30 +557,72 @@ const SuperAdminUserManagement = () => {
                                         onChange={handleSearchChange}
                                         InputProps={{
                                             endAdornment: (
-                                                <IconButton>{/* Removed type="submit" */}
+                                                <IconButton>
                                                     <Search />
                                                 </IconButton>
                                             ),
                                         }}
                                     />
+                                </Grid>
 
-                                    <Select
-                                                    className={classes.roleFilter}
-                                                    value={selectedRole}
-                                                    onChange={(e) => setSelectedRole(e.target.value)}
-                                                    variant="outlined"
-                                                    size="small"
-                                                  >
-                                                    <MenuItem value="all">All Roles</MenuItem>
-                                                    <MenuItem value="super-admin">Super Admin</MenuItem>
-                                                    <MenuItem value="customer-admin">Customer Admin</MenuItem>
-                                                    <MenuItem value="customer-viewer">Customer Viewer</MenuItem>
-                                    </Select>
-                                    
+                                <Grid item>
+                                    <FormControl variant="outlined" className={classes.filterSelect} size="small">
+                                        <InputLabel id="role-select-label">Role</InputLabel>
+                                        <Select
+                                            labelId="role-select-label"
+                                            value={selectedRole}
+                                            onChange={(e) => setSelectedRole(e.target.value)}
+                                            label="Role"
+                                        >
+                                            <MenuItem value="all">All Roles</MenuItem>
+                                            <MenuItem value="super-admin">Super Admin</MenuItem>
+                                            <MenuItem value="customer-admin">Customer Admin</MenuItem>
+                                            <MenuItem value="customer-viewer">Customer Viewer</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+
+                                <Grid item>
+                                    <FormControl variant="outlined" className={classes.filterSelect} size="small">
+                                        <InputLabel id="plan-type-select-label">Plan Type</InputLabel>
+                                        <Select
+                                            labelId="plan-type-select-label"
+                                            value={selectedPlanType}
+                                            onChange={handlePlanTypeChange}
+                                            label="Plan Type"
+                                        >
+                                            <MenuItem value="all">All Plans</MenuItem>
+                                            {planTypes.map((planType) => (
+                                                <MenuItem key={planType} value={planType}>
+                                                    {planType}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+
+                                <Grid item>
+                                    <FormControl variant="outlined" className={classes.filterSelect} size="small">
+                                        <InputLabel id="frequency-select-label">Frequency</InputLabel>
+                                        <Select
+                                            labelId="frequency-select-label"
+                                            value={selectedFrequency}
+                                            onChange={handleFrequencyChange}
+                                            label="Frequency"
+                                        >
+                                            <MenuItem value="all">All Frequencies</MenuItem>
+                                            {frequencies.map((frequency) => (
+                                                <MenuItem key={frequency} value={frequency}>
+                                                    {frequency.charAt(0).toUpperCase() + frequency.slice(1)}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
                                 </Grid>
                             </Grid>
-                            {/* End removed form element */}
                         </Grid>
+
+                
 
                         <Grid container>
                             {getCustomersLoading ? (
@@ -477,9 +645,9 @@ const SuperAdminUserManagement = () => {
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                {customers?.users &&
-                                                    customers.users
-                                                        .slice(
+                                                {customers?.users 
+                                                       && priceIds.length > 0 &&
+                                                        customers.users.slice(
                                                             page * rowsPerPage,
                                                             page * rowsPerPage + rowsPerPage
                                                         )

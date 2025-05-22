@@ -79,17 +79,18 @@ export const GetCustomer = () => (dispatch) => {
     });
 };
 
-export const SearchCustomer = (page, query,role) => (dispatch) => {
+export const SearchCustomer = (page, query,role,priceId) => (dispatch) => {
   dispatch({
     type: 'GET_CUSTOMER_REQUEST',
   });
 
-  axios
+    axios
     .get('/users', {
       params: {
         page,
             query,
-        role
+            role,
+        priceId
       },
     })
     .then((response) => {
