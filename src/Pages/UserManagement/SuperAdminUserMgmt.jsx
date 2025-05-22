@@ -105,7 +105,6 @@ const Styles = (theme) => ({
 const useStyles = makeStyles((theme) => Styles(theme));
 
 const getAllPlans = async () => {
-    console.log("Fetching all subscription plans...");
     try {
         const subscriptionPlans = await axios.get("/subscription-plans-all");
 

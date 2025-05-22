@@ -25,6 +25,7 @@ import Buttons from "Components/Buttons/Buttons";
 import { Delete, Edit } from "@material-ui/icons";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import SubdomainSubscriptionAnalytics from "./SubdomainSubscriptionAnalytics";
 
 const useStyles = makeStyles((theme) => styles(theme));
 
@@ -182,7 +183,8 @@ const SubscriptionSetting = () => {
               </TableBody>
             </Table>
           </TableContainer>
-        </div>
+              </div>
+              <SubdomainSubscriptionAnalytics/>
       </Grid>
     </Layout>
   );
