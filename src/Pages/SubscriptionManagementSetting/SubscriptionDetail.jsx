@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => styles(theme));
 const SubscriptionDetail = () => {
     const theme = useTheme();
     const navigate = useNavigate(); 
-  const { user } = useSelector((state) => state.auth);
+    const { user } = useSelector((state) => state.auth);
   const [currentSubscription, setCurrentSubscription] = useState();
   const [plans, setPlans] = useState([]);
 
@@ -41,7 +41,7 @@ const SubscriptionDetail = () => {
   const classes = useStyles();
   const fetchCurrentSubscription = async () => {
     const currentSubscription = await axios.get('/subscription')
-    setCurrentSubscription(currentSubscription.data.data)
+      setCurrentSubscription(currentSubscription.data.data)
   }
 
   useEffect(() => {
@@ -156,8 +156,8 @@ const SubscriptionDetail = () => {
                   >
                     <Typography className={classes.text}>
                       Trial left duration:{' '}
-                      {moment(user.trial_end_at).diff(moment(), 'days') + 1 >= 0
-                        ? moment(user.trial_end_at).diff(moment(), 'days') +
+                      {moment(currentSubscription?.trial_ends_at).diff(moment(), 'days') + 1 >= 0
+                                          ? moment(currentSubscription?.trial_ends_at).diff(moment(), 'days') +
                           1 +
                           ' days'
                         : 'Trial is expired'}
@@ -179,7 +179,7 @@ const SubscriptionDetail = () => {
                     variant='contained'
                     color="secondary"
                     className={classes.button}
-                    onClick={() => navigate('upgrade')}
+                    onClick={() => navigate('/user/upgrade')}
                   >
                     Change Plan
                   </Button>

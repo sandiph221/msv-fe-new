@@ -3,7 +3,7 @@ import {
   Box,
   Button,
   Container,
-  Dialog,
+    Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
@@ -15,6 +15,9 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import axios from "axios";
+import Buttons from "../../Components/Buttons/Buttons";
+
+
 import PlanDisplay from "Components/Subscription/PlanDisplay";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -85,8 +88,7 @@ const UpgradePlan = (props) => {
   };
 
   return (
-    <>
-      {/* // <Layout> */}
+      <Layout>
       <div
         style={{
           marginTop: 100,
@@ -99,8 +101,8 @@ const UpgradePlan = (props) => {
         <Box className={classes.box}>
           <div className={classes.flexRow}>
             <Typography variant="h2" className={classes.heading}>
-              Subscription Details
-            </Typography>
+                          Change Your Plan
+                      </Typography>
           </div>
 
           <Divider style={{ marginBlock: 20 }} />
@@ -158,7 +160,7 @@ const UpgradePlan = (props) => {
               <Button variant="outlined" onClick={handleClose}>
                 Cancel
               </Button>
-              {/* <Buttons
+              <Buttons
                 variant="outlined"
                 color="secondary"
                 onClick={() =>
@@ -175,13 +177,12 @@ const UpgradePlan = (props) => {
                 }
               >
                 Proceed
-              </Buttons> */}
+              </Buttons>
             </DialogActions>
           </>
         )}
       </Dialog>
-    </>
-    // </Layout>
+</Layout>
   );
 };
 

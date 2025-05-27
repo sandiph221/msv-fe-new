@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import tailwindcss from "tailwindcss";
+import fs from 'fs';
 import autoprefixer from "autoprefixer";
 
 // https://vite.dev/config/
@@ -19,7 +20,13 @@ export default defineConfig({
       store: path.resolve(__dirname, "./src/store"),
       utils: path.resolve(__dirname, "./src/utils"),
     },
-  },
+    },
+//     server: {
+//         https: {
+//           key: fs.readFileSync("./public/key.pem"),
+//           cert: fs.readFileSync("./public/cert.pem")
+//       }
+//   },
   optimizeDeps: {
     include: ["xlsx"],
   },

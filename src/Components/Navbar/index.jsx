@@ -40,6 +40,7 @@ import { SignOut } from "../../store/actions/AuthAction";
 import { Styles } from "./Styles";
 import * as constant from "../../utils/constant";
 import { formatServerImages } from "utils/functions.js";
+import NotificationComponent from "./NotificationComponent";
 
 // Custom Styled MenuItem Component
 const StyledMenuItem = withStyles({
@@ -320,7 +321,10 @@ const Navbar = () => {
     return (
         <AppBar position="fixed" className={classes.appBar}>
             {mobileView ? renderMobileView() : renderDesktopView()}
+            <div className="flex items-center justify-center">
 
+<NotificationComponent/>
+            </div>
             <Button
                 id="navbar-menu-item"
                 className={classes.icons}

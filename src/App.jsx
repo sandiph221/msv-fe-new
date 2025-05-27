@@ -62,6 +62,7 @@ import { Contact } from "./Pages/Web/components/ContactPage";
 import AdminLogin from "./Components/AdminLogin/AdminLogin";
 import SubdomainLogin from "./Components/SubdomainLogin/SubdomainLogin";
 import { EditorProvider } from "react-simple-wysiwyg";
+import VerifyUser from "./Pages/VerifyUser/VerifyUser";
 
 // Web Pages
 
@@ -81,6 +82,7 @@ function App() {
                 <Route path="/payment/verify" element={<PaymentVerifyPage />} />
                 <Route path="/payment/cancel" element={<PaymentCancelPage />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/verify/user/" element={<VerifyUser />} />
             </Route>
 
 
