@@ -2,6 +2,7 @@ import { getSubDomain } from "Functions";
 import NotPaidDashboard from "Pages/DashboardPage/NotPaidDashboard";
 import { useSelector } from "react-redux";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
+import PlanWarningBar from "../PlanWarningBar/PlanWarningBar";
 
 const PrivateLayout = () => {
   const { isAuth, user } = useSelector((state) => state.auth);
@@ -26,7 +27,9 @@ const PrivateLayout = () => {
   }
 
   // User is authenticated and meets all conditions, render child routes
-  return <Outlet />;
+    return (
+            <Outlet />
+    )
 };
 
 export default PrivateLayout;

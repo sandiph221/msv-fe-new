@@ -1,7 +1,7 @@
 export default (theme) => ({
   sidebar: {
     height: "100%",
-    maxHeight: "calc(100vh - 65px)",
+    maxHeight: "calc(100vh - 30px)",
     display: "flex",
     flexDirection: "column",
     padding: "30px 20px",

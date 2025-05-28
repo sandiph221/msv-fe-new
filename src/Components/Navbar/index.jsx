@@ -1,19 +1,4 @@
 import React, { useEffect, useState } from "react";
-import {
-    AppBar,
-    Toolbar,
-    Typography,
-    Button,
-    makeStyles,
-    Menu,
-    MenuItem,
-    Box,
-    useMediaQuery,
-    withStyles,
-    IconButton,
-    Drawer,
-    useTheme,
-} from "@material-ui/core";
 import { NavLink, Link, useLocation } from "react-router-dom";
 
 // Icons
@@ -37,41 +22,17 @@ import {
 
 import { useSelector, useDispatch } from "react-redux";
 import { SignOut } from "../../store/actions/AuthAction";
-import { Styles } from "./Styles";
 import * as constant from "../../utils/constant";
 import { formatServerImages } from "utils/functions.js";
 import NotificationComponent from "./NotificationComponent";
-
-// Custom Styled MenuItem Component
-const StyledMenuItem = withStyles({
-    root: {
-        "&.Mui-selected": {
-            backgroundColor: "#FBE281",
-            "&:hover": {
-                backgroundColor: "#FBE281",
-            },
-        },
-    },
-})(MenuItem);
-
-const useStyles = makeStyles((theme) => Styles(theme));
 
 const Navbar = () => {
     // Hooks & Redux
     const location = useLocation();
     const pathname = location.pathname;
-    const theme = useTheme();
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.auth);
     const { logoURL } = useSelector((state) => state.settings);
-
-    // Media queries
-    const xs = useMediaQuery(theme.breakpoints.down("xs"));
-    const sm = useMediaQuery(theme.breakpoints.down("sm"));
-    const md = useMediaQuery(theme.breakpoints.down("md"));
-
-    // Styles
-    const classes = useStyles({ xs, sm, md });
 
     // Local state
     const [userMenuAnchor, setUserMenuAnchor] = useState(null);
@@ -185,7 +146,6 @@ const Navbar = () => {
             text: "Settings",
             visible: isCustomerAdmin
         },
-  
         {
             to: "/user/user-management",
             icon: <SupervisorAccountIcon fontSize="small" />,
@@ -237,43 +197,58 @@ const Navbar = () => {
             {navItems
                 .filter(item => item.visible && (!item.mobileOnly || mobileView))
                 .map((item, index) => (
-                    <StyledMenuItem
+                    <Link
                         key={index}
-                        component={Link}
                         to={item.to}
-                        className={classes.iconButton}
-                        selected={item.selected}
+                        className={`
+                            flex items-center px-4 py-2 mx-1 rounded-md text-gray-700 
+                            hover:bg-yellow-200 transition-colors duration-200
+                            ${item.selected ? 'bg-yellow-200' : ''}
+                            ${mobileView ? 'w-full mb-2 justify-start' : ''}
+                        `}
                     >
-                        {item.icon}
-                        <Typography className={classes.navTextStyle}>
+                        <span className="mr-2">{item.icon}</span>
+                        <span className="text-sm font-medium whitespace-nowrap">
                             {item.text}
-                        </Typography>
-                    </StyledMenuItem>
+                        </span>
+                    </Link>
                 ))}
         </>
     );
 
     const renderUserMenuItems = () => (
-        <div>
+        <div className="py-1">
             {userMenuItems
                 .filter(item => item.visible)
                 .map((item, index) => (
-                    <MenuItem
-                        key={index}
-                        component={item.onClick ? 'div' : Link}
-                        to={item.onClick ? undefined : item.to}
-                        onClick={item.onClick || handleUserMenuClose}
-                    >
-                        {item.icon} <Box mx={0.5}>{item.text}</Box>
-                    </MenuItem>
+                    item.onClick ? (
+                        <button
+                            key={index}
+                            onClick={item.onClick}
+                            className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+                        >
+                            {item.icon}
+                            <span className="ml-2">{item.text}</span>
+                        </button>
+                    ) : (
+                        <Link
+                            key={index}
+                            to={item.to}
+                            onClick={handleUserMenuClose}
+                            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+                        >
+                            {item.icon}
+                            <span className="ml-2">{item.text}</span>
+                        </Link>
+                    )
                 ))}
         </div>
     );
 
     const renderLogo = () => (
-        <NavLink to="/" className={classes.title}>
+        <NavLink to="/" className="flex items-center">
             <img
-                className={classes.title}
+                className="h-8 w-auto"
                 src={formatServerImages(logoURL)}
                 alt="My Social View"
             />
@@ -281,72 +256,85 @@ const Navbar = () => {
     );
 
     const renderDesktopView = () => (
-        <Toolbar style={{ display: "flex", flexGrow: 1, padding: 0 }}>
+        <div className="flex items-center justify-between w-full px-4">
             {renderLogo()}
-            <div style={{ display: "flex" }}>{renderNavItems()}</div>
-        </Toolbar>
+            <div className="flex items-center space-x-1">
+                {renderNavItems()}
+            </div>
+        </div>
     );
 
     const renderMobileView = () => (
-        <Toolbar
-            style={{
-                display: "flex",
-                flexGrow: 1,
-                flexDirection: "row-reverse",
-                justifyContent: "space-between",
-            }}
-            disableGutters
-        >
-            <IconButton
-                edge="start"
-                aria-label="menu"
-                aria-haspopup="true"
+        <div className="flex items-center justify-between w-full px-4">
+            {renderLogo()}
+
+            <button
                 onClick={handleDrawerToggle}
+                className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+                aria-label="menu"
             >
                 <MenuIcon style={{ color: "#323132" }} />
-            </IconButton>
+            </button>
 
-            <Drawer
-                anchor="right"
-                open={drawerOpen}
-                onClose={handleDrawerToggle}
-            >
-                <div style={{ padding: "50px 10px" }}>{renderNavItems()}</div>
-            </Drawer>
+            {/* Mobile Drawer */}
+            {drawerOpen && (
+                <>
+                    {/* Backdrop */}
+                    <div
+                        className="fixed inset-0 bg-black bg-opacity-50 z-40"
+                        onClick={handleDrawerToggle}
+                    />
 
-            <div>{renderLogo()}</div>
-        </Toolbar>
+                    {/* Drawer */}
+                    <div className="fixed top-0 right-0 h-full w-80 bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out">
+                        <div className="pt-12 px-4">
+                            {renderNavItems()}
+                        </div>
+                    </div>
+                </>
+            )}
+        </div>
     );
 
     return (
-        <AppBar position="fixed" className={classes.appBar}>
-            {mobileView ? renderMobileView() : renderDesktopView()}
-            <div className="flex items-center justify-center">
+        <nav className="fixed top-0 left-0 right-0 bg-white shadow-md z-30 ">
+            <div className="flex items-center justify-between h-16">
+                {mobileView ? renderMobileView() : renderDesktopView()}
 
-<NotificationComponent/>
+                <div className="flex items-center space-x-4 px-4">
+                    <div className="flex items-center justify-center">
+                        <NotificationComponent />
+                    </div>
+
+                    {/* User Menu Button */}
+                    <div className="relative">
+                        <button
+                            id="navbar-menu-item"
+                            onClick={handleUserMenuOpen}
+                            className="p-1 rounded-full text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        >
+                            <AccountCircleIcon fontSize="large" />
+                        </button>
+
+                        {/* User Dropdown Menu */}
+                        {userMenuAnchor && (
+                            <>
+                                {/* Backdrop */}
+                                <div
+                                    className="fixed inset-0 z-10"
+                                    onClick={handleUserMenuClose}
+                                />
+
+                                {/* Menu */}
+                                <div className="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-20">
+                                    {renderUserMenuItems()}
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </div>
             </div>
-            <Button
-                id="navbar-menu-item"
-                className={classes.icons}
-                onClick={handleUserMenuOpen}
-            >
-                <AccountCircleIcon fontSize="large" />
-            </Button>
-
-            <Menu
-                id="user-menu"
-                anchorEl={userMenuAnchor}
-                keepMounted
-                open={Boolean(userMenuAnchor)}
-                onClose={handleUserMenuClose}
-                style={{
-                    top: 60,
-                    left: -30,
-                }}
-            >
-                {renderUserMenuItems()}
-            </Menu>
-        </AppBar>
+        </nav>
     );
 };
 

@@ -1,16 +1,12 @@
 import { Footer } from "../Footer/Footer";
 import Navbar from "../Navbar";
+import PlanWarningBar from "../PlanWarningBar/PlanWarningBar";
 const Layout = ({ children }) => {
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      <Navbar />
-      <div style={{ flexGrow: 1 }}>{children}</div>
+      <div className="min-h-screen flex flex-col pt-16">
+          <Navbar />
+        <PlanWarningBar/>
+      <div className="flex-grow">{children}</div>
       <Footer />
     </div>
   );

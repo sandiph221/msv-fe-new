@@ -88,15 +88,15 @@ export const Styles = (theme) => ({
   },
 
   row: {
-    marginTop: '65px',
-    minHeight: 'calc(100vh - 65px)',
+    marginTop: '30px',
+    minHeight: 'calc(100vh - 30px)',
   },
 
   formContainer: {
     padding: '55px 30px',
     background: '#fff',
     height: '100%',
-    minHeight: 'calc(100vh - 65px)',
+    minHeight: 'calc(100vh - 30px)',
   },
 
   inputField: {

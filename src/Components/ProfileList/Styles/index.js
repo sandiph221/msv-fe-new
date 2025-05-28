@@ -10,7 +10,7 @@ export default (theme) => ({
     textAlign: "center",
   },
   buttonGroup: {
-    marginTop: "65px",
+    marginTop: "30px",
     display: "flex",
     justifyContent: "space-between",
   },

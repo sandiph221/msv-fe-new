@@ -164,14 +164,10 @@ const SubdomainSubscriptionAnalytics = () => {
             aValue = a.social_media_profiles?.length || 0;
             bValue = b.social_media_profiles?.length || 0;
         }
-        else if (orderBy === 'startDate') {
+        else if (orderBy === 'renewDate') {
             // Convert dates to numbers (milliseconds since epoch) for comparison
-            aValue = a.subscription?.subscription_starts_at ? new Date(a.subscription.subscription_starts_at).getTime() : 0; // Treat missing date as earlier
-            bValue = b.subscription?.subscription_starts_at ? new Date(b.subscription.subscription_starts_at).getTime() : 0; // Treat missing date as earlier
-        } else if (orderBy === 'renewDate') {
-            // Convert dates to numbers (milliseconds since epoch) for comparison
-            aValue = a.subscription?.subscription_ended_at ? new Date(a.subscription.subscription_ended_at).getTime() : 0; // Treat missing date as earlier
-            bValue = b.subscription?.subscription_ended_at ? new Date(b.subscription.subscription_ended_at).getTime() : 0; // Treat missing date as earlier
+            aValue = a.subscription?.subscription_ends_at ? new Date(a.subscription.subscription_ends_at).getTime() : 0; // Treat missing date as earlier
+            bValue = b.subscription?.subscription_ends_at ? new Date(b.subscription.subscription_ends_at).getTime() : 0; // Treat missing date as earlier
         } else if (orderBy === 'totalRevenue') {
             // Calculate and parse revenue for comparison
             aValue = parseFloat(calculateTotalRevenue(a.invoices)) || 0;
@@ -418,15 +414,7 @@ const SubdomainSubscriptionAnalytics = () => {
                                 </TableCell>
                                 <TableCell className={classes.tableHeadCell}>Plan</TableCell>
                                 <TableCell className={classes.tableHeadCell}>Status</TableCell>
-                                <TableCell className={classes.tableHeadCell}>
-                                    <TableSortLabel
-                                        active={orderBy === 'startDate'}
-                                        direction={orderBy === 'startDate' ? order : 'asc'}
-                                        onClick={() => handleRequestSort('startDate')}>
-                                    Start Date
-                                        </TableSortLabel>
-                                
-                                </TableCell>
+                             
                                 <TableCell className={classes.tableHeadCell}>
                                     <TableSortLabel
                                     active={orderBy === 'renewDate'}
@@ -507,18 +495,12 @@ const SubdomainSubscriptionAnalytics = () => {
                                                     "-"
                                                 )}
                                             </TableCell>
-                                            <TableCell>
-                                                {subdomain.subscription
-                                                    ? new Date(
-                                                        subdomain.subscription.subscription_starts_at
-                                                    ).toLocaleDateString()
-                                                    : "-"}
-                                            </TableCell>
+                                     
                                             <TableCell>
                                                 {subdomain.subscription &&
-                                                    subdomain.subscription.subscription_ended_at
+                                                    subdomain.subscription.subscription_ends_at
                                                     ? new Date(
-                                                        subdomain.subscription.subscription_ended_at
+                                                        subdomain.subscription.subscription_ends_at
                                                     ).toLocaleDateString()
                                                     : "No end date"}
                                             </TableCell>

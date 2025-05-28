@@ -98,7 +98,7 @@ const SubscriptionDetail = () => {
                 >
                   <Typography className={classes.text}>
                     Subscription Start Date:{' '}
-                    {moment(currentSubscription.subscription_starts_at).format('DD MMMM, YYYY')}
+                              {moment(currentPlanPrice.created_at).format('DD MMMM, YYYY')}
                   </Typography>
                 </Grid>
                 <Grid
