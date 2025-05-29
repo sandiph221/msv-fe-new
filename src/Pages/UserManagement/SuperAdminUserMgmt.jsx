@@ -1,49 +1,39 @@
 import {
-    Box,
     Container,
     Grid,
     IconButton,
     makeStyles,
     Menu,
     MenuItem,
-    Modal,
     Paper,
     Table,
     TableBody,
     TableCell,
-    Select,
     TableContainer,
     TableHead,
     TablePagination,
     TableRow,
-    TextField,
     Typography,
-    withStyles,
-    FormControl,
-    InputLabel,
-    Chip,
 } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import Layout from "../../Components/Layout";
-import { Delete, Edit, Search } from "@material-ui/icons";
+import { FaPlus, FaSearch } from 'react-icons/fa';
+import { Delete, Edit } from "@material-ui/icons";
 import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import Buttons from "Components/Buttons/Buttons";
-import UploadImg from "Components/UploadImg";
 import { connect, useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Alert from "../../Components/AlertBox/Alert";
 import Spinner from "../../Components/Spinner";
 import {
-    CreateCustomer,
     DeleteCustomer,
     GetCustomer,
     PaginateCustomer,
     SearchCustomer,
-    UpdateCustomer,
 } from "../../store/actions/CustomersAction";
-import * as constant from "../../utils/constant";
+import AddUserComponent from "./AddUserComponent";
+import EditUserComponent from "./EditUserComponent";
 import "./Styles/style.css";
 
 // Styles definition
@@ -52,53 +42,11 @@ const Styles = (theme) => ({
         padding: theme.spacing(2),
         paddingTop: theme.spacing(14),
     },
-    topFilter: {
-        marginBottom: theme.spacing(2),
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-    },
-    searchField: {
-        width: "300px",
-    },
     root: {
         width: '100%',
     },
     container: {
         maxHeight: 440,
-    },
-    userManagementForm: {
-        marginTop: theme.spacing(3),
-    },
-    inputField: {
-        width: '100%',
-    },
-    fileUploadConatiner: {
-        marginTop: theme.spacing(2),
-    },
-    imgError: {
-        color: theme.palette.error.main,
-        fontSize: '0.75rem',
-        marginTop: theme.spacing(0.5),
-    },
-    filterSelect: {
-        minWidth: 150,
-        marginLeft: theme.spacing(1),
-    },
-    filterContainer: {
-        display: 'flex',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-    },
-    priceIdChips: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        gap: theme.spacing(0.5),
-        marginTop: theme.spacing(1),
-        maxWidth: 400,
-    },
-    chip: {
-        margin: theme.spacing(0.5),
     },
 });
 
@@ -130,41 +78,12 @@ const getAllPlans = async () => {
     }
 }
 
-const StyledTextField = withStyles({
-    root: {
-        borderRadius: 15,
-        "& .MuiOutlinedInput-root": {
-            "& fieldset": {
-                borderRadius: 12,
-            },
-        },
-    },
-})(TextField);
-
 const SuperAdminUserManagement = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
     // State management
     const [searchQuery, setSearchQuery] = useState("");
-    const [userFormSubmitting, setUserFormSubmitting] = useState(false);
-    const [formValues, setFormValues] = useState({
-        id: "",
-        brandName: "",
-        firstName: "",
-        lastName: "",
-        email: "",
-        phoneNumber: "",
-        logo: "",
-        featured_image: "",
-        userAccountsLimt: "",
-        socialMediaProfilesLimt: "",
-        role: constant.CUSTOMER_ADMIN_NAME,
-    });
-    const [errors, setErrors] = useState({});
-    const [validationErrors, setValidationErrors] = useState({});
-    const [editData, setEditData] = useState({});
-    const [refreshImgUploadComponent, setRefreshImgUploadComponent] = useState(false);
     const [itemToDelete, setItemToDelete] = useState(null);
     const [deleteAlertOpen, setDeleteAlertOpen] = useState(false);
     const [userAddedAlertOpen, setUserAddedAlertOpen] = useState(false);
@@ -173,10 +92,12 @@ const SuperAdminUserManagement = () => {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [anchorEl, setAnchorEl] = useState(null);
     const [selectedRow, setSelectedRow] = useState(null);
-    const [modalOpen, setModalOpen] = useState(false);
+    const [addModalOpen, setAddModalOpen] = useState(false);
+    const [editModalOpen, setEditModalOpen] = useState(false);
+    const [editData, setEditData] = useState({});
     const [selectedRole, setSelectedRole] = useState("super-admin");
 
-    // New state for plan filters
+    // Plan filter states
     const [planTypes, setPlanTypes] = useState([]);
     const [frequencies, setFrequencies] = useState([]);
     const [selectedPlanType, setSelectedPlanType] = useState("all");
@@ -247,60 +168,25 @@ const SuperAdminUserManagement = () => {
         }
         // Case 4: All plan types and All frequencies - no filtering needed
         else if (selectedPlanType === "all" && selectedFrequency === "all") {
-            //loop through all plans and get all price ids
             filteredPriceIds = plansData
                 .filter(plan => plan.id !== null)
                 .map(plan => plan.id);
-            }
+        }
         setPriceIds(filteredPriceIds);
-        
     }, [selectedPlanType, selectedFrequency, plansData]);
 
     // Add useEffect for debounced search
     useEffect(() => {
         const handler = setTimeout(() => {
-            
             fetchSearchCustomers(searchQuery, selectedRole, priceIds);
+        }, 500);
 
-        }, 500); // Debounce for 500ms
-
-        // Cleanup function to clear the timer if searchQuery changes
         return () => {
             clearTimeout(handler);
         };
-    }, [searchQuery, page, selectedRole, priceIds]); // Rerun effect when searchQuery, page, selectedRole, or priceIds changes
-
-    // Update form values when editing a user
-    useEffect(() => {
-        if (Object.keys(editData).length !== 0) {
-            setFormValues({
-                id: editData.id,
-                brandName: editData.CustomerSubdomain ? editData.CustomerSubdomain.subdomain : "",
-                firstName: editData.first_name,
-                lastName: editData.last_name,
-                email: editData.email,
-                phoneNumber: editData.contact_number,
-                logo: editData.CustomerSubdomain ? editData.CustomerSubdomain.logo : "",
-                featured_image: editData.CustomerSubdomain ? editData.CustomerSubdomain.feature_image : "",
-                userAccountsLimt: editData.CustomerSubdomain ? editData.CustomerSubdomain.user_accounts_limit : "",
-                socialMediaProfilesLimt: editData.CustomerSubdomain ? editData.CustomerSubdomain.social_media_profiles_limit : "",
-                role: editData.role,
-            });
-            setValidationErrors({});
-        } else {
-            resetCustomerForm();
-        }
-    }, [editData]);
+    }, [searchQuery, page, selectedRole, priceIds]);
 
     // API calls
-    async function fetchCustomers() {
-        await dispatch(GetCustomer());
-    }
-
-    async function fetchNewCustomers(page) {
-        await dispatch(PaginateCustomer(page));
-    }
-
     async function fetchSearchCustomers(query, role, priceIds) {
         await dispatch(SearchCustomer(page, query, role, priceIds));
     }
@@ -337,41 +223,36 @@ const SuperAdminUserManagement = () => {
         setSelectedRow(null);
     };
 
-    const handleModalOpen = (row = {}) => {
+    const handleAddModalOpen = () => {
+        setAddModalOpen(true);
+    };
+
+    const handleAddModalClose = () => {
+        setAddModalOpen(false);
+    };
+
+    const handleEditModalOpen = (row) => {
         setEditData(row);
-        setFormValues(row);
-        setModalOpen(true);
+        setEditModalOpen(true);
+        handleMenuClose();
     };
 
-    const handleModalClose = () => {
-        setModalOpen(false);
+    const handleEditModalClose = () => {
+        setEditModalOpen(false);
         setEditData({});
-        resetCustomerForm();
-    };
-
-    const handleChange = (event) => {
-        const { name, value, files } = event.target;
-        const inputValue = name === "logo" || name === "featured_image" ? files[0] : value;
-
-        setFormValues((prevState) => ({
-            ...prevState,
-            [name]: inputValue,
-        }));
     };
 
     const handleEdit = () => {
-        handleModalOpen(selectedRow);
-        handleMenuClose();
+        handleEditModalOpen(selectedRow);
     };
 
     const handleDelete = async () => {
         if (itemToDelete) {
             try {
                 await dispatch(DeleteCustomer(selectedRow.id));
-                resetCustomerForm();
-                setEditData({});
                 handleMenuClose();
                 setDeleteAlertOpen(false);
+                toast.success("User deleted successfully");
             } catch (error) {
                 if (error.response) {
                     toast.error(error.response.data.message);
@@ -387,147 +268,16 @@ const SuperAdminUserManagement = () => {
         setItemToDelete(selectedRow);
     };
 
-    const handleCancel = () => {
-        resetCustomerForm();
-        setEditData({});
-        setErrors({});
-        setValidationErrors({});
-        handleModalClose();
+    const handleUserAdded = (message) => {
+        setUserAddedAlertOpen(true);
+        setResponseMessage(message);
+        toast.success(message);
     };
 
-    // Form handling
-    const resetCustomerForm = () => {
-        setFormValues({
-            brandName: "",
-            firstName: "",
-            lastName: "",
-            email: "",
-            phoneNumber: "",
-            logo: "",
-            featured_image: "",
-            userAccountsLimt: "",
-            socialMediaProfilesLimt: "",
-            role: constant.CUSTOMER_ADMIN_NAME,
-        });
-    };
-
-    const validateForm = () => {
-        const specialCharacters = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
-        const imageExtensions = /\.(jpe?g|png|gif|bmp)$/i;
-        let formErrors = {};
-
-        // Basic validations
-        if (!formValues.brandName) formErrors.brandName = "Sub Domain is Required";
-        if (!formValues.firstName) formErrors.firstName = "First Name is Required";
-        if (!formValues.lastName) formErrors.lastName = "Last Name is Required";
-
-        if (!formValues.email) {
-            formErrors.email = "Email is Required";
-        } else if (!new RegExp(constant.EMAIL_PATTERN).test(formValues.email)) {
-            formErrors.email = "Please enter valid email-ID.";
-        }
-
-        if (!formValues.phoneNumber) {
-            formErrors.phoneNumber = "Contact Number is Required";
-        } else if (isNaN(formValues.phoneNumber) || specialCharacters.test(formValues.phoneNumber)) {
-            formErrors.phoneNumber = "Contact Number must be a valid number";
-        }
-
-        if (!formValues.userAccountsLimt) {
-            formErrors.userAccountsLimt = "Account limit is Required";
-        } else if (isNaN(formValues.userAccountsLimt) || formValues.userAccountsLimt === "0" ||
-            specialCharacters.test(formValues.userAccountsLimt)) {
-            formErrors.userAccountsLimt = "Account limit must be a valid number greater than 0";
-        }
-
-        if (!formValues.socialMediaProfilesLimt) {
-            formErrors.socialMediaProfilesLimt = "Social Media Profile limit is Required";
-        } else if (isNaN(formValues.socialMediaProfilesLimt) || formValues.socialMediaProfilesLimt === "0" ||
-            specialCharacters.test(formValues.socialMediaProfilesLimt)) {
-            formErrors.socialMediaProfilesLimt = "Social Media Profile limit must be a valid number greater than 0";
-        }
-
-        // File validations
-        if (Object.keys(editData).length === 0) {
-            if (!formValues.logo) {
-                formErrors.logo = "Logo is Required";
-            } else if (formValues.logo.name && !imageExtensions.test(formValues.logo.name)) {
-                formErrors.logo = "Image must be valid image file.";
-            }
-
-            if (!formValues.featured_image) {
-                formErrors.featured_image = "Brand banner image is Required";
-            } else if (formValues.featured_image.name && !imageExtensions.test(formValues.featured_image.name)) {
-                formErrors.featured_image = "Image must be valid image file.";
-            }
-        }
-
-        setErrors(formErrors);
-        return Object.keys(formErrors).length === 0;
-    };
-
-    const onSubmit = async (event) => {
-        event.preventDefault();
-
-        if (!validateForm()) return;
-
-        setUserFormSubmitting(true);
-
-        try {
-            let response;
-            if (Object.keys(editData).length === 0) {
-                // Creating customer
-                response = await dispatch(CreateCustomer(formValues));
-            } else {
-                // Updating customer
-                response = await dispatch(
-                    UpdateCustomer({
-                        ...formValues,
-                        id: editData.id,
-                        active: editData.active,
-                    })
-                );
-            }
-
-            setUserAddedAlertOpen(true);
-            setResponseMessage(response.data.message);
-            resetCustomerForm();
-            setRefreshImgUploadComponent(true);
-            setValidationErrors({});
-            handleModalClose();
-        } catch (error) {
-            if (error.response) {
-                toast.error(error.response.data.message);
-                const errorMsg = error.response.data.message;
-                setValidationErrors(errorMsg);
-            } else {
-                toast.error("Check your internet connection");
-            }
-        } finally {
-            setUserFormSubmitting(false);
-        }
-    };
-
-    // Image handlers
-    const logoImageHandler = (item) => {
-        setFormValues((prevState) => ({
-            ...prevState,
-            logo: item,
-        }));
-    };
-
-    const bannerImageHandler = (item) => {
-        setFormValues((prevState) => ({
-            ...prevState,
-            featured_image: item,
-        }));
-    };
-
-    // Helper function to truncate price IDs for display
-    const truncatePriceId = (priceId) => {
-        if (!priceId) return '';
-        if (priceId.length <= 12) return priceId;
-        return `${priceId.substring(0, 6)}...${priceId.substring(priceId.length - 6)}`;
+    const handleUserUpdated = (message) => {
+        setUserAddedAlertOpen(true);
+        setResponseMessage(message);
+        toast.success(message);
     };
 
     return (
@@ -535,93 +285,82 @@ const SuperAdminUserManagement = () => {
             <div className={classes.main}>
                 <div style={{ padding: 10 }} className="dashboardPageContainer">
                     <Container disableGutters maxWidth="xl">
-                        <Grid className={classes.topFilter}>
-                            <Buttons
-                                variant="contained"
-                                color="primary"
-                                onClick={() => handleModalOpen()}
-                                style={{ marginBottom: "16px", marginRight: "16px" }}
-                            >
-                                Add User
-                            </Buttons>
+                        <div className="space-y-4">
+                            {/* Add User Button - positioned on the right */}
+                            <div className="flex justify-end">
+                                <button
+                                    onClick={handleAddModalOpen}
+                                    className="flex items-center gap-2 px-4 py-2 bg-[#edb548] text-white font-medium shadow-sm hover:bg-yellow-700 focus:outline-none focus:ring-2 transition-colors"
+                                >
+                                    <FaPlus className="w-4 h-4" />
+                                    Add User
+                                </button>
+                            </div>
 
                             {/* Search and Filter Section */}
-                            <Grid container spacing={1} alignItems="center" className={classes.filterContainer}>
-                                <Grid item>
-                                    <StyledTextField
-                                        className={classes.searchField}
-                                        variant="outlined"
-                                        placeholder="Search by name, email, subdomain..."
-                                        value={searchQuery}
-                                        onChange={handleSearchChange}
-                                        InputProps={{
-                                            endAdornment: (
-                                                <IconButton>
-                                                    <Search />
-                                                </IconButton>
-                                            ),
-                                        }}
-                                    />
-                                </Grid>
+                            <div className="flex flex-wrap items-center gap-3 p-4 bg-white rounded-lg shadow-md">
+                                <div>
+                                    <div className="relative">
+                                        <input
+                                            type="text"
+                                            className="w-72 px-4 py-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            placeholder="Search by name, email, subdomain..."
+                                            value={searchQuery}
+                                            onChange={handleSearchChange}
+                                        />
+                                        <button className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-blue-500">
+                                            <FaSearch />
+                                        </button>
+                                    </div>
+                                </div>
 
-                                <Grid item>
-                                    <FormControl variant="outlined" className={classes.filterSelect} size="small">
-                                        <InputLabel id="role-select-label">Role</InputLabel>
-                                        <Select
-                                            labelId="role-select-label"
-                                            value={selectedRole}
-                                            onChange={(e) => setSelectedRole(e.target.value)}
-                                            label="Role"
-                                        >
-                                            <MenuItem value="all">All Roles</MenuItem>
-                                            <MenuItem value="super-admin">Super Admin</MenuItem>
-                                            <MenuItem value="customer-admin">Customer Admin</MenuItem>
-                                            <MenuItem value="customer-viewer">Customer Viewer</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
+                                <div>
+                                    <label className="block text-sm text-gray-600 mb-1">Role</label>
+                                    <select
+                                        value={selectedRole}
+                                        onChange={(e) => setSelectedRole(e.target.value)}
+                                        className="w-48 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    >
+                                        <option value="all">All Roles</option>
+                                        <option value="super-admin">Super Admin</option>
+                                        <option value="customer-admin">Customer Admin</option>
+                                        <option value="customer-viewer">Customer Viewer</option>
+                                    </select>
+                                </div>
 
-                                <Grid item>
-                                    <FormControl variant="outlined" className={classes.filterSelect} size="small">
-                                        <InputLabel id="plan-type-select-label">Plan Type</InputLabel>
-                                        <Select
-                                            labelId="plan-type-select-label"
-                                            value={selectedPlanType}
-                                            onChange={handlePlanTypeChange}
-                                            label="Plan Type"
-                                        >
-                                            <MenuItem value="all">All Plans</MenuItem>
-                                            {planTypes.map((planType) => (
-                                                <MenuItem key={planType} value={planType}>
-                                                    {planType}
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
+                                <div>
+                                    <label className="block text-sm text-gray-600 mb-1">Plan Type</label>
+                                    <select
+                                        value={selectedPlanType}
+                                        onChange={handlePlanTypeChange}
+                                        className="w-48 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    >
+                                        <option value="all">All Plans</option>
+                                        {planTypes.map((planType) => (
+                                            <option key={planType} value={planType}>
+                                                {planType}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
 
-                                <Grid item>
-                                    <FormControl variant="outlined" className={classes.filterSelect} size="small">
-                                        <InputLabel id="frequency-select-label">Frequency</InputLabel>
-                                        <Select
-                                            labelId="frequency-select-label"
-                                            value={selectedFrequency}
-                                            onChange={handleFrequencyChange}
-                                            label="Frequency"
-                                        >
-                                            <MenuItem value="all">All Frequencies</MenuItem>
-                                            {frequencies.map((frequency) => (
-                                                <MenuItem key={frequency} value={frequency}>
-                                                    {frequency.charAt(0).toUpperCase() + frequency.slice(1)}
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-
-                
+                                <div>
+                                    <label className="block text-sm text-gray-600 mb-1">Frequency</label>
+                                    <select
+                                        value={selectedFrequency}
+                                        onChange={handleFrequencyChange}
+                                        className="w-48 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    >
+                                        <option value="all">All Frequencies</option>
+                                        {frequencies.map((frequency) => (
+                                            <option key={frequency} value={frequency}>
+                                                {frequency.charAt(0).toUpperCase() + frequency.slice(1)}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
 
                         <Grid container>
                             {getCustomersLoading ? (
@@ -644,12 +383,12 @@ const SuperAdminUserManagement = () => {
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                {customers?.users 
-                                                       && priceIds.length > 0 &&
-                                                        customers.users.slice(
-                                                            page * rowsPerPage,
-                                                            page * rowsPerPage + rowsPerPage
-                                                        )
+                                                {customers?.users
+                                                    && priceIds.length > 0 &&
+                                                    customers.users.slice(
+                                                        page * rowsPerPage,
+                                                        page * rowsPerPage + rowsPerPage
+                                                    )
                                                         .map((row) => (
                                                             <TableRow
                                                                 hover
@@ -739,230 +478,26 @@ const SuperAdminUserManagement = () => {
                 </div>
             </div>
 
-            {/* User Form Modal */}
-            <Modal
-                style={{ overflow: "scroll", maxWidth: "100%" }}
-                open={modalOpen}
-                onClose={handleModalClose}
-                aria-labelledby="user-modal-title"
-                aria-describedby="user-modal-description"
-            >
-                <Box
-                    sx={{
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        transform: "translate(-50%, -50%)",
-                        width: "80%",
-                        maxWidth: "1000px",
-                        bgcolor: "background.paper",
-                        boxShadow: 24,
-                        p: 4,
-                        height: "calc(100vh - 100px)",
-                        overflow: "auto",
-                        borderRadius: 8,
-                    }}
-                >
-                    <Typography variant="h6" id="user-modal-title">
-                        {Object.keys(editData).length ? "Edit User" : "Add User"}
-                    </Typography>
+            {/* Add User Modal */}
+            <AddUserComponent
+                open={addModalOpen}
+                onClose={handleAddModalClose}
+                onUserAdded={handleUserAdded}
+            />
 
-                    <form className={classes.userManagementForm} onSubmit={onSubmit}>
-                        <Grid container spacing={3}>
-                            <Grid item xs={12}>
-                                <StyledTextField
-                                    className={classes.inputField}
-                                    type="text"
-                                    id="brandName"
-                                    label="Sub Domain*"
-                                    variant="outlined"
-                                    error={errors.brandName || validationErrors.subdomain}
-                                    helperText={
-                                        errors.brandName ||
-                                        (validationErrors.subdomain && validationErrors.subdomain.message)
-                                    }
-                                    value={formValues.brandName || ""}
-                                    name="brandName"
-                                    onChange={handleChange}
-                                />
-                            </Grid>
-
-                            <Grid item xs={12} md={6}>
-                                <StyledTextField
-                                    className={classes.inputField}
-                                    type="text"
-                                    id="firstName"
-                                    label="First Name*"
-                                    variant="outlined"
-                                    error={!!errors.firstName}
-                                    helperText={errors.firstName}
-                                    value={formValues.firstName || ""}
-                                    name="firstName"
-                                    onChange={handleChange}
-                                />
-                            </Grid>
-
-                            <Grid item xs={12} md={6}>
-                                <StyledTextField
-                                    className={classes.inputField}
-                                    type="text"
-                                    id="lastName"
-                                    label="Last Name*"
-                                    variant="outlined"
-                                    error={!!errors.lastName}
-                                    helperText={errors.lastName}
-                                    value={formValues.lastName || ""}
-                                    name="lastName"
-                                    onChange={handleChange}
-                                />
-                            </Grid>
-
-                            <Grid item xs={12} md={6}>
-                                <StyledTextField
-                                    className={classes.inputField}
-                                    type="text"
-                                    id="email"
-                                    label="Email*"
-                                    variant="outlined"
-                                    error={!!errors.email || !!validationErrors.email}
-                                    helperText={
-                                        errors.email ||
-                                        (validationErrors.email && validationErrors.email.message)
-                                    }
-                                    value={formValues.email || ""}
-                                    name="email"
-                                    onChange={handleChange}
-                                />
-                            </Grid>
-
-                            <Grid item xs={12} md={6}>
-                                <StyledTextField
-                                    className={classes.inputField}
-                                    type="text"
-                                    id="phoneNumber"
-                                    label="Phone Number*"
-                                    variant="outlined"
-                                    error={!!errors.phoneNumber || !!validationErrors.contact_number}
-                                    helperText={
-                                        errors.phoneNumber ||
-                                        (validationErrors.contact_number && validationErrors.contact_number.message)
-                                    }
-                                    value={formValues.phoneNumber || ""}
-                                    name="phoneNumber"
-                                    onChange={handleChange}
-                                />
-                            </Grid>
-
-                            <Grid item xs={12} md={6}>
-                                <StyledTextField
-                                    className={classes.inputField}
-                                    type="text"
-                                    id="userAccountsLimt"
-                                    label="No. of Account Limit*"
-                                    variant="outlined"
-                                    error={!!errors.userAccountsLimt || !!validationErrors.user_accounts_limit}
-                                    helperText={
-                                        errors.userAccountsLimt ||
-                                        (validationErrors.user_accounts_limit && validationErrors.user_accounts_limit.message)
-                                    }
-                                    value={formValues.userAccountsLimt || ""}
-                                    name="userAccountsLimt"
-                                    onChange={handleChange}
-                                />
-                            </Grid>
-
-                            <Grid item xs={12} md={6}>
-                                <StyledTextField
-                                    className={classes.inputField}
-                                    type="text"
-                                    id="socialMediaProfilesLimt"
-                                    label="No. of Social Media Profile Limit*"
-                                    variant="outlined"
-                                    error={!!errors.socialMediaProfilesLimt || !!validationErrors.social_media_profiles_limit}
-                                    helperText={
-                                        errors.socialMediaProfilesLimt ||
-                                        (validationErrors.social_media_profiles_limit && validationErrors.social_media_profiles_limit.message)
-                                    }
-                                    value={formValues.socialMediaProfilesLimt || ""}
-                                    name="socialMediaProfilesLimt"
-                                    onChange={handleChange}
-                                />
-                            </Grid>
-                        </Grid>
-
-                        <Grid container spacing={3} className={classes.fileUploadConatiner}>
-                            <Grid item xs={12} md={6}>
-                                <UploadImg
-                                    id="upload-logo"
-                                    title="Upload Logo"
-                                    name="logo"
-                                    defaultImg={
-                                        editData.CustomerSubdomain
-                                            ? editData.CustomerSubdomain.logo
-                                            : ""
-                                    }
-                                    getSelectedData={logoImageHandler}
-                                    refresh={refreshImgUploadComponent}
-                                    setRefreshImgUploadComponent={setRefreshImgUploadComponent}
-                                />
-                                <Typography className={classes.imgError}>
-                                    {errors.logo ||
-                                        (validationErrors.logo && validationErrors.logo.message) ||
-                                        (validationErrors.brand_logo_size && validationErrors.brand_logo_size)}
-                                </Typography>
-                            </Grid>
-
-                            <Grid item xs={12} md={6}>
-                                <UploadImg
-                                    id="upload-banner"
-                                    title="Upload Banner"
-                                    name="featured_image"
-                                    defaultImg={
-                                        editData.CustomerSubdomain
-                                            ? editData.CustomerSubdomain.feature_image
-                                            : ""
-                                    }
-                                    getSelectedData={bannerImageHandler}
-                                    refresh={refreshImgUploadComponent}
-                                    setRefreshImgUploadComponent={setRefreshImgUploadComponent}
-                                />
-                                <Typography className={classes.imgError}>
-                                    {errors.featured_image ||
-                                        (validationErrors.featured_image && validationErrors.featured_image.message) ||
-                                        (validationErrors.brand_featured_size && validationErrors.brand_featured_size)}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-
-                        <Box mt={3}>
-                            <Buttons
-                                onClick={handleCancel}
-                                style={{
-                                    backgroundColor: "#49fcea",
-                                    borderColor: "#49fcea",
-                                    marginRight: 30,
-                                }}
-                            >
-                                Cancel
-                            </Buttons>
-                            <Buttons
-                                type="submit"
-                                disabled={userFormSubmitting}
-                            >
-                                {Object.keys(editData).length === 0 ? "Save" : "Update"}
-                                {userFormSubmitting && <Spinner size={24} />}
-                            </Buttons>
-                        </Box>
-                    </form>
-                </Box>
-            </Modal>
+            {/* Edit User Modal */}
+            <EditUserComponent
+                open={editModalOpen}
+                onClose={handleEditModalClose}
+                editData={editData}
+                onUserUpdated={handleUserUpdated}
+            />
         </Layout>
     );
 };
 
 const mapDispatchToProps = {
-    CreateCustomer,
-    UpdateCustomer,
+    DeleteCustomer,
     SearchCustomer
 };
 
