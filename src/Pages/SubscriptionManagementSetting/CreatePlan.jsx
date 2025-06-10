@@ -27,7 +27,9 @@ const CreatePlan = () => {
 const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
     name: "",
-    description: "",
+      description: "",
+      user_limit: 0,
+      social_profile_limit:0,
     subscription_details: [],
   });
 
@@ -81,7 +83,6 @@ const navigate = useNavigate();
       navigate("/subscription-management");
     } catch (error) {
       console.error("Error creating plan:", error);
-      // Handle error appropriately
     }
   };
 
@@ -141,7 +142,46 @@ const navigate = useNavigate();
                   }
                   multiline
                   required
-                />
+                              />
+                              
+                                              <Typography style={{ fontSize: 14, fontWeight: 500 }}>
+                                                User Limit
+                                              </Typography>
+                                              <TextField
+                                                fullWidth
+                                                type="number"
+                                                variant="outlined"
+                                                size="small"
+                                                label="User Limit"
+                                                value={formValues.user_limit}
+                                                onChange={(e) =>
+                                                  setFormValues({
+                                                    ...formValues,
+                                                    user_limit: e.target.value,
+                                                  })
+                                                }
+                                                required
+                                              />
+                              
+                                              <Typography style={{ fontSize: 14, fontWeight: 500 }}>
+                                                Social Profile Limit
+                                              </Typography>
+                                              <TextField
+                                                fullWidth
+                                                type="number"
+                                                variant="outlined"
+                                                size="small"
+                                                label="Social Profile Limit" 
+                                                value={formValues.social_profile_limit}
+                                                onChange={(e) =>
+                                                  setFormValues({
+                                                    ...formValues,
+                                                    social_profile_limit: e.target.value,
+                                                  })
+                                                }
+                                                required
+                                              />
+                              
               </div>
 
               <Box className={classes.formSection}>

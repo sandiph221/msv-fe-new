@@ -5,80 +5,87 @@ import topFollowers from "./Data/TopFollowersData";
 import { toast } from "react-toastify";
 
 export const getAddedProfileList =
-  (searchQuery = "") =>
-  (dispatch, getState) => {
-    /* getting added profiles list in database */
-    /*api request is to be made */
-    /*api call */
-    const { activeSocialMediaType, customDateRangeRed } =
-      getState().socialMediaProfileListReducer;
-    const { startDate, endDate } = customDateRangeRed
-      ? customDateRangeRed[0]
-      : "";
-    dispatch({
-      type: "GET_ADDED_PROFILE_LIST_START",
-    });
+    (searchQuery = "") =>
+        (dispatch, getState) => {
+            const { activeSocialMediaType, customDateRangeRed } =
+                getState().socialMediaProfileListReducer;
+            const { startDate, endDate } = customDateRangeRed
+                ? customDateRangeRed[0]
+                : "";
+            dispatch({
+                type: "GET_ADDED_PROFILE_LIST_START",
+            });
 
-    axios
-      .get(`social-media/${activeSocialMediaType}/profiles-list`, {
-        params: {
-          search: searchQuery,
-          start_date: startDate,
-          end_date: endDate,
-        },
-      })
-      .then((response) => {
-        const newdata = response.data.data.map((d) => ({
-          ...d,
-          relative_fan_change: d.relative_fan_change + `%`,
-        }));
-        dispatch({
-          type: "GET_ADDED_PROFILE_LIST",
-          payload: newdata,
-        });
-      })
-      .catch((error) => {
-        if (error.response) {
-          toast.error(error.response.data.message);
-          dispatch(
-            socialMediaResponseErrorWithMessage(error.response.data.message)
-          );
-        } else {
-          dispatch({
-            type: "SOCIAL_MEDIA_PROFILES_ERROR",
-          });
-        }
-      });
-  };
+            // Add return statement here
+            return axios
+                .get(`social-media/${activeSocialMediaType}/profiles-list`, {
+                    params: {
+                        search: searchQuery,
+                        start_date: startDate,
+                        end_date: endDate,
+                    },
+                })
+                .then((response) => {
+                    const newdata = response.data.data.map((d) => ({
+                        ...d,
+                        relative_fan_change: d.relative_fan_change + `%`,
+                    }));
+                    dispatch({
+                        type: "GET_ADDED_PROFILE_LIST",
+                        payload: newdata,
+                    });
+                    // Return the data so it can be used in the component
+                    return newdata;
+                })
+                .catch((error) => {
+                    if (error.response) {
+                        toast.error(error.response.data.message);
+                        dispatch(
+                            socialMediaResponseErrorWithMessage(error.response.data.message)
+                        );
+                    } else {
+                        dispatch({
+                            type: "SOCIAL_MEDIA_PROFILES_ERROR",
+                        });
+                    }
+                    // Return empty array on error
+                    return [];
+                });
+        };
+
 
 export const searchSocialMediaProfiles = (query) => (dispatch, getState) => {
-  /* searching profiles list from database */
-  /* dispatching for loader state */
-  dispatch({
-    type: "SEARCH_SOCIAL_MEDIA_PROFILE_LIST_START",
-  });
-  const { activeSocialMediaType } = getState().socialMediaProfileListReducer;
-  axios
-    .get(`/social-media/${activeSocialMediaType}/search-profiles/${query}`)
-    .then((response) => {
-      dispatch({
-        type: "SEARCH_SOCIAL_MEDIA_PROFILE_LIST",
-        payload: response.data.data,
-      });
-    })
-    .catch((error) => {
-      if (error.response) {
-        toast.error(error.response.data.message);
-        dispatch(
-          socialMediaResponseErrorWithMessage(error.response.data.message)
-        );
-      } else {
-        dispatch({
-          type: "SOCIAL_MEDIA_PROFILES_ERROR",
-        });
-      }
+    dispatch({
+        type: "SEARCH_SOCIAL_MEDIA_PROFILE_LIST_START",
     });
-};
+    const { activeSocialMediaType } = getState().socialMediaProfileListReducer;
+
+    // Add return statement here
+    return axios
+        .get(`/social-media/${activeSocialMediaType}/search-profiles/${query}`)
+        .then((response) => {
+            dispatch({
+                type: "SEARCH_SOCIAL_MEDIA_PROFILE_LIST",
+                payload: response.data.data,
+            });
+            // Return the data so it can be used in the component
+            return response.data.data;
+        })
+        .catch((error) => {
+            if (error.response) {
+                toast.error(error.response.data.message);
+                dispatch(
+                    socialMediaResponseErrorWithMessage(error.response.data.message)
+                );
+            } else {
+                dispatch({
+                    type: "SOCIAL_MEDIA_PROFILES_ERROR",
+                });
+            }
+            // Return empty array on error
+            return [];
+        });
+          };
 
 export const addProfileList = (profiles) => (dispatch, getState) => {
   /* api call to be requested */

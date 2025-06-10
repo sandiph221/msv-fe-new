@@ -49,6 +49,16 @@ const PriceItem = ({
     );
 };
 
+const PlanFeature = ({ icon, label, value }) => (
+    <div className="flex items-center justify-between py-2">
+        <div className="flex items-center">
+            <span className="text-blue-600 mr-2">{icon}</span>
+            <span className="text-sm text-gray-600">{label}</span>
+        </div>
+        <span className="text-sm font-semibold text-gray-800">{value}</span>
+    </div>
+);
+
 export default function PlanDisplay({
     plans = [],
     onPlanClick,
@@ -78,13 +88,32 @@ export default function PlanDisplay({
                         <h3 className="text-xl font-bold text-gray-800 mb-2">
                             {plan.name}
                         </h3>
-                        <p className="text-gray-600 text-sm mb-6 flex-grow">
+                        <p className="text-gray-600 text-sm mb-4">
                             {plan.description}
                         </p>
 
+                        {/* Plan Features Section */}
+                        <div className="mb-6">
+                            <h4 className="text-sm font-semibold text-gray-700 mb-3">Plan Features</h4>
+                            <div className="space-y-1">
+                                <PlanFeature
+                                    icon="👥"
+                                    label="User Limit"
+                                    value={plan.user_limit === -1 ? "Unlimited" : plan.user_limit}
+                                />
+                                <PlanFeature
+                                    icon="📱"
+                                    label="Social Profiles"
+                                    value={plan.social_profile_limit === -1 ? "Unlimited" : plan.social_profile_limit}
+                                />
+                            </div>
+                        </div>
+
                         <div className="h-px w-full bg-gray-200 my-4"></div>
 
-                        <div className="mt-4">
+                        {/* Pricing Section */}
+                        <div className="mt-auto">
+                            <h4 className="text-sm font-semibold text-gray-700 mb-3">Pricing Options</h4>
                             {plan.PlanTypePrices && plan.PlanTypePrices.map((price, index) => (
                                 <div key={`price-${price.id}`}>
                                     {index > 0 && <div className="h-px w-full bg-gray-200 my-2"></div>}
@@ -94,7 +123,7 @@ export default function PlanDisplay({
                                         handleClick={() => onPlanClick(price)}
                                         duration={price.duration}
                                         price={price.price}
-                                        discountPercentage={price.discount_percentage}
+                                        discountPercentage={parseFloat(price.discount_percentage)}
                                     />
                                 </div>
                             ))}

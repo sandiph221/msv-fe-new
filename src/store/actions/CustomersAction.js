@@ -198,18 +198,19 @@ export const UpdateCustomerBanner = (customer, response) => async (dispatch) =>
         const formData = new FormData();
 
         for (const [key, value] of Object.entries(data)) {
-            formData.set(key, value);
+            if (value) { // ✅ Only append if value exists
+                formData.set(key, value);
+            }
         }
 
         axios
             .put('/customer-logo-banners', formData)
             .then((response) => {
-                toast.success(response.data.message);
                 dispatch({
                     type: 'UPDATE_LOGO_AND_BANNER',
                     payload: {
-                        logo: response.data.data.logo,
-                        feature_image: response.data.data.feature_image,
+                        logoURL: response.data.data.logo, // ✅ Match the state property names
+                        bannerURL: response.data.data.featured_image || response.data.data.feature_image, // ✅ Handle both cases
                     },
                 });
                 resolve(response);
@@ -218,6 +219,7 @@ export const UpdateCustomerBanner = (customer, response) => async (dispatch) =>
                 reject(error);
             });
     });
+    
 
 export const DeleteCustomer = (user_id) => (dispatch) =>
     new Promise(function (resolve, reject) {
@@ -239,10 +241,10 @@ const CustomerFailed = (store, error) => {
     };
 };
 
-export const linkSocialPlatform = (accessToken) => async (dispatch) =>
+export const linkSocialPlatform = (accessToken,otherData=null) => async (dispatch) =>
     new Promise(function (resolve, reject) {
         axios
-            .post('/integration', { accessToken, platform: 'facebook' })
+            .post('/integration', { accessToken, platform: 'facebook',otherData })
             .then((response) => {
                 resolve(response);
             })

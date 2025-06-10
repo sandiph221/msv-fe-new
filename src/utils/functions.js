@@ -73,18 +73,36 @@ export const formatVideo = (activeMedia, subdomain, videoLink) => {
 };
 
 export const formatServerImages = (imageLink) => {
-  const checkIfURLLocalHost = () => {
-    if (window.location.href.indexOf("localhost") != -1) {
-      return true;
-    } else return false;
-  };
+    // ✅ Add type checking and validation
+    if (!imageLink) {
+        return null;
+    }
 
-  var formattedImage = imageLink.replace(/^http?\:\/\//i, "https://");
+    // ✅ If it's a File object, return as is (will be handled by URL.createObjectURL)
+    if (imageLink instanceof File) {
+        return imageLink;
+    }
 
-  if (checkIfURLLocalHost()) {
-    return imageLink;
-  } else return formattedImage;
+    // ✅ If it's not a string, convert to string or return null
+    if (typeof imageLink !== 'string') {
+        console.warn('formatServerImages received non-string value:', imageLink);
+        return null;
+    }
+
+    const checkIfURLLocalHost = () => {
+        if (window.location.href.indexOf("localhost") != -1) {
+            return true;
+        } else return false;
+    };
+
+    var formattedImage = imageLink.replace(/^http?\:\/\//i, "https://");
+
+    if (checkIfURLLocalHost()) {
+        return imageLink;
+    } else return formattedImage;
 };
+
+
 export const deleteConfirmation = (title, message) => {
   return new Promise((resolve) => {
     const isConfirmed = window.confirm(`${title}\n${message}`);
