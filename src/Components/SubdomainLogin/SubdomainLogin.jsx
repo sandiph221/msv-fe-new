@@ -1,94 +1,71 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { toast } from 'react-toastify';
-import Spinner from '../../Components/Spinner';
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { LoadLogoAndBanner } from "../../store/actions/SettingActions";
+import { getSubDomain } from "utils/functions.js";
+import Spinner from "../../Components/Spinner";
 
+const SubdomainLogin = () => {
+    const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [loading, setLoading] = useState(true);
+    const code = searchParams.get('code');
+    const subDomain = getSubDomain();
 
-export default function SubdomainLogin() {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+    useEffect(() => {
+        const handleSubdomainLogin = async () => {
+            if (code) {
+                try {
+                    // Parse the response data
+                    const responseData = JSON.parse(decodeURIComponent(code));
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const queryParams = new URLSearchParams(location.search);
-        const code = queryParams.get('code');
-        
-        if (!code) {
-          setError('No authentication code provided');
-          setLoading(false);
-          return;
-        }
-        const jsonData= JSON.parse(decodeURIComponent(code));
-          localStorage.setItem('userInfo', JSON.stringify(jsonData.data));
-          
-          dispatch({
-            type: 'SIGNIN',
-            payload:jsonData.data,
-          });
+                    if (responseData.status && responseData.data) {
+                        // Store user info in localStorage
+                        localStorage.setItem("userInfo", JSON.stringify(responseData.data));
 
-          toast.success('Successfully logged in');
-          navigate("/user")
-       
-      } catch (error) {
-        console.error('Login error:', error);
-        setError(error.response?.data?.message || 'Authentication failed');
-        localStorage.removeItem('code');
-      } finally {
-        setLoading(false);
-      }
-    };
+                        // Update Redux state
+                        dispatch({
+                            type: "SIGNIN",
+                            payload: responseData.data,
+                        });
 
-    fetchUserData();
-  }, [dispatch, location.search, navigate]);
+                        // Load settings immediately after login
+                        if (subDomain) {
+                            await dispatch(LoadLogoAndBanner(subDomain));
+                        }
 
-  if (loading) {
-    return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh',
-        flexDirection: 'column'
-      }}>
-        <h2>Authenticating...</h2>
-        <Spinner size={40} />
-      </div>
-    );
-  }
+                        // Navigate to appropriate route
+                        if (responseData.data.user && responseData.data.user.role === "super-admin") {
+                            navigate("/admin/dashboard");
+                        } else {
+                            navigate("/user");
+                        }
+                    } else {
+                        navigate("/login");
+                    }
+                } catch (error) {
+                    console.error("Subdomain login error:", error);
+                    navigate("/login");
+                }
+            } else {
+                navigate("/login");
+            }
+            setLoading(false);
+        };
 
-  if (error) {
-    return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh',
-        flexDirection: 'column'
-      }}>
-        <h2>Authentication Error</h2>
-        <p>{error}</p>
-        <button 
-          onClick={() => navigate('/login')}
-          style={{
-            marginTop: '20px',
-            padding: '10px 20px',
-            backgroundColor: '#1976d2',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer'
-          }}
-        >
-          Return to Login
-        </button>
-      </div>
-    );
-  }
+        handleSubdomainLogin();
+    }, [code, dispatch, navigate, subDomain]);
 
-  return null;
-}
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <Spinner size={48} />
+            </div>
+        );
+    }
+
+    return null;
+};
+
+export default SubdomainLogin;

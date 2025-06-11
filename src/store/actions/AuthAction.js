@@ -167,3 +167,36 @@ export const updateCustomerFromProfile = (customer) => (dispatch) =>
         reject(error);
       });
   });
+export const updateOnboarding = (stepIndex, isCompleted = false) => async (dispatch) =>
+    new Promise(function (resolve, reject) {
+        axios
+            .post('/user/update/onboarding', {
+                onboarding_state: stepIndex + 1, // Convert to 1-based index for backend
+                onboarding_completed: isCompleted
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                timeout: 10000
+            })
+            .then((response) => {
+                // Update the Redux store with the new onboarding status
+                dispatch({
+                    type: "UPDATE_USER_ONBOARDING",
+                    payload: {
+                        onboarding_state: stepIndex + 1,
+                        onboarding_completed: isCompleted
+                    },
+                });
+
+                if (isCompleted) {
+                    toast.success("Onboarding completed successfully!");
+                }
+
+                resolve(response);
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+  

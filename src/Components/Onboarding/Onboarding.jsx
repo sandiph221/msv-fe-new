@@ -87,8 +87,18 @@ export default function Onboarding({ hasPaid }) {
                 </div>
             </nav>
 
-            <main className="flex-grow px-4 py-8 md:px-8 lg:px-16 xl:px-24">
-                <OnboardingComponent user={user} />
+            <main className="flex-grow px-4 py-8 md:px-8 lg:px-16 xl:px-24 relative">
+                <div className="absolute inset-0 overflow-hidden">
+                    <img 
+                        src="https://img001.prntscr.com/file/img001/YoLPGZuRQVyFBop7FpRH2Q.png" 
+                        alt="" 
+                        className="w-full h-full object-cover blur-sm"
+                    />
+                    <div className="absolute inset-0 bg-white/30"></div>
+                </div>
+                <div className="relative z-10 w-1/2 mx-auto">
+                    <OnboardingComponent user={user} />
+                </div>
             </main>
             <Footer />
         </div>

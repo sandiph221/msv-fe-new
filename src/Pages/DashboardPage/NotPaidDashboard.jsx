@@ -10,7 +10,7 @@ import {
     ExitToApp as ExitToAppIcon,
 } from "@material-ui/icons";
 
-export default function NotPaidDashboard({ hasPaid }) {
+export default function NotPaidDashboard() {
     const [plans, setPlans] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);

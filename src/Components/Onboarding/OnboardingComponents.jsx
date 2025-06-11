@@ -1,10 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector,useDispatch } from 'react-redux';
 import LogoBannerUpload from './LogoBanner';
 import ConnectSocial from './ConnectSocialNew';
 import ViewAddProfiles from './ViewAddProfiles';
 import axios from 'axios';
 import { MSVFooterLogo } from '../logosandicons';
+import { updateOnboarding } from '../../store/actions/AuthAction';
 
 // Progress Bar Component
 const ProgressBar = ({ stages, currentStepIndex }) => {
@@ -79,7 +80,7 @@ const LoadingSpinner = ({ message = "Loading..." }) => (
 
 // Main Onboarding Component
 const OnboardingComponent = ({ user: propUser }) => {
-    // State Management
+    const dispatch = useDispatch();
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
     const [completedSteps, setCompletedSteps] = useState(new Set());
     const [isLoading, setIsLoading] = useState(false);
@@ -120,24 +121,14 @@ const OnboardingComponent = ({ user: propUser }) => {
         setTimeout(() => setError(null), 5000); // Clear error after 5 seconds
     }, []);
 
-    // API Functions
     const updateOnboardingProgress = useCallback(async (stepIndex, isCompleted = false) => {
         try {
             setIsLoading(true);
             setError(null);
-          
 
-            const response = await axios.post('/user/update/onboarding', {
-                onboarding_state: stepIndex + 1, // Convert to 1-based index for backend
-                onboarding_completed: isCompleted
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                timeout: 10000 // 10 second timeout
-            });
+            // Use the Redux action instead of direct axios call
+            await dispatch(updateOnboarding(stepIndex, isCompleted));
 
-            return response.data;
         } catch (error) {
             const errorMessage = error.response?.data?.message ||
                 error.message ||
@@ -148,7 +139,7 @@ const OnboardingComponent = ({ user: propUser }) => {
         } finally {
             setIsLoading(false);
         }
-    }, [showError]);
+    }, [dispatch, showError]);
 
     // Initialize onboarding state from user data
     useEffect(() => {
@@ -230,9 +221,7 @@ const OnboardingComponent = ({ user: propUser }) => {
 
         try {
             await updateOnboardingProgress(currentStepIndex, true);
-            alert('🎉 Onboarding completed successfully! Welcome aboard!');
-            // You might want to redirect to dashboard here
-            // window.location.href = '/dashboard';
+
         } catch (error) {
             // Error is already handled in updateOnboardingProgress
             console.error('Failed to complete onboarding');
@@ -257,7 +246,7 @@ const OnboardingComponent = ({ user: propUser }) => {
 
     if (!currentStage) {
         return (
-            <div className="min-h-screen bg-gray-50 p-4 flex items-center justify-center">
+            <div className=" bg-gray-50 p-4 flex items-center justify-center">
                 <div className="text-center">
                     <p className="text-red-600 text-lg">Invalid onboarding step</p>
                     <button
@@ -272,7 +261,7 @@ const OnboardingComponent = ({ user: propUser }) => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="h-1/2 bg-gray-50">
             <div className="max-w-6xl mx-auto p-4">
                 <div className="bg-white rounded-xl shadow-lg overflow-hidden">
                     {/* Header */}
@@ -313,7 +302,7 @@ const OnboardingComponent = ({ user: propUser }) => {
 
                     {/* Step Content */}
                     <div className="p-6">
-                        <div className="min-h-[400px] flex flex-col justify-center">
+                        <div className=" flex flex-col justify-center">
                             <StepComponent
                                 onStageComplete={handleStepComplete}
                                 isCompleted={isCurrentStepCompleted}
@@ -337,11 +326,6 @@ const OnboardingComponent = ({ user: propUser }) => {
                                 ) : (
                                     <div /> // Empty div for spacing
                                 )}
-                            </div>
-
-                            {/* Step Counter */}
-                            <div className="text-sm text-gray-500">
-                                Step {currentStepIndex + 1} of {stages.length}
                             </div>
 
                             {/* Next/Complete Button */}
@@ -369,14 +353,6 @@ const OnboardingComponent = ({ user: propUser }) => {
                             </button>
                         </div>
 
-                        {/* Help Text */}
-                        {!isCurrentStepCompleted && (
-                            <div className="mt-4 text-center">
-                                <p className="text-sm text-gray-500">
-                                    Complete the current step to continue
-                                </p>
-                            </div>
-                        )}
                     </div>
                 </div>
             </div>

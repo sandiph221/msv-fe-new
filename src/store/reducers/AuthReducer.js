@@ -58,6 +58,15 @@ const AuthReducer = (state = initState, action) => {
       case 'SIGNIN_FAILED':
           break;
       
+      case 'UPDATE_USER_ONBOARDING':
+          return {
+              ...state,
+              user: state.user ? {
+                  ...state.user,
+                  onboarding_state: action.payload.onboarding_state,
+                  onboarding_completed: action.payload.onboarding_completed
+              } : null,
+            };
 
     case 'LOGOUT':
       localStorage.clear();

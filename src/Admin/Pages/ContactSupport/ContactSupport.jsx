@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getContactSupportList } from "../../../store/actions/HelpPageAction";
 import Spinner from "../../../Components/Spinner";
+import TrialEndFeedbackTable from "./TrialEndFeedbackTable";
 
 const useStyles = makeStyles((theme) => Styles(theme));
 export const ContactSupport = () => {
@@ -88,7 +89,8 @@ export const ContactSupport = () => {
             </Grid>
           </Container>
         </Container>
-      </Grid>
+          </Grid>
+          <TrialEndFeedbackTable/>
     </Layout>
   );
 };

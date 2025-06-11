@@ -185,7 +185,7 @@ const ConnnectSocialNew = ({ onStageComplete }) => {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center h-64">
+            <div className="flex items-center justify-center ">
                 <AiOutlineLoading3Quarters className="animate-spin h-12 w-12 text-blue-500" />
             </div>
         );
@@ -195,7 +195,7 @@ const ConnnectSocialNew = ({ onStageComplete }) => {
 
     return (
         <div className="">
-            <div className="mt-4">
+            <div className="">
                 <p className="text-gray-600">Link your social media accounts to get started</p>
             </div>
 
@@ -208,7 +208,7 @@ const ConnnectSocialNew = ({ onStageComplete }) => {
                         className="bg-white border border-gray-200 flex items-center justify-center section1 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer hover:bg-gray-50"
                         onClick={handleFacebookSectionClick}
                     >
-                        <div className="text-center space-y-4">
+                        <div className="text-center">
                             {/* Profile Picture and Status */}
                             <div className="relative inline-block">
                                 <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto overflow-hidden">
@@ -363,7 +363,7 @@ const ConnnectSocialNew = ({ onStageComplete }) => {
                 </div>
             </div>
 
-            {/* Footer Note */}
+            {/* Footer N    ote */}
             <div className="text-xs text-gray-500 text-center mt-6">
                 By connecting, you agree to allow access to your social media accounts for automation features.
             </div>
