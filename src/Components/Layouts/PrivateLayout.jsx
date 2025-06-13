@@ -40,7 +40,7 @@ const PrivateLayout = () => {
 
     // Subdomain with unpaid status (only after settings have loaded)
     if (subDomain && hasPaid === false) {
-        return <NotPaidDashboard hasPaid={false} />;
+        return <NotPaidDashboard />;
     }
 
     // Check if onboarding is completed
