@@ -61,7 +61,6 @@ import FAQPage from "./Pages/Web/components/FaqPage";
 import { Contact } from "./Pages/Web/components/ContactPage";
 import AdminLogin from "./Components/AdminLogin/AdminLogin";
 import SubdomainLogin from "./Components/SubdomainLogin/SubdomainLogin";
-import { EditorProvider } from "react-simple-wysiwyg";
 import VerifyUser from "./Pages/VerifyUser/VerifyUser";
 
 // Web Pages

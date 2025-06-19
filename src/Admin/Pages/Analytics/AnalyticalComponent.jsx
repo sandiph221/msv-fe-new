@@ -25,6 +25,7 @@ import {
 } from "recharts";
 import Layout from "Components/Layout";
 import axios from "axios";
+import TrialToPaid from "../../../Pages/DashboardPage/UserConversion/TrialToPaid";
 
 // Use makeStyles instead of styled for Material-UI v4
 const useStyles = makeStyles((theme) => ({
@@ -257,6 +258,7 @@ function Analytics() {
                         </div>
                     </Paper>
 
+
                     {/* Subscription Analytics */}
                     <Paper className={classes.chartContainer}>
                         <Typography variant="h6" gutterBottom>
@@ -282,7 +284,9 @@ function Analytics() {
                             </ResponsiveContainer>
                         </div>
                     </Paper>
-                </div> {/* Close Charts Row */}
+                </div> 
+                <TrialToPaid />
+
             </div>
         </Layout>
     );
