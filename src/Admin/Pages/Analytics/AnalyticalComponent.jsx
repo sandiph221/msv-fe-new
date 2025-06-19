@@ -26,6 +26,8 @@ import {
 import Layout from "Components/Layout";
 import axios from "axios";
 import TrialToPaid from "../../../Pages/DashboardPage/UserConversion/TrialToPaid";
+import UniqueVisit from "../../../Components/UniqueVist/UniqueVisit";
+import UniqueVisitsToTrial from "../../../Pages/DashboardPage/UserConversion/VisitToTrial";
 
 // Use makeStyles instead of styled for Material-UI v4
 const useStyles = makeStyles((theme) => ({
@@ -285,8 +287,11 @@ function Analytics() {
                         </div>
                     </Paper>
                 </div> 
-                <TrialToPaid />
+                <div className="flex">
 
+                <TrialToPaid />
+                <UniqueVisitsToTrial/>
+                </div>
             </div>
         </Layout>
     );
