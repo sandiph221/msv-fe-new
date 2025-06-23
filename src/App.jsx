@@ -62,7 +62,6 @@ import { Contact } from "./Pages/Web/components/ContactPage";
 import AdminLogin from "./Components/AdminLogin/AdminLogin";
 import SubdomainLogin from "./Components/SubdomainLogin/SubdomainLogin";
 import VerifyUser from "./Pages/VerifyUser/VerifyUser";
-import UniqueVisit from "./Components/UniqueVist/UniqueVisit";
 
 // Web Pages
 

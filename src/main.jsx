@@ -15,7 +15,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "./utils/axios.js";
 import { LoadLogoAndBanner } from "./store/actions/SettingActions.js";
 import {EditorProvider} from "react-simple-wysiwyg"
-import UniqueVisit from "./Components/UniqueVist/UniqueVisit.jsx";
+import VisitCounter from "./Components/UniqueVist/VisitCounter.jsx";
 const AppWrapper = () => {
   const dispatch = useDispatch();
   const { logoBannerDataLoaded } = useSelector((state) => state.settings);
@@ -74,7 +74,7 @@ ReactDOM.render(
       <BrowserRouter>
                 <ThemeProvider theme={theme}>
                     <EditorProvider>
-                                    <UniqueVisit/>
+                                    <VisitCounter/>
                         
           <AppWrapper />
                     </EditorProvider>
