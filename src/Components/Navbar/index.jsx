@@ -170,12 +170,7 @@ const Navbar = () => {
             text: "Subscription Management",
             visible: isSuperAdmin
         },
-        {
-            to: "/admin/analytics",
-            icon: <BarChart fontSize="small" />,
-            text: "Analytics",
-            visible: isSuperAdmin
-        },
+    
         {
             to: "/admin/user-activity",
             icon: <SupervisorAccountIcon fontSize="small" />,

@@ -285,6 +285,8 @@ const SuperAdminUserManagement = () => {
             <div className={classes.main}>
                 <div style={{ padding: 10 }} className="dashboardPageContainer">
                     <Container disableGutters maxWidth="xl">
+                        <p className="font-bold text-lg">User Management Table</p>
+
                         <div className="space-y-4">
                             {/* Add User Button - positioned on the right */}
                             <div className="flex justify-end">

@@ -1,18 +1,4 @@
 import React, { useState, useEffect } from "react";
-import {
-    Box,
-    Container,
-    Grid,
-    Typography,
-    Card,
-    CardContent,
-    FormControl,
-    Select,
-    MenuItem,
-    makeStyles,
-    useMediaQuery,
-    useTheme,
-} from "@material-ui/core";
 import { Bar } from "react-chartjs-2";
 import {
     Chart as ChartJS,
@@ -25,8 +11,8 @@ import {
 } from "chart.js";
 import Spinner from "../../../Components/Spinner";
 import { NO_DATA_AVAILABLE } from "../../../utils/constant";
-import { Styles } from "../Style";
 import axios from "axios";
+
 // Register Chart.js components
 ChartJS.register(
     CategoryScale,
@@ -37,217 +23,102 @@ ChartJS.register(
     Legend
 );
 
-const useStyles = makeStyles((theme) => ({
-    ...Styles(theme),
-    statsCard: {
-        padding: theme.spacing(2),
-        marginBottom: theme.spacing(2),
-        backgroundColor: "#fff",
-        borderRadius: 8,
-        boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-        transition: "transform 0.2s ease-in-out",
-        "&:hover": {
-            transform: "translateY(-2px)",
-        },
-    },
-    statsGrid: {
-        marginBottom: theme.spacing(3),
-    },
-    statValue: {
-        fontSize: "2rem",
-        fontWeight: "bold",
-        color: theme.palette.primary.main,
-        lineHeight: 1.2,
-    },
-    statLabel: {
-        fontSize: "0.875rem",
-        color: theme.palette.text.secondary,
-        marginTop: theme.spacing(0.5),
-        fontWeight: 500,
-    },
-    filterContainer: {
-        display: "flex",
-        alignItems: "center",
-        gap: theme.spacing(2),
-        marginBottom: theme.spacing(3),
-    },
-    filterLabel: {
-        fontSize: "0.875rem",
-        fontWeight: 500,
-        color: theme.palette.text.primary,
-    },
-    select: {
-        minWidth: 120,
-        "& .MuiSelect-select": {
-            padding: "8px 14px",
-        },
-        "& .MuiOutlinedInput-root": {
-            borderRadius: 8,
-        },
-    },
-    chartContainer: {
-        backgroundColor: "#fff",
-        borderRadius: 8,
-        padding: theme.spacing(3),
-        boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-        minHeight: 400,
-    },
-    chartTitle: {
-        fontSize: "1.25rem",
-        fontWeight: 600,
-        marginBottom: theme.spacing(2),
-        color: theme.palette.text.primary,
-    },
-    noDataContainer: {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        minHeight: 300,
-        backgroundColor: "#f5f5f5",
-        borderRadius: 8,
-    },
-    pageTitle: {
-        fontSize: "1.75rem",
-        fontWeight: 600,
-        color: theme.palette.text.primary,
-        marginBottom: theme.spacing(1),
-    },
-    errorContainer: {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        minHeight: 400,
-        backgroundColor: "#fff",
-        borderRadius: 8,
-        boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-    },
-    errorText: {
-        color: theme.palette.error.main,
-        textAlign: "center",
-    },
-}));
+// Separate component for period filter
+const PeriodFilter = ({ period, onPeriodChange }) => {
+    return (
+        <div className="flex items-center gap-4 mb-6">
+            <label className="text-sm font-medium text-gray-700">
+                Period:
+            </label>
+            <select
+                value={period}
+                onChange={(e) => onPeriodChange(e.target.value)}
+                className="min-w-[120px] px-3 py-2 text-sm border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+                <option value="daily">Daily</option>
+                <option value="monthly">Monthly</option>
+                <option value="yearly">Yearly</option>
+            </select>
+        </div>
+    );
+};
 
+// Separate component for chart container
+const ChartContainer = ({ title, children, showFilter = false, filterComponent = null }) => {
+    return (
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 min-h-[400px]">
+            <div className={`flex ${showFilter ? 'justify-between items-center' : ''} mb-6`}>
+                <h3 className="text-xl font-semibold text-gray-800">
+                    {title}
+                </h3>
+                {showFilter && filterComponent}
+            </div>
+            {children}
+        </div>
+    );
+};
 
-const TrialToPaid = () => {
-    const theme = useTheme();
-    const xs = useMediaQuery(theme.breakpoints.down("xs"));
-    const sm = useMediaQuery(theme.breakpoints.down("sm"));
-    const classes = useStyles({ sm, xs });
+// Separate component for chart display
+const ConversionChart = ({ chartData, chartOptions }) => {
+    if (!chartData) {
+        return (
+            <div className="flex items-center justify-center min-h-[300px] bg-gray-50 rounded-lg">
+                <p className="text-lg text-gray-600">{NO_DATA_AVAILABLE}</p>
+            </div>
+        );
+    }
 
-    const [period, setPeriod] = useState("monthly");
-    const [loading, setLoading] = useState(false);
-    const [conversionData, setConversionData] = useState(null);
-    const [chartData, setChartData] = useState(null);
-    const [error, setError] = useState(null);
-    // Add this demo data variable near the top of your component, after the state declarations
-    const demoData = {
-        status: true,
-        data: {
-            summary: {
-                total_trial_users: 1250,
-                total_converted_users: 187,
-                overall_conversion_rate: "14.96%",
-                total_revenue: 28050,
-                average_revenue_per_user: 149.73
-            },
-            period_breakdown: [
-                {
-                    period: "2024-01",
-                    trial_users: 145,
-                    converted_users: 22,
-                    conversion_rate: "15.17%",
-                    revenue: 3298
-                },
-                {
-                    period: "2024-02",
-                    trial_users: 132,
-                    converted_users: 18,
-                    conversion_rate: "13.64%",
-                    revenue: 2694
-                },
-                {
-                    period: "2024-03",
-                    trial_users: 167,
-                    converted_users: 28,
-                    conversion_rate: "16.77%",
-                    revenue: 4186
-                },
-                {
-                    period: "2024-04",
-                    trial_users: 189,
-                    converted_users: 25,
-                    conversion_rate: "13.23%",
-                    revenue: 3745
-                },
-                {
-                    period: "2024-05",
-                    trial_users: 156,
-                    converted_users: 24,
-                    conversion_rate: "15.38%",
-                    revenue: 3588
-                },
-                {
-                    period: "2024-06",
-                    trial_users: 178,
-                    converted_users: 31,
-                    conversion_rate: "17.42%",
-                    revenue: 4637
-                },
-                {
-                    period: "2024-07",
-                    trial_users: 143,
-                    converted_users: 19,
-                    conversion_rate: "13.29%",
-                    revenue: 2843
-                },
-                {
-                    period: "2024-08",
-                    trial_users: 140,
-                    converted_users: 20,
-                    conversion_rate: "14.29%",
-                    revenue: 2990
-                }
-            ]
-        }
-    };
+    return (
+        <div className="h-[400px]">
+            <Bar data={chartData} options={chartOptions} />
+        </div>
+    );
+};
 
-  
-    const fetchConversionData = async () => {
-        setLoading(true);
-        setError(null);
+// Separate component for error display
+const ErrorDisplay = ({ error }) => {
+    return (
+        <div className="flex items-center justify-center min-h-[400px] bg-white rounded-lg shadow-sm border border-gray-200">
+            <div className="text-center">
+                <h3 className="text-lg font-medium text-red-600 mb-2">
+                    Error loading conversion data
+                </h3>
+                <p className="text-sm text-red-500">
+                    {error}
+                </p>
+            </div>
+        </div>
+    );
+};
 
-        try {
-            const response = await axios.get(`/trial-to-paid?period=${period}`, {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-            // const response = {data:demoData}
-            if (response.data.status) {
-                setConversionData(response.data.data);
-                prepareChartData(response.data.data);
-            } else {
-                throw new Error(response.data.message || "Failed to fetch conversion data");
-            }
-        } catch (error) {
-            console.error("Error fetching conversion data:", error);
-            setError(error.response?.data?.message || error.message);
-            setConversionData(null);
-            setChartData(null);
-        } finally {
-            setLoading(false);
-        }
-    };
+// Separate component for no data display
+const NoDataDisplay = () => {
+    return (
+        <div className="flex items-center justify-center min-h-[400px] bg-gray-50 rounded-lg">
+            <p className="text-lg text-gray-600">{NO_DATA_AVAILABLE}</p>
+        </div>
+    );
+};
 
-    // Prepare chart data
+// Separate component for loading state
+const LoadingDisplay = () => {
+    return (
+        <div className="w-full">
+            <div className="max-w-7xl mx-auto">
+                <Spinner />
+            </div>
+        </div>
+    );
+};
+
+// Custom hook for chart data preparation
+const useChartData = (period) => {
     const prepareChartData = (data) => {
         if (!data || !data.period_breakdown || data.period_breakdown.length === 0) {
-            setChartData(null);
-            return;
+            return null;
         }
 
         const labels = data.period_breakdown.map((item) => {
-            // Format labels based on period
             switch (period) {
                 case "daily":
                     return new Date(item.period).toLocaleDateString("en-US", {
@@ -273,22 +144,22 @@ const TrialToPaid = () => {
             parseFloat(item.conversion_rate.replace("%", ""))
         );
 
-        setChartData({
+        return {
             labels,
             datasets: [
                 {
                     label: "Trial Users",
                     data: trialUsers,
-                    backgroundColor: "rgba(255, 206, 86, 0.6)",
-                    borderColor: "rgba(255, 206, 86, 1)",
+                    backgroundColor: "rgba(54, 162, 235, 0.6)",
+                    borderColor: "rgba(54, 162, 235, 1)",
                     borderWidth: 1,
                     yAxisID: "y",
                 },
                 {
                     label: "Paid Users",
                     data: convertedUsers,
-                    backgroundColor: "rgba(255, 193, 7, 0.6)",
-                    borderColor: "rgba(255, 193, 7, 1)",
+                    backgroundColor: "rgba(75, 192, 192, 0.6)",
+                    borderColor: "rgba(75, 192, 192, 1)",
                     borderWidth: 1,
                     yAxisID: "y",
                 },
@@ -304,10 +175,14 @@ const TrialToPaid = () => {
                     fill: false,
                 },
             ],
-        });
+        };
     };
 
-    // Chart options
+    return { prepareChartData };
+};
+
+// Custom hook for chart options
+const useChartOptions = () => {
     const chartOptions = {
         responsive: true,
         maintainAspectRatio: false,
@@ -410,114 +285,184 @@ const TrialToPaid = () => {
         },
     };
 
-    // Handle period change
-    const handlePeriodChange = (event) => {
-        setPeriod(event.target.value);
+    return chartOptions;
+};
+
+// Custom hook for API data fetching
+const useConversionData = (period) => {
+    const [loading, setLoading] = useState(false);
+    const [conversionData, setConversionData] = useState(null);
+    const [error, setError] = useState(null);
+
+    // Demo data for testing (same as original)
+    const demoData = {
+        status: true,
+        data: {
+            summary: {
+                total_trial_users: 1250,
+                total_converted_users: 187,
+                overall_conversion_rate: "14.96%",
+                total_revenue: 28050,
+                average_revenue_per_user: 149.73
+            },
+            period_breakdown: [
+                {
+                    period: "2024-01",
+                    trial_users: 145,
+                    converted_users: 22,
+                    conversion_rate: "15.17%",
+                    revenue: 3298
+                },
+                {
+                    period: "2024-02",
+                    trial_users: 132,
+                    converted_users: 18,
+                    conversion_rate: "13.64%",
+                    revenue: 2694
+                },
+                {
+                    period: "2024-03",
+                    trial_users: 167,
+                    converted_users: 28,
+                    conversion_rate: "16.77%",
+                    revenue: 4186
+                },
+                {
+                    period: "2024-04",
+                    trial_users: 189,
+                    converted_users: 25,
+                    conversion_rate: "13.23%",
+                    revenue: 3745
+                },
+                {
+                    period: "2024-05",
+                    trial_users: 156,
+                    converted_users: 24,
+                    conversion_rate: "15.38%",
+                    revenue: 3588
+                },
+                {
+                    period: "2024-06",
+                    trial_users: 178,
+                    converted_users: 31,
+                    conversion_rate: "17.42%",
+                    revenue: 4637
+                },
+                {
+                    period: "2024-07",
+                    trial_users: 143,
+                    converted_users: 19,
+                    conversion_rate: "13.29%",
+                    revenue: 2843
+                },
+                {
+                    period: "2024-08",
+                    trial_users: 140,
+                    converted_users: 20,
+                    conversion_rate: "14.29%",
+                    revenue: 2990
+                }
+            ]
+        }
     };
 
-    // Format currency
-    const formatCurrency = (amount) => {
-        return new Intl.NumberFormat("en-US", {
-            style: "currency",
-            currency: "USD",
-        }).format(amount);
+    const fetchConversionData = async () => {
+        setLoading(true);
+        setError(null);
+
+        try {
+            const response = await axios.get(`/trial-to-paid?period=${period}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            // const response = {data:demoData}
+            if (response.data.status) {
+                setConversionData(response.data.data);
+            } else {
+                throw new Error(response.data.message || "Failed to fetch conversion data");
+            }
+        } catch (error) {
+            console.error("Error fetching conversion data:", error);
+            setError(error.response?.data?.message || error.message);
+            setConversionData(null);
+        } finally {
+            setLoading(false);
+        }
     };
 
-    // Fetch data on component mount and period change
     useEffect(() => {
         fetchConversionData();
     }, [period]);
 
+    return { loading, conversionData, error, fetchConversionData };
+};
+
+// Utility function for currency formatting
+const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+    }).format(amount);
+};
+
+// Main component
+const TrialToPaid = () => {
+    const [period, setPeriod] = useState("monthly");
+    const [chartData, setChartData] = useState(null);
+
+    const { loading, conversionData, error } = useConversionData(period);
+    const { prepareChartData } = useChartData(period);
+    const chartOptions = useChartOptions();
+
+    // Update chart data when conversion data changes
+    useEffect(() => {
+        if (conversionData) {
+            const newChartData = prepareChartData(conversionData);
+            setChartData(newChartData);
+        } else {
+            setChartData(null);
+        }
+    }, [conversionData, period]);
+
+    const handlePeriodChange = (newPeriod) => {
+        setPeriod(newPeriod);
+    };
+
     if (loading) {
-        return (
-                <div className={classes.main}>
-                    <Container disableGutters maxWidth="xl">
-                        <Spinner />
-                    </Container>
-                </div>
-        );
+        return <LoadingDisplay />;
     }
 
     if (error) {
-        return (
-                <div className={classes.main}>
-                        <div className={classes.errorContainer}>
-                            <div>
-                                <Typography variant="h6" className={classes.errorText}>
-                                    Error loading conversion data
-                                </Typography>
-                                <Typography variant="body2" className={classes.errorText}>
-                                    {error}
-                                </Typography>
-                            </div>
-                        </div>
-                </div>
-        );
+        return <ErrorDisplay error={error} />;
     }
 
     return (
-            <div className={classes.main}>
-                            <Grid container spacing={2} justifyContent="space-between" alignItems="center">
-                                <Grid item>
-                                    <Typography variant="h4" className={classes.pageTitle}>
-                                        Trial to Paid Conversion
-                                    </Typography>
-                                </Grid>
-                                <Grid item>
-                                    <div className={classes.filterContainer}>
-                                        <Typography className={classes.filterLabel}>
-                                            Period:
-                                        </Typography>
-                                        <FormControl className={classes.select} variant="outlined">
-                                            <Select
-                                                value={period}
-                                                onChange={handlePeriodChange}
-                                                displayEmpty
-                                            >
-                                                <MenuItem value="daily">Daily</MenuItem>
-                                                <MenuItem value="monthly">Monthly</MenuItem>
-                                                <MenuItem value="yearly">Yearly</MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                    </div>
-                                </Grid>
-                            </Grid>
-
-                        {conversionData ? (
-              <>
-                      
-
-                                <Grid container spacing={3}>
-                                    <Grid item xs={12}>
-                                        <div className={classes.chartContainer}>
-                                            <Typography className={classes.chartTitle}>
-                                                Trial to Paid Conversion Trends
-                                            </Typography>
-                                            {chartData ? (
-                                                <div style={{ height: "400px" }}>
-                                                    <Bar data={chartData} options={chartOptions} />
-                                                </div>
-                                            ) : (
-                                                <div className={classes.noDataContainer}>
-                                                    <Typography variant="h6">
-                                                        {NO_DATA_AVAILABLE}
-                                                    </Typography>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </Grid>
-                                </Grid>
-
-
-                            </>
-                        ) : (
-                            <div className={classes.noDataContainer}>
-                                <Typography variant="h6">
-                                    {NO_DATA_AVAILABLE}
-                                </Typography>
-                            </div>
-                        )}
-            </div>
+        <div className="w-full">
+            {conversionData ? (
+                <div className="grid grid-cols-1 gap-6">
+                    <div className="col-span-1">
+                        <ChartContainer
+                            title="Trial to Paid Conversion Trends"
+                            showFilter={true}
+                            filterComponent={
+                                <PeriodFilter
+                                    period={period}
+                                    onPeriodChange={handlePeriodChange}
+                                />
+                            }
+                        >
+                            <ConversionChart
+                                chartData={chartData}
+                                chartOptions={chartOptions}
+                            />
+                        </ChartContainer>
+                    </div>
+                </div>
+            ) : (
+                <NoDataDisplay />
+            )}
+        </div>
     );
 };
 
